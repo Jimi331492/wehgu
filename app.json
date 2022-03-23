@@ -15,7 +15,7 @@
     "navigationBarTextStyle": "white"
   },
   "usingComponents": {
-    "cu-custom": "/components/cu-custom/cu-custom"
+    "custom": "/components/custom/cu-custom"
   },
   "sitemapLocation": "sitemap.json"
 }

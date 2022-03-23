@@ -42,7 +42,7 @@
         "ignoreUploadUnusedFiles": true
     },
     "compileType": "miniprogram",
-    "libVersion": "2.21.1",
+    "libVersion": "2.23.1",
     "appid": "wxeb4f620b577ff31a",
     "projectname": "WeHgu",
     "debugOptions": {
