@@ -1,0 +1,126 @@
+var formatTime = function (val, option) {
+  if (!val) return 'NULL'
+  var date = getDate(val)
+  var year = date.getFullYear()
+  var month = date.getMonth() + 1
+  var day = date.getDate()
+  var hour = function () {
+    if (date.getHours() < 10) { //补‘0’
+      return '0' + date.getHours()
+    }
+    return date.getHours();
+  }
+  var minute = function () {
+    if (date.getMinutes() < 10) {
+      return '0' + date.getMinutes()
+    }
+    return date.getMinutes();
+  }
+  var second = function () {
+    if (date.getSeconds() < 10) {
+      return '0' + date.getSeconds()
+    }
+    return date.getSeconds();
+  }
+
+  if (option === 'notime') { //不需要时间
+    // return year + '-' + month + '-' + day;
+    if (month < 10) {
+      month = '0' + month
+    }
+    if (day < 10) {
+      day = '0' + day
+    }
+    var str = year + '-' + month + '-' + day;
+    return str;
+  }
+
+  return year + '-' + month + '-' + day + ' ' + hour() + ':' + minute() + ":" + second();
+
+}
+
+var filterArray = function (arr, col, bullet) {
+  if (!arr || bullet.length === 0) return []
+
+  var outArr = []
+
+  for (var index = 0; index < arr.length; index++) {
+    var element = arr[index];
+    if (bullet.indexOf(element[col]) !== -1) {
+      outArr.push(element)
+    }
+  }
+
+  return outArr
+}
+
+/**
+ * @description 传入一个值和一个对象，判断对象中是否存在这个值
+ * @param target 需要搜索的值
+ * @param obj 需要查找的对象
+ * @param attr 若是对象为对象数组，要查找的属性(非必填)
+ * @returns {boolean} 如果 target 被找到则返回 true 否则返回 false
+ */
+function isInclude(target, obj, attr) {
+
+  // 定义返回值
+  var flag = false
+  // 传入的obj为数组
+  if (obj.constructor === 'Array') {
+    var length = obj.length;
+    // 长度为0直接返回false
+    if (length === 0) return flag
+    // 有传入attr
+    if (attr) {
+      obj.forEach(function (item) {
+        if (item[attr] === target) {
+          flag = true
+        }
+      })
+    } else { // 没有attr
+      flag = obj.indexOf(target) !== -1 ? true : false
+    }
+    // console.log(target + '在' + obj + '结果为' + flag)
+    return flag
+  }
+
+  return false
+
+}
+
+/**
+ * 过滤一个树
+ */
+function filterTree(multiArray) {
+
+  var farmList = JSON.parse(JSON.stringify(multiArray[0])),
+    curFarmUnitList = JSON.parse(JSON.stringify(multiArray[1])),
+    cloneFarmList = [],
+    cloneCurFarmUnitList = [],
+    item;
+
+  for (var i = 0; i < farmList.length; i++) {
+    item = farmList[i];
+    cloneFarmList.push(item.farmName)
+  }
+
+
+  for (var j = 0; j < curFarmUnitList.length; j++) {
+    item = curFarmUnitList[j];
+    cloneCurFarmUnitList.push(item.farmUnitName)
+  }
+
+  var filterMultiArray = [cloneFarmList, cloneCurFarmUnitList]
+
+
+  return filterMultiArray
+}
+
+
+module.exports.formatTime = formatTime
+
+module.exports.filterArray = filterArray
+
+module.exports.isInclude = isInclude
+
+module.exports.filterTree = filterTree

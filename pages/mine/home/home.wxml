@@ -1,0 +1,20 @@
+<!--pages/mine/home/home.wxml-->
+<scroll-view scroll-y class="scrollPage">
+  <cu-custom bgColor="bg-gradual-white">
+    <view slot="right">
+      <button class="cuIcon-noticefill bg-yellow round text-white" size="mini"></button>
+    </view>
+    <view slot="content">个人中心</view>
+  </cu-custom>
+  <image class="UCenter-bg bg-img bg-mask padding-tb-xl bg-avatar" src="{{userInfo.avatar}}">
+    <image class="cu-avatar xxxl round margin-left" src="{{userInfo.avatar}}"></image>
+    <view class="text-xl nickname">
+      <text>{{userInfo.nickname}}</text>
+      <text class="text-df auth-status">未认证</text>
+    </view>
+    <view class="margin-top-sm introduce">
+      <text>个性签名</text>
+    </view>
+  </image>
+
+</scroll-view>

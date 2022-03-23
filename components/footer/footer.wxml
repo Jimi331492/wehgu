@@ -1,0 +1,4 @@
+<view class="box">
+    <view class="text">{{text}}</view>
+    <navigator url="url" class="url">{{Copyright}}</navigator>
+</view>

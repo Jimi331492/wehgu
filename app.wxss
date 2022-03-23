@@ -1,0 +1,22 @@
+@import "/style/main.wxss";
+@import "/style/icon.wxss";
+/* @import "/style/iconfont.wxss"; */
+
+.scrollPage {
+    height: 80vh;
+}
+
+.footer {
+    position: fixed;
+    bottom: 2vh;
+    z-index: 9;
+    left: 50%;
+    -webkit-transform: translate(-50%);
+    transform: translate(-50%);
+  }
+
+  .round-btn{
+      width: 5vh;
+      height: 5vh;
+      border-radius: 100%;
+  }

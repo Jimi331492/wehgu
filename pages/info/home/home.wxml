@@ -1,0 +1,79 @@
+<!--pages/info/home/home.wxml-->
+<cu-custom bgColor="bg-gradual-blue">
+    <view slot="content">消息</view>
+</cu-custom>
+
+<cu-custom bgColor="bg-gradual-blue">
+    <view slot="content">我的</view>
+</cu-custom>
+<view class="scrollPage">
+
+    <!-- header -->
+    <view class="padding flex text-center text-grey bg-white shadow-warp header">
+
+        <!-- 微信登录按钮 -->
+        <view class="wechat-login" wx:if='{{!isLogin}}'>
+            <button class="cu-btn bg-green round lg shadow" bindtap="getUserProfile">微信一键登录</button>
+        </view>
+
+        <!-- 用户信息 -->
+        <view type="primary" class='userInfo' wx:else>
+            <view class="cu-avatar xl round margin-left" style="background-image:url({{userInfo.avatar}});"></view>
+            <text class='user-name'>{{userInfo.nickname}}</text>
+        </view>
+    </view>
+
+    <!-- main -->
+    <view class="cu-list menu card-menu margin-top-xl margin-bottom-xl shadow-lg radius">
+        <view class="cu-item ">
+            <view class="content flex" style="justify-content: space-between;">
+                <span class="cuIcon-my Icon">
+                    <text class="text-grey">角色</text>
+                </span>
+                <text class="text-grey padding-right">{{userInfo.roles?userInfo.roles:"未登录"}}</text>
+            </view>
+        </view>
+        <view class="cu-item ">
+            <view class="content flex" style="justify-content: space-between;">
+                <span class="cuIcon-my Icon">
+                    <text class="text-grey">手机</text>
+                </span>
+                <text class="text-grey padding-right">{{userInfo.telephone?userInfo.telephone:"未登录"}}</text>
+            </view>
+        </view>
+
+        <view class="cu-item arrow">
+            <view class="content" data-url="/pages/getOrderList/getOrderList" bindtap="navChange">
+                <span class="cuIcon-my Icon"></span>
+                <text class="text-grey">收货地址</text>
+            </view>
+        </view>
+
+        <view class="cu-item arrow">
+            <view class="content" data-url="/pages/getCowList/getCowList" bindtap="navChange">
+                <span class="cuIcon-my Icon"></span>
+                <text class="text-grey">我的牛群</text>
+            </view>
+        </view>
+
+        <view class="cu-item arrow">
+            <view class="content" data-url="/pages/getOrderList/getOrderList" bindtap="navChange">
+                <span class="cuIcon-my Icon"></span>
+                <text class="text-grey">我的订单</text>
+            </view>
+        </view>
+
+        <view class="cu-item arrow">
+            <view class="content" data-url="/pages/about/about/about" bindtap="navChange">
+                <span class="cuIcon-my Icon"></span>
+                <text class="text-grey">关于我们</text>
+            </view>
+        </view>
+
+    </view>
+    <view class="cu-tabbar-height exit" wx:if='{{isLogin}}'>
+        <view class="padding flex flex-direction">
+            <button class="cu-btn bg-red margin-tb-sm lg" bindtap="confirmExit">退出登录</button>
+        </view>
+    </view>
+</view>

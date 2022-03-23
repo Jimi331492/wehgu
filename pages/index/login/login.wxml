@@ -1,0 +1,34 @@
+<!--pages/index/login/login.wxml-->
+<view class="container">
+    <image src="/images/bg1.png" class="bg1"></image>
+
+    <view class="container-2">
+        <view class="welcome-word">
+            <view class="word-1">
+                <text>
+                    欢迎你，新同学</text>
+            </view>
+            <view class="word-2">
+                <view>
+                    即刻加入WeHGU,
+                </view>
+                <view>
+                    与校友一起发现美好校园生活！
+                </view>
+            </view>
+        </view>
+        <view class="login-box">
+            <button class="cu-btn round lg shadow wx-login" bindtap="getUserProfile">
+                <text class="cuIcon-weixin"></text>通过微信登录
+            </button>
+        </view>
+        <!-- <view class="other-login flex">
+            <button class="round-btn bg-gray">验</button>
+            <button class="cuIcon-more"></button>
+        </view> -->
+    </view>
+
+
+
+    <footer class="footer"></footer>
+</view>

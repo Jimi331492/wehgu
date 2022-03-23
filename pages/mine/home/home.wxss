@@ -1,0 +1,43 @@
+/* pages/mine/home/home.wxss */
+
+
+.bg-avatar {
+    width: 100vw;
+}
+
+.UCenter-bg {
+    background-size: cover;
+    height: 550rpx;
+    display: flex;
+    justify-content: center;
+    padding-top: 40rpx;
+    overflow: hidden;
+    position: relative;
+    flex-direction: column;
+    align-items: center;
+    color: #fff;
+    font-weight: 300;
+    text-shadow: 0 0 3px rgba(0, 0, 0, 0.3);
+}
+
+.UCenter-bg .xxxl {
+    width: 10rem;
+    height: 10rem;
+}
+
+.UCenter-bg .nickname {
+    display: flex;
+    justify-content: center;
+}
+
+.UCenter-bg .auth-status {
+    align-self: flex-end;
+}
+
+.UCenter-bg .introduce {
+    display: flex;
+    justify-content: center;
+    opacity: 0.8;
+}
+
+

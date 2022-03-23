@@ -1,0 +1,21 @@
+{
+  "pages": [
+    "pages/index/home/home",
+    "pages/home/home/home",
+    "pages/find/home/home",
+    "pages/info/home/home",
+    "pages/mine/home/home",
+    "pages/index/login/login"
+  ],
+  "window": {
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#fff",
+    "navigationBarTitleText": "ColorUI",
+    "navigationStyle": "custom",
+    "navigationBarTextStyle": "white"
+  },
+  "usingComponents": {
+    "cu-custom": "/components/cu-custom/cu-custom"
+  },
+  "sitemapLocation": "sitemap.json"
+}
