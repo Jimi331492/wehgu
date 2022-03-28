@@ -1,0 +1,24 @@
+/* components/modal.wxss */
+@import "/style/main.wxss";
+
+.cu-modal .modal {
+    border-radius: 35rpx 35rpx 0 0 !important;
+}
+
+.modal-body {
+    background-color: #fff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 4vh;
+}
+
+.bar {
+    width: 18vw;
+    height: 2vw;
+    border-radius: 35rpx 35rpx;
+    background-color: #333333;
+    opacity: 0.3;
+    position: absolute;
+    top: 2vw;
+}

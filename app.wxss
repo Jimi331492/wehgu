@@ -1,8 +1,9 @@
 @import "/style/main.wxss";
 @import "/style/icon.wxss";
-/* @import "/style/iconfont.wxss"; */
+
 
 .scrollPage {
+    width: 100vw;
     height: 80vh;
 }
 

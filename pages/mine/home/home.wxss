@@ -1,43 +1,56 @@
 /* pages/mine/home/home.wxss */
 
-
-.bg-avatar {
+.scrollPage .placeholder-1 {
     width: 100vw;
+    height: 550rpx;
 }
 
-.UCenter-bg {
-    background-size: cover;
+.scrollPage .avatar-filter-bg {
+    width: 100vw;
     height: 550rpx;
-    display: flex;
-    justify-content: center;
-    padding-top: 40rpx;
+    filter: blur(8rpx);
     overflow: hidden;
-    position: relative;
+    position: absolute;
+    top:0;
+    z-index: -100;
+}
+
+
+
+.avatar-filter-bg .avatar-img {
+    width: 100vw;
+    height: 550rpx;
+}
+
+.scrollPage .user-avatar {
+    width: 100vw;
+    height: 550rpx;
+    position: absolute;
+    top: 0;
+    z-index: 99;
+    display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: center;
     color: #fff;
-    font-weight: 300;
-    text-shadow: 0 0 3px rgba(0, 0, 0, 0.3);
 }
 
-.UCenter-bg .xxxl {
+.user-avatar .xxxl {
     width: 10rem;
     height: 10rem;
 }
 
-.UCenter-bg .nickname {
+.user-avatar .nickname {
     display: flex;
     justify-content: center;
 }
 
-.UCenter-bg .auth-status {
+.user-avatar .auth-status {
     align-self: flex-end;
 }
 
-.UCenter-bg .introduce {
+.user-avatar .introduce {
     display: flex;
     justify-content: center;
     opacity: 0.8;
 }
-
-

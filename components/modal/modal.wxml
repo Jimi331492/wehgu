@@ -1,0 +1,13 @@
+<!--components/modal.wxml-->
+<view class="cu-modal bottom-modal {{name===modalName?'show':''}}" bindtap="hiddlen">
+    <view class="cu-dialog modal" catchtap="sure">
+        <view class="cu-bar bg-white" wx:if="{{isHead}}">
+            <view class="action text-green">确定</view>
+            <view class="action text-blue" bindtap="hiddlen">取消</view>
+        </view>
+        <view class=" modal-body " style="height: {{bodyHeight}}rpx">
+            <view class="bar" wx:if="{{isBar}}"></view>
+            <slot></slot>
+        </view>
+    </view>
+</view>

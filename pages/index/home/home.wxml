@@ -1,4 +1,4 @@
-<view class="container" wx:if="{{isLogin===null||isLogin===false||isLogin===''}}">
+<!-- <view class="container" wx:if="{{isLogin===null||isLogin===false||isLogin===''}}">
     <image src="/images/bg1.png" class="bg1"></image>
 
     <view class="container-2">
@@ -21,18 +21,18 @@
                 <text class="cuIcon-weixin"></text>通过微信登录
             </button>
         </view>
-        <!-- <view class="other-login flex">
+        <view class="other-login flex">
             <button class="round-btn bg-gray">验</button>
             <button class="cuIcon-more"></button>
-        </view> -->
+        </view>
     </view>
 
 
 
     <footer class="footer"></footer>
-</view>
+</view> -->
 
-<view class="container" wx:else>
+<view class="container" >
 
     <home wx:if="{{PageCur=='Home'}}"></home>
     <find wx:if="{{PageCur=='Find'}}"></find>

@@ -4,7 +4,7 @@
         "ignore": []
     },
     "setting": {
-        "urlCheck": false,
+        "urlCheck": true,
         "es6": true,
         "enhance": true,
         "postcss": true,
@@ -20,7 +20,7 @@
         "checkInvalidKey": true,
         "checkSiteMap": true,
         "uploadWithSourceMap": true,
-        "compileHotReLoad": false,
+        "compileHotReLoad": true,
         "lazyloadPlaceholderEnable": false,
         "useMultiFrameRuntime": false,
         "useApiHook": false,
@@ -42,7 +42,7 @@
         "ignoreUploadUnusedFiles": true
     },
     "compileType": "miniprogram",
-    "libVersion": "2.23.1",
+    "libVersion": "2.23.2",
     "appid": "wxeb4f620b577ff31a",
     "projectname": "WeHgu",
     "debugOptions": {

@@ -65,6 +65,11 @@ Page({
 
 
     onLoad: function () {
+        if (wx.getStorageSync("isLogin")) {
+            this.setData({
+                isLogin: wx.getStorageSync("isLogin")
+            })
+        }
         console.log(this.data.isLogin);
     },
 

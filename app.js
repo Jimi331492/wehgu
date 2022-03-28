@@ -42,6 +42,7 @@ App({
       }
     })
   },
+
   // 全局可用
   reloadThisPage: function () {
     let currentPages = getCurrentPages()
