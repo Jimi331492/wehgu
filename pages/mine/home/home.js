@@ -9,10 +9,18 @@ Component({
     },
     lifetimes: {
         attached() {
-            this.setData({
-                userInfo: wx.getStorageSync("userInfo"),
-                isLogin: wx.getStorageSync('isLogin')
-            });
+            if (true !== wx.getStorageSync('isLogin')) {
+                this.setData({
+                    ['userInfo.avatar']: '/images/custom-avatar.png',
+                });
+            } else {
+                this.setData({
+                    userInfo: wx.getStorageSync("userInfo"),
+                    isLogin: wx.getStorageSync('isLogin')
+                });
+            }
+
+
         }
     },
     data: {
@@ -71,21 +79,37 @@ Component({
             console.log(e.currentTarget.dataset.url);
             let url = e.currentTarget.dataset.url
             if (!this.data.isLogin) {
-                wx.showModal({
-                    title: '提示',
-                    content: '用户未登录。',
-                    confirmText: '去登陆',
-                    success: res => {
-                        if (res.confirm) {
-                            this.getUserProfile()
-                        }
-                    }
-                })
+                this.noLogin()
             } else {
                 wx.navigateTo({
                     url: url,
                 })
             }
+        },
+
+        toLogin() {
+            wx.navigateBack({
+                delta: 1,
+            })
+        },
+
+        noLogin() {
+            wx.showModal({
+                title: '提示',
+                content: '用户未登录。',
+                confirmText: '一键登陆',
+                success: res => {
+                    if (res.confirm) {
+                        this.getUserProfile()
+                    }
+                }
+            })
+        },
+
+        toEdit() {
+            wx.navigateTo({
+                url: '/pages/mine/edit/edit',
+            })
         },
 
         // 退出登录

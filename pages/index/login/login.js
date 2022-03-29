@@ -165,6 +165,12 @@ Page({
         }, 1000)
     },
 
+    toIndexHome() {
+        wx.navigateTo({
+            url: '/pages/index/home/home',
+        })
+    },
+
     /**
      * 生命周期函数--监听页面加载
      */

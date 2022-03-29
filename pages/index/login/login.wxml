@@ -23,7 +23,7 @@
                 <text class="cuIcon-weixin"></text>通过微信登录
             </button>
         </view>
-        <view class="no-login flex">
+        <view class="no-login flex" bindtap="toIndexHome">
             <text class="padding-top">游客模式</text>
         </view>
 
@@ -31,8 +31,6 @@
             <text class="padding-top cuIcon-phone"></text>
         </view>
     </view>
-
-
 
     <footer class="footer"></footer>
 </view>

@@ -10,7 +10,7 @@ Component({
     lifetimes: {
         attached() {
 
-            this.towerSwiper('swiperList');
+            this.towerSwiper();
             // 初始化towerSwiper 传已有的数组名即可
 
             this.setData({
@@ -22,35 +22,7 @@ Component({
         isLogin: false,
         // 轮播图相关
         cardCur: 0,
-        swiperList: [{
-            id: 0,
-            type: 'image',
-            url: ''
-        }, {
-            id: 1,
-            type: 'image',
-            url: ''
-        }, {
-            id: 2,
-            type: 'image',
-            url: ''
-        }, {
-            id: 3,
-            type: 'image',
-            url: ''
-        }, {
-            id: 4,
-            type: 'image',
-            url: ''
-        }, {
-            id: 5,
-            type: 'image',
-            url: ''
-        }, {
-            id: 6,
-            type: 'image',
-            url: ''
-        }],
+        swiperList: [],
         //菜单导航相关
         menuList: [{
             icon: 'cardboardfill',
@@ -110,7 +82,6 @@ Component({
         tabList: ["最新发布", "最多人看", "距离最近", "历史记录"]
     },
     methods: {
-
         // 路由跳转
         navChange(e) {
             console.log(e.currentTarget.dataset.url);
@@ -133,17 +104,8 @@ Component({
             }
         },
 
-        /**
-         * 用户点击右上角分享
-         */
-        onShareAppMessage: function () {
 
-        },
-        DotStyle(e) {
-            this.setData({
-                DotStyle: e.detail.value
-            })
-        },
+
         // cardSwiper
         cardSwiper(e) {
             this.setData({
@@ -152,15 +114,31 @@ Component({
         },
         // towerSwiper
         // 初始化towerSwiper
-        towerSwiper(name) {
-            let list = this.data[name];
-            for (let i = 0; i < list.length; i++) {
-                list[i].zIndex = parseInt(list.length / 2) + 1 - Math.abs(i - parseInt(list.length / 2))
-                list[i].mLeft = i - parseInt(list.length / 2)
+        towerSwiper() {
+            const nowTime = new Date();
+            const query = {
+                limit: "",
+                page: "",
+                status: true,
+                nowTime: nowTime
             }
-            this.setData({
-                swiperList: list
-            })
+            http.postRequest('/carousel/getCarouselPage', query, ContentTypeEnum.Json_Sub,
+                res => {
+                    const list = res.data.records
+                    for (let i = 0; i < list.length; i++) {
+                        list[i].zIndex = parseInt(list.length / 2) + 1 - Math.abs(i - parseInt(list.length / 2))
+                        list[i].mLeft = i - parseInt(list.length / 2)
+                        list[i].index = i
+                        list[i].type = 'image'
+                    }
+                    this.setData({
+                        swiperList: list
+                    })
+                    console.log(this.data.swiperList);
+                }, err => {
+                    console.log(err);
+                })
+
         },
         // towerSwiper触摸开始
         towerStart(e) {
@@ -210,8 +188,14 @@ Component({
                 TabCur: e.currentTarget.dataset.id,
                 scrollLeft: (e.currentTarget.dataset.id - 1) * 60
             })
-        }
+        },
 
+        /**
+         * 用户点击右上角分享
+         */
+        onShareAppMessage: function () {
+
+        },
 
     }
 })

@@ -1,0 +1,5 @@
+<!--pages/mine/edit/edit.wxml-->
+<custom bgColor="bg-gradual-white" isBack>
+    <view slot="backText">返回</view>
+    <view slot="content">我的信息</view>
+</custom>

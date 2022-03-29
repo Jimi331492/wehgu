@@ -5,7 +5,8 @@
     "pages/home/home/home",
     "pages/find/home/home",
     "pages/info/home/home",
-    "pages/mine/home/home"
+    "pages/mine/home/home",
+    "pages/mine/edit/edit"
   ],
   "window": {
     "backgroundTextStyle": "light",

@@ -11,7 +11,7 @@
     filter: blur(8rpx);
     overflow: hidden;
     position: absolute;
-    top:0;
+    top: 0;
     z-index: -100;
 }
 
@@ -53,4 +53,18 @@
     display: flex;
     justify-content: center;
     opacity: 0.8;
+}
+
+.to-login {
+    border-bottom: solid 1rpx white;
+}
+
+.edit-btn {
+    width: 22vw;
+    position: absolute;
+    top: 5vw;
+    right: 5vw;
+    background-color: #000;
+    color: #fff;
+    opacity: 0.6;
 }

@@ -13,14 +13,20 @@
   <view class="avatar-filter-bg bg-mask">
     <image class="avatar-img" src="{{userInfo.avatar}}"></image>
   </view>
+
   <view class="user-avatar">
+    <button class="edit-btn round" bindtap="{{isLogin?'toEdit':'noLogin'}}"><text class="cuIcon-edit"></text> 编辑</button>
     <image class="cu-avatar xxxl round margin-left" src="{{userInfo.avatar}}"></image>
-    <view class="text-xl nickname">
+    <view class="text-xl nickname" wx:if="{{isLogin}}">
       <text>{{userInfo.nickname}}</text>
       <text class="text-df auth-status">未认证</text>
     </view>
+    <view class="text-xl nickname" bindtap="toLogin" wx:else>
+      <text>未登录</text>
+      <text class="text-df auth-status to-login">去登录</text>
+    </view>
     <view class="margin-top-sm introduce">
-      <text>个性签名</text>
+      <text>{{isLogin===true?'我是个性签名':'我是一个游客'}}</text>
     </view>
   </view>
 
@@ -29,8 +35,9 @@
     <view class="flex flex-sub flex-direction solid-right">
       <view class="text-xxl text-orange">{{visitTotal}}</view>
       <view class="margin-top-sm">
-        <text class="cuIcon-attentionfill"></text> View
+        <text class="cuIcon-commentfill"></text> Comment
       </view>
+
     </view>
     <view class="flex flex-sub flex-direction solid-right">
       <view class="text-xxl text-blue">{{starCount}}</view>
@@ -41,7 +48,7 @@
     <view class="flex flex-sub flex-direction">
       <view class="text-xxl text-green">{{forksCount}}</view>
       <view class="margin-top-sm">
-        <text class="cuIcon-fork"></text> Fork
+        <text class="cuIcon-attentionfill"></text> View
       </view>
     </view>
   </view>
