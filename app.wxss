@@ -14,10 +14,14 @@
     left: 50%;
     -webkit-transform: translate(-50%);
     transform: translate(-50%);
-  }
+}
 
-  .round-btn{
-      width: 5vh;
-      height: 5vh;
-      border-radius: 100%;
-  }
+.round-btn {
+    width: 5vh;
+    height: 5vh;
+    border-radius: 100%;
+}
+
+.mm-input {
+    text-align: left;
+}

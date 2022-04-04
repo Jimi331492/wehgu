@@ -15,7 +15,7 @@ Page({
         codeFocus: false,
         curItemIndex: 0, //当前输入第几位Code
         isSend: false,
-        countdown: 5,
+        countdown: 30,
         toggleDelay: false,
     },
 
@@ -56,6 +56,7 @@ Page({
         wx.getUserProfile({
             desc: '用于完善资料',
             success: res => {
+                console.log(res.rawData);
                 const form = {
                     signature: res.signature,
                     rawData: res.rawData,
@@ -65,15 +66,15 @@ Page({
                     appid: "wxeb4f620b577ff31a"
                 }
 
-                http.postRequest("/mp_login", form, ContentTypeEnum.Json_Sub,
+                http.postRequest("/mp_get_unionId", form, ContentTypeEnum.Json_Sub,
                     res => {
                         console.log(res);
                         wx.setStorageSync('sessionId', res.data.sessionId);
                         wx.setStorageSync('unionId', res.data.unionId);
                         wx.setStorageSync('openid', res.data.openId);
+                        http.fill_token_toheader(res.data.unionId);
                         wx.setStorageSync('userInfo', res.data.userInfo);
                         wx.setStorageSync('isLogin', true)
-                        http.fill_token_toheader(res.data.unionId);
                         this.setData({
                             isLogin: wx.getStorageSync('isLogin'),
                             userInfo: wx.getStorageSync('userInfo')
@@ -83,7 +84,10 @@ Page({
                         })
                     },
                     err => {
-                        console.log(err);
+                        wx.showToast({
+                            icon: 'none',
+                            title: err.message,
+                        })
                     }
                 )
             },
@@ -124,9 +128,9 @@ Page({
                 codeList: codeList
             })
         }
-        // if (codeList.length >= 4) { //执行发送请求
-        //     this.validShortMessage(codeList.join(""));
-        // }
+        if (codeList.length >= 4) { //执行发送请求
+            this.codeLogin(codeList.join(""));
+        }
 
     },
 
@@ -135,17 +139,29 @@ Page({
         /**
          * 发送验证码接口
          */
-
-        this.setData({
-            isSend: true,
-            toggleDelay: true
-        })
-        setTimeout(() => {
-            this.setData({
-                toggleDelay: false
+        http.getRequest(`/sendSMS?telephone=${this.data.telephone}`, null,
+            res => {
+                wx.showToast({
+                    icon: "none",
+                    title: res.message,
+                })
+                console.log(res);
+                this.setData({
+                    isSend: true,
+                    toggleDelay: true
+                })
+                setTimeout(() => {
+                    this.setData({
+                        toggleDelay: false
+                    })
+                }, 1000)
+                this.countdownTimer()
+            }, err => {
+                wx.showToast({
+                    icon: "none",
+                    title: err.message,
+                })
             })
-        }, 1000)
-        this.countdownTimer()
     },
 
     countdownTimer() {
@@ -157,7 +173,7 @@ Page({
             if (this.data.countdown === 0) {
                 this.setData({
                     isSend: false,
-                    countdown: 5
+                    countdown: 30
                 })
                 clearInterval(timer)
             }
@@ -169,6 +185,67 @@ Page({
         wx.navigateTo({
             url: '/pages/index/home/home',
         })
+    },
+
+    codeLogin(code) {
+        wx.login({
+            success: res => {
+                if (res.code) {
+                    wx.setStorageSync('code', res.code);
+                }
+
+                wx.getUserInfo({
+                    lang: 'zh_CN',
+                    success: res => {
+                        console.log(res.rawData);
+                        const form = {
+                            signature: res.signature,
+                            rawData: res.rawData,
+                            encryptedData: res.encryptedData,
+                            iv: res.iv,
+                            jscode: wx.getStorageSync('code'),
+                            appid: "wxeb4f620b577ff31a",
+                            code: code,
+                            telephone: this.data.telephone,
+                        }
+
+                        console.log(form);
+
+                        /**
+                         * 调用校验验证码参数
+                         */
+                        http.postRequest(`/SMSLogin`, form, ContentTypeEnum.Default_Sub,
+                            res => {
+                                console.log(res);
+                                wx.setStorageSync('sessionId', res.data.sessionId);
+                                wx.setStorageSync('unionId', res.data.unionId);
+                                wx.setStorageSync('openid', res.data.openId);
+                                http.fill_token_toheader(res.data.unionId);
+                                wx.setStorageSync('userInfo', res.data.userInfo);
+                                wx.setStorageSync('isLogin', true)
+                                this.setData({
+                                    isLogin: wx.getStorageSync('isLogin'),
+                                    userInfo: wx.getStorageSync('userInfo')
+                                })
+                                wx.redirectTo({
+                                    url: '/pages/index/home/home',
+                                })
+                            }, err => {
+                                wx.showToast({
+                                    icon: "none",
+                                    title: err.message,
+                                })
+                            })
+                    },
+                    fail: err => {
+                        console.log(err);
+                    }
+                })
+            }
+        })
+
+
+
     },
 
     /**

@@ -14,7 +14,7 @@ function fill_token_toheader(token) {
   if (token == null || token == undefined || token == "") {
     token = wx.getStorageSync('unionId');
   }
-  header["AuthorizationWxA"] = token;
+  header["unionId"] = token;
   // console.log(token)
   return (token)
 }
@@ -67,7 +67,7 @@ function request(url, params, method, onSuccess, onFailed) {
 
   let fullpath = getFullRequestPath(url);
   header["Cookie"] = wx.getStorageSync('cookie');
-  header["wxaSessionId"] = wx.getStorageSync('wxaSessionId');
+  header["sessionId"] = wx.getStorageSync('sessionId');
   header["openid"] = wx.getStorageSync('openid');
   wx.request({
     url: fullpath,

@@ -1,0 +1,6 @@
+<!--pages/mine/auth/auth.wxml-->
+<custom bgColor="bg-gradual-white" isBack>
+    <view slot="backText">保存并返回</view>
+    <view slot="content">认证信息</view>
+</custom>
+<footer class="footer"></footer>

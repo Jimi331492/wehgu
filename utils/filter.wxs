@@ -117,10 +117,16 @@ function filterTree(multiArray) {
 }
 
 
+var sslice = function () {
+  console.log(1);
+  console.log(1);
+  return 'ssssssssssssss'
+}
 
-
-
-module.exports.formatTime = formatTime
-module.exports.filterArray = filterArray
-module.exports.isInclude = isInclude
-module.exports.filterTree = filterTree
+module.exports = {
+  formatTime: formatTime,
+  filterArray: filterArray,
+  isInclude: isInclude,
+  filterTree: filterTree,
+  sslice: sslice
+}

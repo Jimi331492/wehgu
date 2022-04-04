@@ -1,5 +1,6 @@
 <!--pages/mine/home/home.wxml-->
 <!-- navigation -->
+<!-- <wxs scr="../../../utils/filter.wxs" module="filter" ></wxs> -->
 <custom bgColor="bg-gradual-white">
   <view slot="right">
     <button class="cuIcon-noticefill bg-yellow round text-white" size="mini"></button>
@@ -11,22 +12,31 @@
   <!-- 头像背景 -->
   <view class="placeholder-1"></view>
   <view class="avatar-filter-bg bg-mask">
-    <image class="avatar-img" src="{{userInfo.avatar}}"></image>
+    <image class="avatar-img" src="{{userInfo.avatar==null?'/images/custom-avatar.png':userInfo.avatar}}">
+    </image>
   </view>
 
   <view class="user-avatar">
     <button class="edit-btn round" bindtap="{{isLogin?'toEdit':'noLogin'}}"><text class="cuIcon-edit"></text> 编辑</button>
-    <image class="cu-avatar xxxl round margin-left" src="{{userInfo.avatar}}"></image>
+    <image class="cu-avatar xxxl round margin-left " src="{{userInfo.avatar==null?'/images/custom-avatar.png':userInfo.avatar}}">
+
+    </image>
     <view class="text-xl nickname" wx:if="{{isLogin}}">
-      <text>{{userInfo.nickname}}</text>
-      <text class="text-df auth-status">未认证</text>
+      <text wx:if="{{userInfo.nickname!=null}}">{{userInfo.nickname}}</text>
+      <text wx:else>{{'用户'+userInfo.userUuid[0]
+        +userInfo.userUuid[1]
+        +userInfo.userUuid[2]
+        +userInfo.userUuid[3]
+        +userInfo.userUuid[4]
+        +userInfo.userUuid[5]}}</text>
+      <text class="text-df auth-status">{{userInfo.authentication?"已实名":"未认证"}}</text>
     </view>
     <view class="text-xl nickname" bindtap="toLogin" wx:else>
       <text>未登录</text>
       <text class="text-df auth-status to-login">去登录</text>
     </view>
     <view class="margin-top-sm introduce">
-      <text>{{isLogin===true?'我是个性签名':'我是一个游客'}}</text>
+      <text>{{userInfo.introduce!==null&&isLogin===true?userInfo.introduce:'一句话介绍自己'}}</text>
     </view>
   </view>
 

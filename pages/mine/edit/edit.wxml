@@ -3,3 +3,133 @@
     <view slot="backText">返回</view>
     <view slot="content">我的信息</view>
 </custom>
+<form>
+    <view class="cu-form-group bg-gray margin-top padding-top">
+        <view class="title text-gray">头像</view>
+        <view class="flex flex-sub justify-center" style="overflow: visible;">
+            <view class="margin-rihgt">
+                <view class="mm-tag badge round {{userInfo.gender===1?'cuIcon-female bg-pink':'cuIcon-male bg-blue'}}"></view>
+                <image class="cu-avatar xxxl round" src="{{userInfo.avatar==null?'/images/custom-avatar.png':userInfo.avatar}}"></image>
+                <button class="mm-btn badge round cuIcon-camerafill bg-yellow text-white" bindtap="ChooseImage"></button>
+            </view>
+        </view>
+    </view>
+
+    <view class="cu-form-group">
+        <view class="title text-gray ">介绍</view>
+        <view class="introduce-box flex-sub">{{userInfo.introduce}}</view>
+        <button class="cu-btn bg-green shadow" data-target="introduce" bindtap="showModal">输入</button>
+    </view>
+
+    <view class="cu-form-group margin-top">
+        <view class="title text-gray">昵称
+            <text class="text-black margin-left">{{userInfo.nickname!==null?userInfo.nickname:'NULL'}}</text>
+        </view>
+        <button class="cu-btn bg-green shadow" data-target="nickname" bindtap="showModal">输入</button>
+    </view>
+
+
+
+    <view class="cu-form-group">
+        <view class="title text-gray">
+            性别
+            <text class="text-black margin-left"> {{userInfo.gender===1?'女':'男'}}</text>
+        </view>
+        <view>
+            <button class="cu-btn bg-blue shadow margin-right">男</button>
+            <button class="cu-btn bg-pink shadow">女</button>
+        </view>
+
+    </view>
+
+    <view class="cu-form-group">
+        <view class="title text-gray">手机
+            <text class="text-black margin-left">{{userInfo.telephone!==null?userInfo.telephone:'未绑定'}}</text>
+        </view>
+        <input disabled type="text" />
+        <button size="mini" bindtap="showModal" data-target="bindTelephone" class="{{userInfo.telephone!==null?'cuIcon-check round bg-green':'cuIcon-close bg-red'}}">
+            {{userInfo.telephone!==null?' ':'点击绑定'}}
+        </button>
+
+    </view>
+
+    <view class="cu-form-group margin-top">
+        <view class="title text-gray">当前认证角色
+            <text class="text-black margin-left">{{userInfo.role.roleName}}</text>
+        </view>
+        <input disabled="true" type="text" />
+        <button class="cuIcon-unfold bg-green" data-path="/pages/mine/auth/auth" bindtap="navigateTo">查看</button>
+    </view>
+
+
+</form>
+
+<footer class="footer"></footer>
+
+<modal isBar name="bindTelephone" class="mm-modal" modal-name="{{modalName}}" bind:hidden="hideModal" body-height="{{600}}">
+    <view class="mm-modal-body">
+        <view class="mm-text">输入手机号码
+            <view class="mm-text">发送验证码绑定手机</view>
+        </view>
+
+        <view class="mm-input-box {{toggleDelay?'animation-slide-bottom':''}} {{flag?'check-success':'check-fail'}}">
+            <view class=" cuIcon-phone"></view>
+            <input class="mm-input" cursor-spacing="{{50}}" bindinput="telephoneInput" disabled="{{isSend}}" type="number" maxlength="11" placeholder="输入手机号" placeholder-class="mm-input-placeholder" auto-focus="{{modalName==='bindTelephone'}}">
+            </input>
+        </view>
+        <view class="code-list {{toggleDelay?'animation-scale-up':''}}" style="animation-delay: 0.{{4}}s;" wx:if="{{isSend===true}}">
+            <input value="{{codeList.length>=index+1?codeList[index]:''}}" disabled class="code-item {{curItemIndex==index && 'theme-color'}}" type="number" maxlength="1" catchtap="itemFocus" wx:for="{{4}}" wx:key="index"></input>
+
+            <input type="number" cursor-spacing="{{100}}" class="code-input" maxlength="4" bindinput="codeInputChange" data-field="code" focus="{{codeFocus}}"></input>
+        </view>
+
+        <button disabled="{{isSend===true}}" class="cu-btn round lg shadow tel-login send-btn" catchtap="sendSMSCode">
+            <text class="cuIcon-weixin"></text>{{isSend?countdown:'获取验证码'}}
+        </button>
+    </view>
+
+</modal>
+
+<view class="cu-modal {{modalName=='introduce'?'show':''}}">
+    <view class="cu-dialog">
+        <view class="cu-bar bg-white justify-end">
+            <view class="content">一句话介绍自己</view>
+            <view class="action" bindtap="hideModal">
+                <text class="cuIcon-close text-red"></text>
+            </view>
+        </view>
+        <view class="margin flex flex-direction ">
+            <textarea class="mm-input padding-left" style="width: 100%;" value="{{userInfo.introduce}}" placeholder="请输入..." maxlength="50" bindinput="introduceInput"></textarea>
+            <text class="self-start">1.介绍不超过 <text class="text-red">50</text> 个字</text>
+            <text class="self-start">2.介绍 <text class="text-red">可以</text> 添加emoji小表情</text>
+        </view>
+        <view class="cu-bar bg-white">
+            <view class="action margin-0 flex-sub text-green solid-left" bindtap="hideModal">取消</view>
+            <view class="action margin-0 flex-sub  solid-left" bindtap="saveIntroduceInput">确定</view>
+        </view>
+    </view>
+</view>
+
+
+<view class="cu-modal {{modalName=='nickname'?'show':''}}">
+    <view class="cu-dialog">
+        <view class="cu-bar bg-white justify-end">
+            <view class="content">修改你的昵称</view>
+            <view class="action" bindtap="hideModal">
+                <text class="cuIcon-close text-red"></text>
+            </view>
+        </view>
+        <view class="padding-xl flex flex-direction">
+            <input class="self-start margin-bottom padding-left mm-input" type="text" value="{{userInfo.nickname}}" placeholder="请输入..." bindinput="nicknameInput" />
+
+            <text class="self-start">1.昵称不超过 <text class="text-red">14</text> 个字</text>
+            <text class="self-start">2.昵称 <text class="text-red">可以</text> 添加emoji小表情</text>
+            <text class="self-start"></text>
+
+        </view>
+        <view class="cu-bar bg-white">
+            <view class="action margin-0 flex-sub text-green solid-left" bindtap="hideModal">取消</view>
+            <view class="action margin-0 flex-sub  solid-left" bindtap="saveNicknameInput">确定</view>
+        </view>
+    </view>
+</view>
