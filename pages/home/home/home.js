@@ -14,11 +14,13 @@ Component({
             // 初始化towerSwiper 传已有的数组名即可
 
             this.setData({
-                isLogin: wx.getStorageSync('isLogin')
+                isLogin: wx.getStorageSync('isLogin'),
+                isExamine: app.globalData.isExamine
             });
         }
     },
     data: {
+        isExamine: true,//审核字段
         isLogin: false,
         // 轮播图相关
         cardCur: 0,

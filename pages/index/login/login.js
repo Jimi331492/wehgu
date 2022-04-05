@@ -143,7 +143,7 @@ Page({
             res => {
                 wx.showToast({
                     icon: "none",
-                    title: res.message,
+                    title: res.data,
                 })
                 console.log(res);
                 this.setData({

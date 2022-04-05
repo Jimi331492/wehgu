@@ -1,38 +1,4 @@
-<!-- <view class="container" wx:if="{{isLogin===null||isLogin===false||isLogin===''}}">
-    <image src="/images/bg1.png" class="bg1"></image>
-
-    <view class="container-2">
-        <view class="welcome-word">
-            <view class="word-1">
-                <text>
-                    欢迎你，新同学</text>
-            </view>
-            <view class="word-2">
-                <view>
-                    即刻加入WeHGU,
-                </view>
-                <view>
-                    与校友一起发现美好校园生活！
-                </view>
-            </view>
-        </view>
-        <view class="login-box">
-            <button class="cu-btn round lg shadow wx-login" bindtap="getUserProfile">
-                <text class="cuIcon-weixin"></text>通过微信登录
-            </button>
-        </view>
-        <view class="other-login flex">
-            <button class="round-btn bg-gray">验</button>
-            <button class="cuIcon-more"></button>
-        </view>
-    </view>
-
-
-
-    <footer class="footer"></footer>
-</view> -->
-
-<view class="container" >
+<view class="container">
 
     <home wx:if="{{PageCur=='Home'}}"></home>
     <find wx:if="{{PageCur=='Find'}}"></find>
@@ -47,7 +13,10 @@
         <!-- <view class="action {{PageCur==='Find'?'text-blue':'text-gray'}}" bindtap="NavChange" data-cur="Find">
         <view class="cuIcon-discoverfill"></view> 发现
     </view> -->
-        <view class="action text-gray add-action">
+        <view wx:if="{{ isExamine }}">
+            
+        </view>
+        <view class="action text-gray add-action" wx:else>
             <button class="cu-btn cuIcon-add bg-blue shadow"></button>
             发布
         </view>

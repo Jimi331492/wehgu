@@ -6,8 +6,9 @@ const app = getApp()
 
 Page({
     data: {
-        PageCur: 'Mine',
-        isLogin: wx.getStorageSync('isLogin')
+        PageCur: 'Home',
+        isLogin: wx.getStorageSync('isLogin'),
+        isExamine: true
     },
 
     NavChange(e) {
@@ -70,6 +71,9 @@ Page({
                 isLogin: wx.getStorageSync("isLogin")
             })
         }
+        this.setData({
+            isExamine: app.globalData.isExamine
+        })
         console.log(this.data.isLogin);
     },
 

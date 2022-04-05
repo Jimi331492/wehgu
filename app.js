@@ -4,6 +4,18 @@ App({
     return require($uri)
   },
   onLaunch: function () {
+    // console.log('进入小程序')
+
+    // 获取当前时间
+    var nowTime = Date.parse(new Date())
+    var delineTime = Date.parse('2022-4-6')
+    // console.log(nowTime > delineTime)
+    if (nowTime > delineTime) {
+      // 说明已经过了审核周期，正常显示
+      this.globalData.isExamine = false
+    }
+    console.log(this.globalData.isExamine)
+
     // 获取系统状态栏信息
     wx.getSystemInfo({
       success: e => {
@@ -56,5 +68,7 @@ App({
       url: '/' + lastRoute + optionsStr,
     })
   },
-  globalData: {}
+  globalData: {
+    isExamine: true
+  }
 })
