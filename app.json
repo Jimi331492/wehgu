@@ -7,7 +7,8 @@
     "pages/info/home/home",
     "pages/mine/home/home",
     "pages/mine/edit/edit",
-    "pages/mine/auth/auth"
+    "pages/mine/auth/auth",
+    "pages/mine/cropper/cropper"
   ],
   "window": {
     "backgroundTextStyle": "light",

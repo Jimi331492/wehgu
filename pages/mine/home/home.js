@@ -49,22 +49,34 @@ Component({
                         appid: "wxeb4f620b577ff31a"
                     }
 
-                    http.postRequest("/mp_login", form, ContentTypeEnum.Json_Sub,
+                    http.postRequest("/mp_get_unionId", form, ContentTypeEnum.Json_Sub,
                         res => {
                             console.log(res);
                             wx.setStorageSync('sessionId', res.data.sessionId);
                             wx.setStorageSync('unionId', res.data.unionId);
                             wx.setStorageSync('openid', res.data.openId);
-                            wx.setStorageSync('userInfo', res.data.userInfo);
-                            wx.setStorageSync('isLogin', true)
                             http.fill_token_toheader(res.data.unionId);
-                            this.setData({
-                                isLogin: wx.getStorageSync('isLogin'),
-                                userInfo: wx.getStorageSync('userInfo')
-                            })
+                            wx.setStorageSync('isLogin', true)
+                            http.postRequest("/getMPUserInfo", unionId, ContentTypeEnum.Default_Sub,
+                                res => {
+                                    wx.setStorageSync('userInfo', res.data);
+                                    this.setData({
+                                        userInfo: res.data
+                                    })
+                                },
+                                err => {
+                                    wx.showToast({
+                                        icon: "none",
+                                        title: err.message,
+                                    })
+                                })
+
                         },
                         err => {
-                            console.log(err);
+                            wx.showToast({
+                                icon: 'none',
+                                title: err.message,
+                            })
                         }
                     )
                 },
@@ -74,6 +86,14 @@ Component({
             })
         },
 
+        //刷新数据
+        changeData() {
+            this.setData({
+                userInfo: wx.getStorageSync('userInfo')
+            })
+            console.log(this.data.userInfo.introduce);
+            console.log('上一个页面一键刷新');
+        },
         // 路由跳转
         navChange(e) {
             console.log(e.currentTarget.dataset.url);
@@ -126,7 +146,7 @@ Component({
                     setTimeout(() =>
                         // app.reloadThisPage(),
                         wx.redirectTo({
-                            url: '/pages/index/index',
+                            url: '/pages/index/login/login',
                         }), 1000
                     )
                 },

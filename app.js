@@ -1,4 +1,6 @@
 //app.js
+const http = require('./utils/httputils.js');
+const ContentTypeEnum = require('./utils/ContentTypeEnum.js');
 App({
   require: function ($uri) {
     return require($uri)
@@ -54,6 +56,11 @@ App({
       }
     })
   },
+
+
+
+
+
 
   // 全局可用
   reloadThisPage: function () {

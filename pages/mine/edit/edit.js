@@ -5,14 +5,13 @@ const ContentTypeEnum = require('../../../utils/ContentTypeEnum.js');
 const app = getApp()
 Page({
 
+
     /**
      * 页面的初始数据
      */
     data: {
-        modalName: "",
-
+        modalName: null,
         telephone: "",
-
         //表单输入
         userInfo: {},
         form: {
@@ -40,26 +39,119 @@ Page({
         },
         baseURL: "",
     },
-    navigateTo(e) {
-        wx.navigateTo({
-            url: e.currentTarget.dataset.path,
+
+
+    //选择头像
+    ChooseImage() {
+        wx.chooseImage({
+            count: 1, //默认9
+            sizeType: ['original', 'compressed'], //可以指定是原图还是压缩图，默认二者都有
+            sourceType: ['album', 'camera'], //从相册选择
+            success: res => {
+                const src = res.tempFilePaths[0]
+                wx.navigateTo({
+                    url: `../cropper/cropper?img=${src}`, //注意是这里跳转裁剪页面
+                });
+            }
+        });
+
+    },
+
+    uploadImage(path) {
+        const entityUID = this.data.userInfo.userDetailUuid
+        const entityName = 'avatar'
+        this.upload(entityUID, entityName, path)
+    },
+    /**
+     * 上传图片
+     * @param {*} e 
+     */
+    upload: function (entityUID, entityName, path) {
+        this.data.PicturePathSaveForm.entityUID = entityUID;
+        this.data.PicturePathSaveForm.entityName = entityName;
+        wx.showLoading({
+            title: '上传中...',
+            mask: true,
+        })
+        wx.uploadFile({
+            url: this.data.baseURL + '/file/uploadPicture',
+            filePath: path,
+            fileType: 'image',
+            name: 'picture',
+            formData: {
+                'pictype': this.data.PicturePathSaveForm.entityName
+            },
+            success: res => {
+                console.log('上传头像成功获得相对路径' + res);
+                let obj = new Object();
+                let map = JSON.parse(res.data)
+                obj.path = map.data
+                obj.sequence = 1;
+                this.data.PicturePathSaveForm.pathSequenceList.push(obj)
+                console.log('保存图片相对路径的参数' + this.data.PicturePathSaveForm);
+
+                const form = {
+                    userDetailUuid: this.data.userInfo.userDetailUuid,
+                    avatar: obj.path
+                }
+                //保存路径到用户信息
+                this.saveEdit(form)
+                http.postRequest("/file/savePicturePath", this.data.PicturePathSaveForm, ContentTypeEnum.Default_Sub,
+                    res => {
+                        wx.hideLoading()
+                        wx.showToast({
+                            icon: "none",
+                            title: res.message,
+                        })
+                        const unionId = wx.getStorageSync("unionId")
+                        this.getMPUserInfo(unionId)
+
+                        console.log("上传完毕！！！");
+                    }
+                )
+
+            },
+            fail(e) {
+                console.log("上传失败", e)
+            }
+        })
+
+    },
+
+    getMPUserInfo(unionId) {
+        http.postRequest("/getMPUserInfo", unionId, ContentTypeEnum.Default_Sub,
+            res => {
+                wx.setStorageSync('userInfo', res.data);
+                this.setData({
+                    userInfo: res.data
+                })
+                this.changeLastPageData()
+            },
+            err => {
+                wx.showToast({
+                    icon: "none",
+                    title: err.message,
+                })
+            })
+    },
+
+    changeLastPageData() {
+        let pages = getCurrentPages()
+        let prevPage = pages[0]; //首页
+        wx.nextTick(() => {
+            let mine = prevPage.selectComponent('#mine');
+            console.log(mine);
+            mine.changeData()
         })
     },
 
-    nicknameInput(e) {
-        this.setData({
-            ['userInfo.nickname']: e.detail.value
-        })
-
-    },
-
+    //介绍输入
     introduceInput(e) {
         this.setData({
             ['userInfo.introduce']: e.detail.value
         })
 
     },
-
     saveIntroduceInput() {
         const form = {
             userDetailUuid: this.data.userInfo.userDetailUuid,
@@ -68,7 +160,12 @@ Page({
 
         this.saveEdit(form)
     },
-
+    //昵称输入
+    nicknameInput(e) {
+        this.setData({
+            ['userInfo.nickname']: e.detail.value
+        })
+    },
     saveNicknameInput() {
         const form = {
             userDetailUuid: this.data.userInfo.userDetailUuid,
@@ -77,12 +174,57 @@ Page({
         this.saveEdit(form)
     },
 
+    //点击修改性别
+    changeGender(e) {
+        const gender = e.currentTarget.dataset.gender
+        this.setData({
+            ['userInfo.gender']: gender
+        })
+        const form = {
+            userDetailUuid: this.data.userInfo.userDetailUuid,
+            gender: this.data.userInfo.gender
+        }
+
+        this.saveEdit(form)
+    },
+
+    navigateTo(e) {
+        wx.navigateTo({
+            url: e.currentTarget.dataset.path,
+        })
+    },
+
     //保存修改的接口
     saveEdit(form) {
         /**
          * 表单预先校验 先不写
          */
         http.postRequest('/sys_user_detail/saveCustomer', form, ContentTypeEnum.Default_Sub,
+            res => {
+                wx.setStorageSync('userInfo', this.data.userInfo)
+                this.setData({
+                    userInfo: this.data.userInfo
+                })
+                this.changeLastPageData()
+                this.hideModal()
+                wx.showToast({
+                    icon: "none",
+                    title: res.message,
+                })
+            }, err => {
+                wx.showToast({
+                    icon: "none",
+                    title: err.message,
+                })
+            })
+    },
+
+    //保存修改的接口
+    saveAuth(form) {
+        /**
+         * 表单预先校验 先不写
+         */
+        http.postRequest('/sys_user/saveUser', form, ContentTypeEnum.Default_Sub,
             res => {
                 wx.setStorageSync('userInfo', this.data.userInfo)
                 this.setData({
@@ -169,7 +311,15 @@ Page({
          */
         http.getRequest(`/checkSMS?telephone=${this.data.telephone}&code=${code}`, null,
             res => {
-                http.postRequest('/')
+                console.log(res);
+                const form = {
+                    userUuid: this.data.userInfo.userUuid,
+                    telephone: this.data.telephone,
+                }
+                this.setData({
+                    ['userInfo.telephone']: this.data.telephone
+                })
+                this.saveAuth(form)
             }, err => {
                 wx.showToast({
                     icon: "none",
@@ -222,64 +372,7 @@ Page({
         }, 1000)
     },
 
-    //选择头像
-    ChooseImage() {
-        wx.chooseImage({
-            count: 1, //默认9
-            sizeType: ['original', 'compressed'], //可以指定是原图还是压缩图，默认二者都有
-            sourceType: ['album'], //从相册选择
-            success: (res) => {
-                this.setData({
-                    imgList: res.tempFilePaths
-                })
-            }
-        });
 
-    },
-
-    /**
-     * 上传图片
-     * @param {*} e 
-     */
-    upload: function (entifyUID, entifyName) {
-        this.data.PicturePathSaveForm.entifyUID = entifyUID;
-        this.data.PicturePathSaveForm.entifyName = entifyName;
-        for (let i = 0; i < this.data.imgList.length; i++) {
-            wx.uploadFile({
-                url: this.data.baseURL + '/file/uploadPicture',
-                filePath: this.data.imgList[i],
-                fileType: 'image',
-                name: 'picture',
-                formData: {
-                    'pictype': this.data.PicturePathSaveForm.entifyName
-                },
-                success(res) {
-                    let obj = new Object();
-                    let map = JSON.parse(res.data)
-                    obj.path = map.data
-                    obj.sequence = i + 1;
-                    this.data.BascPictureStore.listPathSequence.push(obj)
-                    console.log(this.data.PicturePathSaveForm);
-                    if (i === this.data.imgList.length - 1) {
-                        console.log(this.data.imgList.length);
-                        console.log(this.data.PicturePathSaveForm);
-                        http.postRequest("/file-case/picturePathSave", this.data.PicturePathSaveForm, ContentTypeEnum.Default_Sub,
-                            res => {
-                                wx.showToast({
-                                    icon: "none",
-                                    title: res.message,
-                                })
-                                console.log("上传完毕！！！");
-                            }
-                        )
-                    }
-                },
-                fail(e) {
-                    console.log("上传失败", e)
-                }
-            })
-        }
-    },
 
     /**
      * 生命周期函数--监听页面加载
@@ -290,6 +383,8 @@ Page({
             userInfo: wx.getStorageSync('userInfo'),
             baseURL: http.baseURL,
         })
+
+
     },
 
 

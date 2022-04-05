@@ -1,9 +1,9 @@
 <view class="container">
 
-    <home wx:if="{{PageCur=='Home'}}"></home>
-    <find wx:if="{{PageCur=='Find'}}"></find>
-    <info wx:if="{{PageCur=='Info'}}"></info>
-    <mine wx:if="{{PageCur=='Mine'}}"></mine>
+    <home id='home' wx:if="{{PageCur=='Home'}}"></home>
+    <find id='find' wx:if="{{PageCur=='Find'}}"></find>
+    <info id='info' wx:if="{{PageCur=='Info'}}"></info>
+    <mine id='mine' wx:if="{{PageCur=='Mine'}}"></mine>
 
     <!-- 底部导航 -->
     <view class="cu-bar tabbar bg-white navbar">
@@ -14,7 +14,7 @@
         <view class="cuIcon-discoverfill"></view> 发现
     </view> -->
         <view wx:if="{{ isExamine }}">
-            
+
         </view>
         <view class="action text-gray add-action" wx:else>
             <button class="cu-btn cuIcon-add bg-blue shadow"></button>

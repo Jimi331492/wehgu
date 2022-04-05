@@ -73,15 +73,20 @@ Page({
                         wx.setStorageSync('unionId', res.data.unionId);
                         wx.setStorageSync('openid', res.data.openId);
                         http.fill_token_toheader(res.data.unionId);
-                        wx.setStorageSync('userInfo', res.data.userInfo);
                         wx.setStorageSync('isLogin', true)
-                        this.setData({
-                            isLogin: wx.getStorageSync('isLogin'),
-                            userInfo: wx.getStorageSync('userInfo')
-                        })
-                        wx.redirectTo({
-                            url: '/pages/index/home/home',
-                        })
+                        http.postRequest("/getMPUserInfo", res.data.unionId, ContentTypeEnum.Default_Sub,
+                            res => {
+                                wx.setStorageSync('userInfo', res.data);
+                                wx.redirectTo({
+                                    url: '/pages/index/home/home',
+                                })
+                            },
+                            err => {
+                                wx.showToast({
+                                    title: err.message,
+                                })
+                            })
+
                     },
                     err => {
                         wx.showToast({
@@ -96,6 +101,8 @@ Page({
             }
         })
     },
+
+
 
     itemFocus() {
         console.log(1);
@@ -221,15 +228,20 @@ Page({
                                 wx.setStorageSync('unionId', res.data.unionId);
                                 wx.setStorageSync('openid', res.data.openId);
                                 http.fill_token_toheader(res.data.unionId);
-                                wx.setStorageSync('userInfo', res.data.userInfo);
                                 wx.setStorageSync('isLogin', true)
-                                this.setData({
-                                    isLogin: wx.getStorageSync('isLogin'),
-                                    userInfo: wx.getStorageSync('userInfo')
-                                })
-                                wx.redirectTo({
-                                    url: '/pages/index/home/home',
-                                })
+                                http.postRequest("/getMPUserInfo", res.data.unionId, ContentTypeEnum.Default_Sub,
+                                    res => {
+                                        wx.setStorageSync('userInfo', res.data);
+                                        wx.redirectTo({
+                                            url: '/pages/index/home/home',
+                                        })
+                                    },
+                                    err => {
+                                        wx.showToast({
+                                            icon: "none",
+                                            title: err.message,
+                                        })
+                                    })
                             }, err => {
                                 wx.showToast({
                                     icon: "none",

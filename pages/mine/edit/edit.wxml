@@ -18,14 +18,14 @@
     <view class="cu-form-group">
         <view class="title text-gray ">介绍</view>
         <view class="introduce-box flex-sub">{{userInfo.introduce}}</view>
-        <button class="cu-btn bg-green shadow" data-target="introduce" bindtap="showModal">输入</button>
+        <button class="cu-btn bg-green shadow" data-target="introduce" bindtap="showModal">修改</button>
     </view>
 
     <view class="cu-form-group margin-top">
         <view class="title text-gray">昵称
             <text class="text-black margin-left">{{userInfo.nickname!==null?userInfo.nickname:'NULL'}}</text>
         </view>
-        <button class="cu-btn bg-green shadow" data-target="nickname" bindtap="showModal">输入</button>
+        <button class="cu-btn bg-green shadow" data-target="nickname" bindtap="showModal">修改</button>
     </view>
 
 
@@ -36,8 +36,8 @@
             <text class="text-black margin-left"> {{userInfo.gender===1?'女':'男'}}</text>
         </view>
         <view>
-            <button class="cu-btn bg-blue shadow margin-right">男</button>
-            <button class="cu-btn bg-pink shadow">女</button>
+            <button data-gender="{{0}}" bindtap="changeGender" class="cu-btn bg-blue shadow margin-right">男</button>
+            <button data-gender="{{1}}" bindtap="changeGender" class="cu-btn bg-pink shadow">女</button>
         </view>
 
     </view>
