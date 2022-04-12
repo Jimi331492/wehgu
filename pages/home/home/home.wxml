@@ -1,4 +1,5 @@
 <!--pages/home/home.wxml-->
+<wxs src="/utils/filter.wxs" module="filter"></wxs>
 <custom bgColor="bg-gradual-blue">
     <view slot="content">首页</view>
 </custom>
@@ -15,7 +16,7 @@
 
     <view class="flex justify-center text-lg">美好的一天又开始了</view>
 </scroll-view>
-<scroll-view scroll-y class="scrollPage" wx:else>
+<scroll-view scroll-y class="scrollPage" bindscrolltolower="loadPostList" wx:else>
     <!-- 轮播图 -->
     <swiper class="card-swiper square-dot" indicator-dots="true" circular="true" autoplay="true" interval="5000" duration="500" bindchange="cardSwiper" indicator-color="#8799a3" indicator-active-color="#0081ff">
         <swiper-item wx:for="{{swiperList}}" wx:key="index" class="{{cardCur==index?'cur':''}}">
@@ -57,32 +58,36 @@
     </scroll-view>
 
     <!-- 消息列表 -->
-    <view class="cu-card case no-card ">
-        <view class="cu-item shadow">
-            <view class="image">
-                <image src="https://ossweb-img.qq.com/images/lol/web201310/skin/big10006.jpg" mode="widthFix"></image>
-                <view class="cu-tag bg-blue">史诗</view>
+    <view class="cu-card case no-card post-list">
+        <view class="cu-item shadow flex-direction post-item" wx:for="{{postList}}" wx:key="index">
+            <view class="image mm-img" wx:if="{{item.imgIndexURI!==null}}">
+                <image src="{{item.imgIndexURI}}" mode="aspectFill"></image>
+                <view class="cu-tag bg-{{item.backgroundColor}}">{{item.tag}}</view>
                 <view class="cu-bar bg-shadeBottom">
-                    <text class="text-cut">我已天理为凭，踏入这片荒芜，不再受凡人的枷锁遏制。我已天理为凭，踏入这片荒芜，不再受凡人的枷锁遏制。</text>
+                    <text class="text-cut">{{item.content}}</text>
                 </view>
             </view>
-            <view class="cu-list menu-avatar">
+            <view class="image mm-img flex align-center" wx:else style="min-height: 400rpx;">
+                <text class="self-start text-bold padding padding-top-xl">{{item.content}}s</text>
+                <view class="cu-tag bg-{{item.backgroundColor}}">{{item.tag}}</view>
+            </view>
+            <view class="cu-list menu-avatar ">
                 <view class="cu-item">
-                    <view class="cu-avatar round lg" style="background-image:url(https://ossweb-img.qq.com/images/lol/web201310/skin/big10006.jpg);"></view>
+                    <image class="cu-avatar lg round" src="{{item.avatar==null?'/images/custom-avatar.png':item.avatar}}"></image>
                     <view class="content flex-sub">
-                        <view class="text-grey">正义天使 凯尔</view>
+                        <view class="text-grey text-sm"> {{filter.formatTime(item.addTime,"notime")}}</view>
                         <view class="text-gray text-sm flex justify-between">
-                            十天前
+                            {{item.nickname}}
                             <view class="text-gray text-sm">
-                                <text class="cuIcon-attentionfill margin-lr-xs"></text> 10
-                                <text class="cuIcon-appreciatefill margin-lr-xs"></text> 20
-                                <text class="cuIcon-messagefill margin-lr-xs"></text> 30
+                                <text class="cuIcon-appreciatefill margin-lr-xs"></text> {{item.star}}
                             </view>
                         </view>
                     </view>
                 </view>
             </view>
         </view>
-
+        <view wx:if="{{isBottom}}">
+            到底了
+        </view>
     </view>
 </scroll-view>

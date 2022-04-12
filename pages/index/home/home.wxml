@@ -17,7 +17,7 @@
 
         </view>
         <view class="action text-gray add-action" wx:else>
-            <button class="cu-btn cuIcon-add bg-blue shadow"></button>
+            <button data-path="/pages/post/home/home" class="cu-btn cuIcon-add bg-blue shadow" bindtap="navigateTo"></button>
             发布
         </view>
         <!-- <view class="action {{PageCur==='Info'?'text-blue':'text-gray'}}" bindtap="NavChange" data-cur="Info">

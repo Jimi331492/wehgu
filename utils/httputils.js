@@ -61,9 +61,9 @@ function get(url, params, onSuccess, onFailed) {
  */
 
 function request(url, params, method, onSuccess, onFailed) {
-  wx.showLoading({
-    title: "正在加载中...",
-  })
+//   wx.showLoading({
+//     title: "正在加载中...",
+//   })
 
   let fullpath = getFullRequestPath(url);
   header["Cookie"] = wx.getStorageSync('cookie');
@@ -75,7 +75,7 @@ function request(url, params, method, onSuccess, onFailed) {
     method: method,
     header: header,
     success: function (res) {
-      wx.hideLoading()
+    //   wx.hideLoading()
       // console.log('响应：', res);
       if (res.header) {
         if ('Set-Cookie' in res.header) {
@@ -100,7 +100,7 @@ function request(url, params, method, onSuccess, onFailed) {
       }
     },
     fail: function (error) {
-      wx.hideLoading();
+    //   wx.hideLoading();
       wx.showToast({
         title: 'Network Error',
         icon: 'none',

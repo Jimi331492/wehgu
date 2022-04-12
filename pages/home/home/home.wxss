@@ -6,10 +6,31 @@
     z-index: var(--index);
 }
 
-.cu-list+.cu-list{
+.cu-list+.cu-list {
     margin-top: 15rpx;
 }
 
-.tab{
+.tab {
     margin-top: 15rpx;
+}
+
+.post-list {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    margin-top: 10rpx;
+}
+
+.post-list .post-item {
+    display: flex;
+    justify-content: space-between;
+    width: 49%;
+    margin: 5rpx 0 !important; 
+    padding-top: 10rpx;
+    border-radius: 10rpx;
+}
+
+.post-list .post-item .image.mm-img {
+    margin: 0 20rpx ;
 }

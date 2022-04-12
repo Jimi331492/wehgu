@@ -17,7 +17,8 @@ page {
 	--orange: #f37b1d;
 	--yellow: #fbbd08;
 	--olive: #8dc63f;
-	--green: #39b54a;
+    --green: #39b54a;
+    --lightgreen: #31df80;
 	--cyan: #1cbbb4;
 	--blue: #0081ff;
 	--purple: #6739b6;
@@ -3457,6 +3458,11 @@ scroll-view.cu-steps .cu-item {
 	color: var(--white);
 }
 
+.bg-lightgreen {
+	background-color: var(--lightgreen);
+	color: var(--white);
+}
+
 .bg-cyan {
 	background-color: var(--cyan);
 	color: var(--white);
@@ -3831,7 +3837,7 @@ scroll-view.cu-steps .cu-item {
 }
 
 .text-bold {
-	font-weight: bold;
+    font-weight: bold;
 }
 
 .text-center {
@@ -3878,6 +3884,12 @@ scroll-view.cu-steps .cu-item {
 .line-green,
 .lines-green {
 	color: var(--green);
+}
+
+.text-lightgreen,
+.line-lightgreen,
+.lines-lightgreen {
+	color: var(--lightgreen);
 }
 
 .text-cyan,

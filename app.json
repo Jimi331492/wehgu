@@ -4,6 +4,7 @@
     "pages/index/home/home",
     "pages/home/home/home",
     "pages/find/home/home",
+    "pages/post/home/home",
     "pages/info/home/home",
     "pages/mine/home/home",
     "pages/mine/edit/edit",

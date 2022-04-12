@@ -12,7 +12,7 @@ Component({
 
             this.towerSwiper();
             // 初始化towerSwiper 传已有的数组名即可
-
+            this.getPostList()
             this.setData({
                 isLogin: wx.getStorageSync('isLogin'),
                 isExamine: app.globalData.isExamine
@@ -20,7 +20,7 @@ Component({
         }
     },
     data: {
-        isExamine: true,//审核字段
+        isExamine: true, //审核字段
         isLogin: false,
         // 轮播图相关
         cardCur: 0,
@@ -81,9 +81,55 @@ Component({
         //导航栏相关
         TabCur: 0,
         scrollLeft: 0,
-        tabList: ["最新发布", "最多人看", "距离最近", "历史记录"]
+        tabList: ["最热讨论", "最新发布", "距离最近", "历史记录"],
+        query: {
+            limit: 6,
+            page: 1,
+            auditStatus: '正常'
+        },
+        total: 0,
+        isBottom: false,
+        postList: [],
     },
     methods: {
+
+        //获取帖子
+        getPostList() {
+            http.postRequest('/post/getPostPage', this.data.query, ContentTypeEnum.Json_Sub,
+                res => {
+                    let postList = [];
+                    this.data.total = res.data.total
+                    if (this.data.postList.length < 1) {
+                        postList = res.data.records
+                    } else {
+                        postList = this.data.postList.concat(res.data.records)
+                    }
+
+                    this.setData({
+                        postList: postList
+                    })
+
+                }, err => {
+                    console.log(err);
+                })
+        },
+        loadPostList() {
+            if (this.data.query.limit * this.data.query.page >= this.data.total) {
+                this.setData({
+                    isBottom: true
+                })
+                wx.showToast({
+                    icon: "none",
+                    title: '到底了',
+                })
+            }
+            if (!this.data.isBottom) {
+                this.data.query.page += 1;
+                this.getPostList()
+            }
+
+        },
+
         // 路由跳转
         navChange(e) {
             console.log(e.currentTarget.dataset.url);
@@ -127,22 +173,34 @@ Component({
                         appid: "wxeb4f620b577ff31a"
                     }
 
-                    http.postRequest("/mp_login", form, ContentTypeEnum.Json_Sub,
+                    http.postRequest("/mp_get_unionId", form, ContentTypeEnum.Json_Sub,
                         res => {
                             console.log(res);
                             wx.setStorageSync('sessionId', res.data.sessionId);
                             wx.setStorageSync('unionId', res.data.unionId);
                             wx.setStorageSync('openid', res.data.openId);
-                            wx.setStorageSync('userInfo', res.data.userInfo);
-                            wx.setStorageSync('isLogin', true)
                             http.fill_token_toheader(res.data.unionId);
-                            this.setData({
-                                isLogin: wx.getStorageSync('isLogin'),
-                                userInfo: wx.getStorageSync('userInfo')
-                            })
+                            wx.setStorageSync('isLogin', true)
+                            http.postRequest("/getMPUserInfo", res.data.unionId, ContentTypeEnum.Default_Sub,
+                                res => {
+                                    wx.setStorageSync('userInfo', res.data);
+                                    this.setData({
+                                        userInfo: res.data
+                                    })
+                                },
+                                err => {
+                                    wx.showToast({
+                                        icon: "none",
+                                        title: err.message,
+                                    })
+                                })
+
                         },
                         err => {
-                            console.log(err);
+                            wx.showToast({
+                                icon: 'none',
+                                title: err.message,
+                            })
                         }
                     )
                 },
@@ -237,6 +295,8 @@ Component({
                 scrollLeft: (e.currentTarget.dataset.id - 1) * 60
             })
         },
+
+
 
         /**
          * 用户点击右上角分享

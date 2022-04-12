@@ -40,6 +40,7 @@ Component({
             wx.getUserProfile({
                 desc: '用于完善资料',
                 success: res => {
+
                     const form = {
                         signature: res.signature,
                         rawData: res.rawData,
@@ -56,12 +57,14 @@ Component({
                             wx.setStorageSync('unionId', res.data.unionId);
                             wx.setStorageSync('openid', res.data.openId);
                             http.fill_token_toheader(res.data.unionId);
-                            wx.setStorageSync('isLogin', true)
-                            http.postRequest("/getMPUserInfo", unionId, ContentTypeEnum.Default_Sub,
+
+                            http.postRequest("/getMPUserInfo", res.data.unionId, ContentTypeEnum.Default_Sub,
                                 res => {
                                     wx.setStorageSync('userInfo', res.data);
+                                    wx.setStorageSync('isLogin', true)
                                     this.setData({
-                                        userInfo: res.data
+                                        userInfo: wx.getStorageSync('userInfo'),
+                                        isLogin:true
                                     })
                                 },
                                 err => {
