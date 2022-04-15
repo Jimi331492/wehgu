@@ -1,0 +1,105 @@
+<!--pages/home/item/item.wxml-->
+<wxs src="/utils/filter.wxs" module="filter"></wxs>
+<custom bgColor="bg-gradual-blue" isBack>
+    <view slot="content">
+        {{item.tag}}
+    </view>
+</custom>
+<scroll-view scroll-y class="scrollPage ">
+    <view class=" item flex flex-direction padding-left-sm padding-right-sm">
+        <!-- 头 -->
+        <view class="head flex justify-between padding-top">
+            <view class="avatar flex align-center ">
+                <image class="cu-avatar lg round" src="{{item.avatar==null?'/images/custom-avatar.png':item.avatar}}"></image>
+                <view class="padding-left-sm  flex flex-direction flex-sub ">
+                    <view class="text-black text-xl padding-bottom-sm text-sm  ">
+                        {{item.nickname}}
+                    </view>
+                    <view class="text-black text-sm"> {{filter.formatTime(item.addTime,"notime")}}</view>
+                </view>
+            </view>
+            <view class="flex align-center ">
+                <button class="cu-btn bg-blue round">
+                    查看主页
+                </button>
+            </view>
+        </view>
+        <!-- 内容 -->
+        <view class="content padding-top">
+            <text class="text-xl"> {{item.content}}</text>
+        </view>
+        <!-- 多张图片 -->
+        <view class="image padding-top flex flex-direction" wx:if="{{item.pictureNum>0}}">
+            <view>
+                <image class="margin-bottom-sm full" src="{{item.imgIndexURI}}" mode="widthFix"></image>
+            </view>
+            <view wx:for="{{imgURIList}}" wx:key="index" wx:for-item="URI">
+                <image class="margin-bottom-sm full" src="{{URI}}" mode="widthFix"></image>
+            </view>
+        </view>
+        <!-- 点赞评论区 -->
+        <view class="tip flex justify-between padding-bottom">
+            <text class="cuIcon-attention text-gray">1.2k浏览</text>
+            <view class="flex align-center">
+                <view class="flex padding-right-xl">
+                    <text class="icon cuIcon-message text-gray"></text>
+                    <text class="message-count text-lg text-gray">{{item.commentList.length}}</text>
+                </view>
+                <view class="flex padding-left-xl" data-type="post" data-id="{{item.postUuid}}" bindtap="likedIt">
+                    <text class="icon cuIcon-appreciate text-gray"></text>
+                    <text class="star-count text-lg text-gray">{{item.star}}</text>
+                </view>
+            </view>
+        </view>
+        <view class="tip flex justify-between">
+            <text class="cuIcon-infofill text-gray">长按评论可以举报哦~</text>
+            <text class="cuIcon-close text-gray"></text>
+        </view>
+        <!-- 评论区 -->
+        <view class="comment flex flex-direction" wx:if="{{item.commentList.length>0}}">
+            <!-- 热门评论 -->
+            <view>
+
+            </view>
+            <!-- 所有评论 -->
+            <view class="flex align-center justify-between " style="height: 10vh;" wx:for="{{item.commentList}}" wx:key="index" wx:for-item="comment">
+                <view class="flex flex-direction align-center padding-right-sm">
+                    <image class="cu-avatar round" src="{{comment.fromAvatar===null?'/images/custom-avatar.png':comment.fromAvatar}}"></image>
+                    <text class="padding-top-sm text-lg text-gray">{{index+1}}L</text>
+                </view>
+
+                <view class="flex flex-direction flex-sub">
+                    <text class="text-lg">{{comment.fromNickname}}</text>
+                    <text class="text-sm text-gray"> {{filter.formatTime(comment.addTime,"format")}}</text>
+                    <text class="padding-top-sm text-black"> {{comment.content}}</text>
+                </view>
+                <!-- 评论的回复和点赞 -->
+                <view class="self-start flex align-center padding-top">
+                    <text class="icon text-gray cuIcon-message padding-right"></text>
+                    <text class="icon text-gray cuIcon-appreciate" data-type="comment" data-id="{{comment.commentUuid}}" bindtap="likedIt"></text>
+                    <text class="star-count text-gray">0</text>
+                </view>
+
+            </view>
+        </view>
+        <!-- 评论区 -->
+        <view class="comment flex flex-direction align-center justify-center" style="height: 20vh;" wx:else>
+            <text style="font-size: 5rem;" class="cuIcon-edit text-xxxl"></text>
+            <text class="text-gray">快给楼主写评论吧</text>
+        </view>
+
+    </view>
+</scroll-view>
+<view class="bar">
+    <view class="cu-bar input">
+        <image class="cu-avatar round" src="{{avatar===null?'/images/custom-avatar.png':avatar}}"></image>
+        <view class="action">
+            <text class="cuIcon-roundaddfill text-grey"></text>
+        </view>
+        <input class="solid-bottom" value="{{form.content}}" bindinput="contentInput" placeholder="回复楼主：" maxlength="300" cursor-spacing="10"></input>
+        <view class="action">
+            <text class="cuIcon-emojifill text-grey"></text>
+        </view>
+        <button class="cu-btn bg-green shadow-blur" bindtap="saveComment">发送</button>
+    </view>
+</view>

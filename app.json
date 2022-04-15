@@ -1,25 +1,32 @@
 {
-  "pages": [
-    "pages/index/login/login",
-    "pages/index/home/home",
-    "pages/home/home/home",
-    "pages/find/home/home",
-    "pages/post/home/home",
-    "pages/info/home/home",
-    "pages/mine/home/home",
-    "pages/mine/edit/edit",
-    "pages/mine/auth/auth",
-    "pages/mine/cropper/cropper"
-  ],
-  "window": {
-    "backgroundTextStyle": "light",
-    "navigationBarBackgroundColor": "#fff",
-    "navigationBarTitleText": "ColorUI",
-    "navigationStyle": "custom",
-    "navigationBarTextStyle": "white"
-  },
-  "usingComponents": {
-    "custom": "/components/custom/cu-custom"
-  },
-  "sitemapLocation": "sitemap.json"
+    "pages": [
+        "pages/index/login/login",
+        "pages/index/home/home",
+
+        "pages/home/home/home",
+        "pages/home/item/item",
+
+        "pages/find/home/home",
+
+        "pages/post/home/home",
+
+        "pages/info/home/home",
+
+
+        "pages/mine/home/home",
+        "pages/mine/edit/edit",
+        "pages/mine/auth/auth",
+        "pages/mine/cropper/cropper"
+    ],
+    "window": {
+        "backgroundTextStyle": "light",
+        "navigationBarBackgroundColor": "#fff",
+        "navigationBarTitleText": "ColorUI",
+        "navigationStyle": "custom",
+        "navigationBarTextStyle": "white"
+    },
+    "usingComponents": {
+        "custom": "/components/custom/cu-custom"
+    },
+    "sitemapLocation": "sitemap.json"
 }

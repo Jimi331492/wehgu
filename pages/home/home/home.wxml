@@ -59,7 +59,7 @@
 
     <!-- 消息列表 -->
     <view class="cu-card case no-card post-list">
-        <view class="cu-item shadow flex-direction post-item" wx:for="{{postList}}" wx:key="index">
+        <view class="cu-item shadow flex-direction post-item" wx:for="{{postList}}" wx:key="index" data-post="{{item}}" bindtap="toItem">
             <view class="image mm-img" wx:if="{{item.imgIndexURI!==null}}">
                 <image src="{{item.imgIndexURI}}" mode="aspectFill"></image>
                 <view class="cu-tag bg-{{item.backgroundColor}}">{{item.tag}}</view>
@@ -75,7 +75,7 @@
                 <view class="cu-item">
                     <image class="cu-avatar lg round" src="{{item.avatar==null?'/images/custom-avatar.png':item.avatar}}"></image>
                     <view class="content flex-sub">
-                        <view class="text-grey text-sm"> {{filter.formatTime(item.addTime,"notime")}}</view>
+                        <view class="text-grey text-sm"> {{filter.formatTime(item.addTime,"format")}}</view>
                         <view class="text-gray text-sm flex justify-between">
                             {{item.nickname}}
                             <view class="text-gray text-sm">
@@ -86,8 +86,9 @@
                 </view>
             </view>
         </view>
-        <view wx:if="{{isBottom}}">
-            到底了
-        </view>
+
+    </view>
+    <view class="flex justify-center" wx:if="{{isBottom}}">
+        <text class="text-grey">到底了</text>
     </view>
 </scroll-view>

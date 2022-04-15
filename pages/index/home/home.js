@@ -1,10 +1,12 @@
 //获取应用实例
+const http = require('../../../utils/httputils.js');
+const ContentTypeEnum = require('../../../utils/ContentTypeEnum.js');
 const app = getApp()
 
 Page({
     data: {
         PageCur: 'Home',
-        isLogin: wx.getStorageSync('isLogin'),
+        isLogin: false,
         isExamine: true
     },
 
@@ -21,22 +23,39 @@ Page({
         })
     },
 
-    onLoad: function () {
-        if (wx.getStorageSync("isLogin")) {
-            this.setData({
-                isLogin: wx.getStorageSync("isLogin")
-            })
+    getStarList() {
+        const userDetailId = wx.getStorageInfoSync("userInfo").userDetailUuid
+        const query = {
+            limit: "",
+            page: "",
+            userDetailUuid: userDetailId,
+            status: 1
         }
+        http.postRequest('/star/getStarPage', query, ContentTypeEnum.Default_Sub,
+            res => {
+                app.globalData.starList = res.data.records
+                console.log(res.data.records);
+            }, err => {
+                wx.showToast({
+                    icon: "none",
+                    title: err.message,
+                })
+            })
+    },
+
+    onLoad: function () {
+        if (wx.getStorageSync('isLogin') === true) {
+            this.setData({
+                isLogin: true
+            })
+            this.getStarList()
+        }
+
         this.setData({
             isExamine: app.globalData.isExamine
         })
         console.log(this.data.isLogin);
     },
 
-    /**
-     * 用户点击右上角分享
-     */
-    onShareAppMessage: function () {
 
-    }
 })

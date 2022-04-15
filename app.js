@@ -1,9 +1,7 @@
 //app.js
-const http = require('./utils/httputils.js');
-const ContentTypeEnum = require('./utils/ContentTypeEnum.js');
 App({
     require: function ($uri) {
-        return require($uri)
+        return wx.require($uri)
     },
     onLaunch: function () {
         // console.log('进入小程序')
@@ -44,14 +42,27 @@ App({
                 console.log('是否重写分享方法', data.isOverShare);
                 if (!data.isOverShare) {
                     data.isOverShare = true;
+                    wx.showShareMenu({
+                        withShareTicket: true,
+                        menus: ['shareAppMessage', 'shareTimeline'],
+                    });
                     view.onShareAppMessage = function () {
                         //分享配置
                         return {
-                            title: '标题', // 子页面的title
-                            path: 'pages/index/index',
-                            imageUrl: '/static/logo.jpg'
+                            title: 'WeHgu', // 子页面的title
+                            path: 'pages/index/login/login',
+                            imageUrl: '/images/custom-avatar.png'
                         };
-                    }
+                    };
+                    view.onShareTimeline = function () {
+                        //分享配置
+                        return {
+                            title: 'WeHgu', // 子页面的title
+                            query: "?a=pyq",
+                            imageUrl: '/images/custom-avatar.png'
+                        };
+                    };
+
                 }
             }
         })
@@ -76,82 +87,8 @@ App({
         })
     },
     globalData: {
-        isExamine: true,
-        ColorList: [{
-                title: '嫣红',
-                name: 'red',
-                color: '#e54d42'
-            },
-            {
-                title: '桔橙',
-                name: 'orange',
-                color: '#f37b1d'
-            },
-            {
-                title: '明黄',
-                name: 'yellow',
-                color: '#fbbd08'
-            },
-            {
-                title: '橄榄',
-                name: 'olive',
-                color: '#8dc63f'
-            },
-            {
-                title: '森绿',
-                name: 'green',
-                color: '#39b54a'
-            },
-            {
-                title: '天青',
-                name: 'cyan',
-                color: '#1cbbb4'
-            },
-            {
-                title: '海蓝',
-                name: 'blue',
-                color: '#0081ff'
-            },
-            {
-                title: '姹紫',
-                name: 'purple',
-                color: '#6739b6'
-            },
-            {
-                title: '木槿',
-                name: 'mauve',
-                color: '#9c26b0'
-            },
-            {
-                title: '桃粉',
-                name: 'pink',
-                color: '#e03997'
-            },
-            {
-                title: '棕褐',
-                name: 'brown',
-                color: '#a5673f'
-            },
-            {
-                title: '玄灰',
-                name: 'grey',
-                color: '#8799a3'
-            },
-            {
-                title: '草灰',
-                name: 'gray',
-                color: '#aaaaaa'
-            },
-            {
-                title: '墨黑',
-                name: 'black',
-                color: '#333333'
-            },
-            {
-                title: '雅白',
-                name: 'white',
-                color: '#ffffff'
-            },
-        ]
+        isExamine: true, //过审
+        currentPost: null, //当前浏览的帖子
+        starList: [], //保存当前用户的点赞对象
     }
 })

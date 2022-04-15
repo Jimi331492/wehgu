@@ -92,6 +92,13 @@ Component({
         postList: [],
     },
     methods: {
+        // 路由跳转
+        toItem(e) {
+            app.globalData.currentPost = e.currentTarget.dataset.post
+            wx.navigateTo({
+                url: '/pages/home/item/item',
+            })
+        },
 
         //获取帖子
         getPostList() {
@@ -120,7 +127,7 @@ Component({
                 })
                 wx.showToast({
                     icon: "none",
-                    title: '到底了',
+                    title: '一滴都没有了',
                 })
             }
             if (!this.data.isBottom) {
@@ -240,7 +247,7 @@ Component({
                     this.setData({
                         swiperList: list
                     })
-                    console.log(this.data.swiperList);
+                   
                 }, err => {
                     console.log(err);
                 })

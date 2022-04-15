@@ -18,8 +18,8 @@
     width: 100%;
     display: flex;
     flex-wrap: wrap;
-    justify-content: space-around;
-    margin-top: 10rpx;
+    justify-content: space-between;
+    margin: 10rpx;
 }
 
 .post-list .post-item {
