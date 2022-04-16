@@ -15,7 +15,7 @@
                     <view class="text-black text-xl padding-bottom-sm text-sm  ">
                         {{item.nickname}}
                     </view>
-                    <view class="text-black text-sm"> {{filter.formatTime(item.addTime,"notime")}}</view>
+                    <view class="text-black text-sm"> {{filter.formatTime(item.addTime,"format")}}</view>
                 </view>
             </view>
             <view class="flex align-center ">
@@ -25,7 +25,7 @@
             </view>
         </view>
         <!-- 内容 -->
-        <view class="content padding-top">
+        <view class="content padding-top padding-bottom">
             <text class="text-xl"> {{item.content}}</text>
         </view>
         <!-- 多张图片 -->
@@ -45,8 +45,8 @@
                     <text class="icon cuIcon-message text-gray"></text>
                     <text class="message-count text-lg text-gray">{{item.commentList.length}}</text>
                 </view>
-                <view class="flex padding-left-xl" data-type="post" data-id="{{item.postUuid}}" bindtap="likedIt">
-                    <text class="icon cuIcon-appreciate text-gray"></text>
+                <view class="flex padding-left-xl" data-type="post" data-id="{{item.postUuid}}" bindtap="{{filter.isInclude(item.postUuid,starList,'linkedUuid')?'cancelLikedIt':'likedIt'}}">
+                    <text class="icon {{filter.isInclude(item.postUuid,starList,'linkedUuid')?'cuIcon-appreciatefill text-yellow':'cuIcon-appreciate text-gray'}}"></text>
                     <text class="star-count text-lg text-gray">{{item.star}}</text>
                 </view>
             </view>

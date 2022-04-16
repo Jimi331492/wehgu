@@ -7,6 +7,12 @@ Component({
     options: {
         addGlobalClass: true,
     },
+    properties: {
+        starList: {
+            type: Array,
+            default: []
+        },
+    },
     lifetimes: {
         attached() {
 
@@ -15,9 +21,11 @@ Component({
             this.getPostList()
             this.setData({
                 isLogin: wx.getStorageSync('isLogin'),
-                isExamine: app.globalData.isExamine
+                isExamine: app.globalData.isExamine,
             });
-        }
+
+        },
+
     },
     data: {
         isExamine: true, //审核字段
@@ -90,6 +98,9 @@ Component({
         total: 0,
         isBottom: false,
         postList: [],
+
+        // starList: [], //用户点赞的列表
+        triggered: false, //下拉状态
     },
     methods: {
         // 路由跳转
@@ -120,15 +131,19 @@ Component({
                     console.log(err);
                 })
         },
+        
         loadPostList() {
             if (this.data.query.limit * this.data.query.page >= this.data.total) {
+                if (this.data.isBottom) {
+                    wx.showToast({
+                        icon: "none",
+                        title: '一滴都没有了',
+                    })
+                }
                 this.setData({
                     isBottom: true
                 })
-                wx.showToast({
-                    icon: "none",
-                    title: '一滴都没有了',
-                })
+
             }
             if (!this.data.isBottom) {
                 this.data.query.page += 1;
@@ -217,8 +232,6 @@ Component({
             })
         },
 
-
-
         // cardSwiper
         cardSwiper(e) {
             this.setData({
@@ -247,7 +260,7 @@ Component({
                     this.setData({
                         swiperList: list
                     })
-                   
+
                 }, err => {
                     console.log(err);
                 })
@@ -301,6 +314,41 @@ Component({
                 TabCur: e.currentTarget.dataset.id,
                 scrollLeft: (e.currentTarget.dataset.id - 1) * 60
             })
+        },
+
+        onPulling(e) {
+            console.log('onPulling:', e)
+        },
+
+        onRefresh(e) {
+            console.log('onRefresh:', e)
+            if (this._freshing === true) return
+            this._freshing = true
+
+            //重置
+            this.data.query = {
+                limit: 6,
+                page: 1,
+                auditStatus: '正常'
+            };
+            this.data.postList = [];
+            this.data.total = 0;
+            this.getPostList();
+            setTimeout(() => {
+                this.setData({
+                    triggered: false,
+                    isBottom: false,
+                })
+                this._freshing = false
+            }, 1000)
+        },
+
+        onRestore(e) {
+            console.log('onRestore:', e)
+        },
+
+        onAbort(e) {
+            console.log('onAbort', e)
         },
 
 

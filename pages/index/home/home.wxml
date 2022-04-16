@@ -1,6 +1,6 @@
 <view class="container">
 
-    <home id='home' wx:if="{{PageCur=='Home'}}"></home>
+    <home id='home' wx:if="{{PageCur=='Home'}}" starList="{{starList}}"></home>
     <find id='find' wx:if="{{PageCur=='Find'}}"></find>
     <info id='info' wx:if="{{PageCur=='Info'}}"></info>
     <mine id='mine' wx:if="{{PageCur=='Mine'}}"></mine>

@@ -20,7 +20,7 @@ Page({
     },
 
     showModal(e) {
-        console.log(e);
+
         this.setData({
             modalName: e.currentTarget.dataset.target
         })
@@ -32,10 +32,10 @@ Page({
     },
 
     telephoneInput(e) {
-        console.log(e.detail.value)
+
         const reg = /^(0|86|17951)?(13[0-9]|15[0-9]|17[3678]|18[0-9]|14[57])\d{8}$/ig;
         let flag = reg.test(e.detail.value);
-        console.log(flag);
+
         this.setData({
             telephone: e.detail.value,
             flag: flag
@@ -56,7 +56,7 @@ Page({
         wx.getUserProfile({
             desc: '用于完善资料',
             success: res => {
-                console.log(res.rawData);
+
                 const form = {
                     signature: res.signature,
                     rawData: res.rawData,
@@ -68,7 +68,7 @@ Page({
 
                 http.postRequest("/mp_get_unionId", form, ContentTypeEnum.Json_Sub,
                     res => {
-                        console.log(res);
+
                         wx.setStorageSync('sessionId', res.data.sessionId);
                         wx.setStorageSync('unionId', res.data.unionId);
                         wx.setStorageSync('openid', res.data.openId);
@@ -232,6 +232,7 @@ Page({
                                 http.postRequest("/getMPUserInfo", res.data.unionId, ContentTypeEnum.Default_Sub,
                                     res => {
                                         wx.setStorageSync('userInfo', res.data);
+
                                         wx.redirectTo({
                                             url: '/pages/index/home/home',
                                         })
@@ -260,6 +261,25 @@ Page({
 
     },
 
+    getStarList(userDetailId) {
+        const query = {
+            limit: "",
+            page: "",
+            userDetailUuid: userDetailId,
+            status: 1
+        }
+        http.postRequest('/star/getStarPage', query, ContentTypeEnum.Default_Sub,
+            res => {
+                app.globalData.starList = res.data.records
+                console.log(res.data.records);
+            }, err => {
+                wx.showToast({
+                    icon: "none",
+                    title: err.message,
+                })
+            })
+    },
+
     /**
      * 生命周期函数--监听页面加载
      */
@@ -268,6 +288,15 @@ Page({
             wx.redirectTo({
                 url: '/pages/index/home/home',
             })
+        }
+    },
+
+    onUnload() {
+        console.log('onUnload');
+
+        if (wx.getStorageSync('isLogin') === true) {
+            const userDetailUuid = wx.getStorageSync('userInfo').userDetailUuid
+            this.getStarList(userDetailUuid)
         }
     },
 

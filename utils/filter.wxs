@@ -59,11 +59,7 @@ var formatTime = function (val, option) {
             return "刚刚";
         }
     }
-
-
-
     return time;
-
 }
 
 var filterArray = function (arr, col, bullet) {
@@ -89,7 +85,9 @@ var filterArray = function (arr, col, bullet) {
  * @returns {boolean} 如果 target 被找到则返回 true 否则返回 false
  */
 function isInclude(target, obj, attr) {
-
+    // console.log(target, attr);
+    // console.log(obj.constructor);
+    // console.log(obj.length);
     // 定义返回值
     var flag = false
     // 传入的obj为数组

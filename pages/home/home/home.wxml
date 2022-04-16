@@ -16,7 +16,16 @@
 
     <view class="flex justify-center text-lg">美好的一天又开始了</view>
 </scroll-view>
-<scroll-view scroll-y class="scrollPage" bindscrolltolower="loadPostList" wx:else>
+<!-- 给用户看的 -->
+<scroll-view scroll-y class="scrollPage" refresher-enabled="{{true}}" refresher-threshold="{{100}}" refresher-default-style="white" refresher-background="gray" refresher-triggered="{{triggered}}" bindrefresherpulling="onPulling" bindrefresherrefresh="onRefresh" bindrefresherrestore="onRestore" bindrefresherabort="onAbort" bindscrolltolower="loadPostList" wx:else>
+
+    <!-- 自定义下拉刷新样式 没用 -->
+    <view slot="refresher" class="refresh-container" style="width: 100%; height: 60px; background: #fff; display: flex; align-items: center;justify-content: center;">
+        <view class="view1" style="position: absolute; display: flex; align-items: center;justify-content: center;width: 100%;">
+        </view>
+    </view>
+
+
     <!-- 轮播图 -->
     <swiper class="card-swiper square-dot" indicator-dots="true" circular="true" autoplay="true" interval="5000" duration="500" bindchange="cardSwiper" indicator-color="#8799a3" indicator-active-color="#0081ff">
         <swiper-item wx:for="{{swiperList}}" wx:key="index" class="{{cardCur==index?'cur':''}}">
@@ -79,7 +88,7 @@
                         <view class="text-gray text-sm flex justify-between">
                             {{item.nickname}}
                             <view class="text-gray text-sm">
-                                <text class="cuIcon-appreciatefill margin-lr-xs"></text> {{item.star}}
+                                <text class="cuIcon-appreciatefill text-{{filter.isInclude(item.postUuid,starList,'linkedUuid')?'yellow':'gray'}} margin-lr-xs"></text> {{item.star}}
                             </view>
                         </view>
                     </view>

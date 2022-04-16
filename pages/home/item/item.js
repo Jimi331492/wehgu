@@ -1,7 +1,7 @@
 // pages/home/item/item.js
 const http = require('../../../utils/httputils.js');
 const ContentTypeEnum = require('../../../utils/ContentTypeEnum.js');
-
+const util = require('../../../utils/util.js');
 const app = getApp()
 Page({
 
@@ -9,6 +9,7 @@ Page({
      * 页面的初始数据
      */
     data: {
+        starList: [],
         item: null, //帖子
         imgURIList: [], //多张图片的地址
         avatar: null, //发帖子的人头像
@@ -64,7 +65,9 @@ Page({
         }
         form.status = 1
         form.linkedUuid = e.currentTarget.dataset.id
-        this.saveStar(form)
+        //点赞完成更新本地缓存数据和视图
+        this.updateLocalCache(form)
+
     },
 
     //取消点赞
@@ -78,31 +81,16 @@ Page({
         }
         form.status = 0
         form.linkedUuid = e.currentTarget.dataset.id
-        this.saveStar(form)
+        this.updateLocalCache(form)
+
     },
 
-    saveStar(form) {
+    saveStar: util.debounce(function (arg) {
+        const form = arg[0]
+        console.log(form);
         http.postRequest('/star/saveStarToRedis', form, ContentTypeEnum.Default_Sub,
             res => {
                 console.log(res.message);
-                //改变本地缓存
-                const statList = app.globalData.starList
-                if (form.status === 1) {
-                    const star = {
-                        starUuid: res.data,
-                        type: form.type,
-                        userDetailUuid: wx.getStorageSync('userInfo').userDetailUuid,
-                        linkedUuid: form.linkedUuid,
-                        status: form.status
-                    }
-                    statList.push(star)
-                } else {
-                    const index = statList.findIndex(item => {
-                        return item.starUuid = res.data
-                    })
-                    statList.splice(index, 1)
-                }
-                app.globalData.starList = statList
 
             }, err => {
                 wx.showToast({
@@ -110,6 +98,42 @@ Page({
                     title: err.message,
                 })
             })
+    }),
+
+    //点赞完成更新本地缓存数据和视图
+    updateLocalCache(form) {
+        //拿到本地点赞列表
+        const starList = app.globalData.starList
+        const item = this.data.item
+        //判断新增是点赞还是取消点赞
+        if (form.status === 1) {
+            const star = {
+                type: form.type,
+                userDetailUuid: wx.getStorageSync('userInfo').userDetailUuid,
+                linkedUuid: form.linkedUuid,
+                status: form.status
+            }
+            starList.push(star)
+            item.star++;
+        } else {
+            const index = starList.findIndex(item => {
+                item.linkedUuid === form.linkedUuid
+            })
+            starList.splice(index, 1)
+            item.star--;
+        }
+        app.globalData.starList = starList
+        //更新详情页和home页
+        this.updateStarList(starList, item)
+
+
+        this.saveStar(form)
+    },
+    updateStarList(starList, item) {
+        this.setData({
+            starList: starList,
+            item: item
+        })
     },
 
     //评论
@@ -236,9 +260,10 @@ Page({
         const item = app.globalData.currentPost;
         console.log(item.commentList);
         const avatar = wx.getStorageSync('userInfo').avatar
+        this.updateStarList(app.globalData.starList)
         this.setData({
             item: item,
-            avatar: avatar
+            avatar: avatar,
         })
         if (item.pictureNum > 1 && item.imgPathList.length > 1) {
             wx.showLoading({
@@ -308,7 +333,7 @@ Page({
      * 页面相关事件处理函数--监听用户下拉动作
      */
     onPullDownRefresh() {
-
+        console.log(11);
     },
 
     /**

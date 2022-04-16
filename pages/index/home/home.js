@@ -7,7 +7,8 @@ Page({
     data: {
         PageCur: 'Home',
         isLogin: false,
-        isExamine: true
+        isExamine: true,
+        starList: [],
     },
 
     NavChange(e) {
@@ -23,32 +24,22 @@ Page({
         })
     },
 
-    getStarList() {
-        const userDetailId = wx.getStorageInfoSync("userInfo").userDetailUuid
-        const query = {
-            limit: "",
-            page: "",
-            userDetailUuid: userDetailId,
-            status: 1
-        }
-        http.postRequest('/star/getStarPage', query, ContentTypeEnum.Default_Sub,
-            res => {
-                app.globalData.starList = res.data.records
-                console.log(res.data.records);
-            }, err => {
-                wx.showToast({
-                    icon: "none",
-                    title: err.message,
-                })
-            })
-    },
+
 
     onLoad: function () {
         if (wx.getStorageSync('isLogin') === true) {
             this.setData({
                 isLogin: true
             })
-            this.getStarList()
+
+            //延时获取starList
+            setTimeout(() => {
+                this.setData({
+                    starList: app.globalData.starList
+                });
+                console.log('sss' + JSON.stringify(this.data.starList));
+            }, 800)
+
         }
 
         this.setData({
