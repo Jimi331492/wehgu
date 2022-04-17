@@ -104,27 +104,38 @@ Page({
     updateLocalCache(form) {
         //拿到本地点赞列表
         const starList = app.globalData.starList
-        const item = this.data.item
-        //判断新增是点赞还是取消点赞
-        if (form.status === 1) {
-            const star = {
-                type: form.type,
-                userDetailUuid: wx.getStorageSync('userInfo').userDetailUuid,
-                linkedUuid: form.linkedUuid,
-                status: form.status
+
+        //判断点赞类型是给帖子点赞还是给评论点赞
+        if (form.type === 0) {
+            const item = this.data.item
+            //判断新增是点赞还是取消点赞
+            console.log("before", starList);
+            if (form.status === 1) {
+                const star = {
+                    type: form.type,
+                    linkedUuid: form.linkedUuid,
+                    status: form.status
+                }
+                starList.push(star)
+                item.star++;
+            } else {
+                const index = starList.findIndex(e => {
+                    return e.linkedUuid === form.linkedUuid
+                })
+                console.log(index);
+                starList.splice(index, 1)
+                item.star--;
             }
-            starList.push(star)
-            item.star++;
-        } else {
-            const index = starList.findIndex(item => {
-                item.linkedUuid === form.linkedUuid
-            })
-            starList.splice(index, 1)
-            item.star--;
+            app.globalData.starList = starList
+            //更新详情页和home页
+            this.updateStarList(starList, item)
+            console.log("after", starList);
+
+        }else{//给评论点赞
+
         }
-        app.globalData.starList = starList
-        //更新详情页和home页
-        this.updateStarList(starList, item)
+
+
 
 
         this.saveStar(form)

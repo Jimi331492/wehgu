@@ -8,6 +8,7 @@ Page({
      * 页面的初始数据
      */
     data: {
+        bgImgPath: '/images/bg1.png',
         modalName: "",
         telephone: null,
         flag: null, //手机号预校验状态

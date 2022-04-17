@@ -1,7 +1,7 @@
 <!--pages/index/login/login.wxml-->
-<wxs src="../../../utils/filter.wxs" module="filter" />
+<wxs src="/utils/filter.wxs" module="filter" />
 <view class="container">
-    <image src="../../../images/bg1.png" class="bg1"></image>
+    <image wx:if="{{bgImgPath}}" src="{{bgImgPath}}" class="bg1"></image>
 
     <view class="container-2">
         <view class="welcome-word">

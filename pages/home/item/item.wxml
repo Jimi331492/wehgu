@@ -76,7 +76,7 @@
                 <!-- 评论的回复和点赞 -->
                 <view class="self-start flex align-center padding-top">
                     <text class="icon text-gray cuIcon-message padding-right"></text>
-                    <text class="icon text-gray cuIcon-appreciate" data-type="comment" data-id="{{comment.commentUuid}}" bindtap="likedIt"></text>
+                    <text class="icon {{filter.isInclude(comment.commentUuid,starList,'linkedUuid')?'cuIcon-appreciatefill text-yellow':'cuIcon-appreciate text-gray'}}" data-type="comment" data-id="{{comment.commentUuid}}" bindtap="{{filter.isInclude(item.postUuid,starList,'linkedUuid')?'cancelLikedIt':'likedIt'}}"></text>
                     <text class="star-count text-gray">0</text>
                 </view>
 

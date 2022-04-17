@@ -77,7 +77,7 @@
                 </view>
             </view>
             <view class="image mm-img flex align-center" wx:else style="min-height: 400rpx;">
-                <text class="self-start text-bold padding padding-top-xl">{{item.content}}s</text>
+                <text class="self-start text-bold padding padding-top-xl">{{item.content}}</text>
                 <view class="cu-tag bg-{{item.backgroundColor}}">{{item.tag}}</view>
             </view>
             <view class="cu-list menu-avatar ">
