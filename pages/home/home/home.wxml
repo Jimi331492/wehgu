@@ -82,7 +82,8 @@
             </view>
             <view class="cu-list menu-avatar ">
                 <view class="cu-item">
-                    <image class="cu-avatar lg round" wx:if="{{bakPath||item.avatar}}" src="{{item.avatar===null?bakPath:item.avatar}}"></image>
+                  
+                    <image class="cu-avatar lg round" wx:if="{{bakPath!==null||item.avatar!==null}}" src="{{item.avatar===null?bakPath:item.avatar}}"></image>
                     <view class="content flex-sub">
                         <view class="text-grey text-sm"> {{filter.formatTime(item.addTime,"format")}}</view>
                         <view class="text-gray text-sm flex justify-between">

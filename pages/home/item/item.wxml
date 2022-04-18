@@ -10,7 +10,7 @@
         <!-- 头 -->
         <view class="head flex justify-between padding-top">
             <view class="avatar flex align-center ">
-                <image class="cu-avatar lg round" wx:if="{{bakPath||item.avatar}}" src="{{item.avatar===null?bakPath:item.avatar}}"></image>
+                <image class="cu-avatar lg round" wx:if="{{bakPath!==null||item.avatar!==null}}" src="{{item.avatar===null?bakPath:item.avatar}}"></image>
 
                 <view class="padding-left-sm  flex flex-direction flex-sub ">
                     <view class="text-black text-xl padding-bottom-sm text-sm  ">
@@ -65,7 +65,7 @@
             <!-- 所有评论 -->
             <view class="flex align-center justify-between " style="height: 10vh;" wx:for="{{item.commentList}}" wx:key="index" wx:for-item="comment">
                 <view class="flex flex-direction align-center padding-right-sm">
-                    <image class="cu-avatar round" wx:if="{{bakPath||comment.fromAvatar}}" src="{{comment.fromAvatar===null?bakPath:comment.fromAvatar}}"></image>
+                    <image class="cu-avatar round" wx:if="{{bakPath!==null||comment.fromAvatar!==null}}" src="{{comment.fromAvatar===null?bakPath:comment.fromAvatar}}"></image>
                     <text class="padding-top-sm text-lg text-gray">{{index+1}}L</text>
                 </view>
 
@@ -93,7 +93,8 @@
 </scroll-view>
 <view class="bar">
     <view class="cu-bar input">
-        <image class="cu-avatar round" src="{{avatar===null?'/images/custom-avatar.png':avatar}}"></image>
+        <image class="cu-avatar round" wx:if="{{bakPath!==null||avatar!==null}}" src="{{item.avatar===null?bakPath:avatar}}"></image>
+   
         <view class="action">
             <text class="cuIcon-roundaddfill text-grey"></text>
         </view>
