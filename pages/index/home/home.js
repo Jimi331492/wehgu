@@ -24,7 +24,12 @@ Page({
         })
     },
 
-
+    updateStarList() {
+        this.setData({
+            starList: app.globalData.starList
+        });
+        console.log('updateStarList' + JSON.stringify(this.data.starList));
+    },
 
     onLoad: function () {
         if (wx.getStorageSync('isLogin') === true) {
@@ -33,12 +38,14 @@ Page({
             })
 
             //延时获取starList
+
+
             setTimeout(() => {
                 this.setData({
                     starList: app.globalData.starList
                 });
                 console.log('sss' + JSON.stringify(this.data.starList));
-            }, 800)
+            }, 1000)
 
         }
 

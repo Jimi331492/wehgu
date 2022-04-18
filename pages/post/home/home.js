@@ -1,6 +1,7 @@
 // pages/post/home/home.js
 const http = require('../../../utils/httputils.js');
 const ContentTypeEnum = require('../../../utils/ContentTypeEnum.js');
+import WxValidate from '../../../utils/WxValidate.js'
 const app = getApp()
 Page({
 
@@ -35,10 +36,6 @@ Page({
             limit: "",
             page: ""
         },
-
-
-
-
     },
 
 
@@ -150,6 +147,18 @@ Page({
         if (this.data.form.tag == null && this.data.newTag !== null) {
             this.data.form.tag = this.data.newTag
         }
+
+        //所选信息都是必填
+        if (!this.WxValidate.checkForm(this.data.form)) {
+            const error = this.WxValidate.errorList[0]
+            wx.showToast({
+                title: error.msg,
+                icon: 'error',
+                duration: 2000
+            })
+            return false
+        }
+
         http.postRequest("/post/savePost", this.data.form, ContentTypeEnum.Default_Sub,
             res => {
                 if (this.data.imgList.length > 0) {
@@ -240,6 +249,27 @@ Page({
         }
     },
 
+    //预校验函数
+    initValidate: function () {
+        const rules = {
+            content: {
+                required: true,
+            },
+            tag: {
+                required: true,
+            }
+        }
+        const messages = {
+            content: {
+                required: '内容为空',
+            },
+            tag: {
+                required: '标签为空',
+            },
+        }
+        this.WxValidate = new WxValidate(rules, messages)
+    },
+
 
 
 
@@ -251,6 +281,7 @@ Page({
         this.setData({
             baseURL: http.baseURL
         })
+        this.initValidate(); //初始化预校验规则
 
     },
 

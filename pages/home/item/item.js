@@ -9,6 +9,8 @@ Page({
      * 页面的初始数据
      */
     data: {
+        bakPath: '/images/custom-avatar.png',
+
         starList: [],
         item: null, //帖子
         imgURIList: [], //多张图片的地址
@@ -64,7 +66,9 @@ Page({
             form.type = 1
         }
         form.status = 1
+        console.log(e);
         form.linkedUuid = e.currentTarget.dataset.id
+        console.log(form);
         //点赞完成更新本地缓存数据和视图
         this.updateLocalCache(form)
 
@@ -81,16 +85,17 @@ Page({
         }
         form.status = 0
         form.linkedUuid = e.currentTarget.dataset.id
+        console.log(form);
         this.updateLocalCache(form)
 
     },
 
     saveStar: util.debounce(function (arg) {
         const form = arg[0]
-        console.log(form);
         http.postRequest('/star/saveStarToRedis', form, ContentTypeEnum.Default_Sub,
             res => {
                 console.log(res.message);
+
 
             }, err => {
                 wx.showToast({
@@ -104,43 +109,65 @@ Page({
     updateLocalCache(form) {
         //拿到本地点赞列表
         const starList = app.globalData.starList
+        //判断新增是点赞还是取消点赞
 
-        //判断点赞类型是给帖子点赞还是给评论点赞
-        if (form.type === 0) {
-            const item = this.data.item
-            //判断新增是点赞还是取消点赞
-            console.log("before", starList);
-            if (form.status === 1) {
-                const star = {
-                    type: form.type,
-                    linkedUuid: form.linkedUuid,
-                    status: form.status
-                }
-                starList.push(star)
-                item.star++;
-            } else {
-                const index = starList.findIndex(e => {
-                    return e.linkedUuid === form.linkedUuid
-                })
-                console.log(index);
-                starList.splice(index, 1)
-                item.star--;
+        if (form.status === 1) {
+            const star = {
+                type: form.type,
+                linkedUuid: form.linkedUuid,
+                status: form.status
             }
-            app.globalData.starList = starList
-            //更新详情页和home页
-            this.updateStarList(starList, item)
-            console.log("after", starList);
-
-        }else{//给评论点赞
-
+            starList.push(star)
+        } else {
+            const index = starList.findIndex(e => {
+                return e.linkedUuid === form.linkedUuid
+            })
+            console.log(index);
+            starList.splice(index, 1)
         }
 
+        app.globalData.starList = starList
 
 
 
+        //判断点赞类型是给帖子还是给评论
+        if (form.type === 0) {
+            const item = this.data.item
+            if (form.status === 1) {
+                item.star++;
+            } else {
+                item.star--;
+            }
+            //更新详情页和home页
+            this.updatePostList(starList, item)
+        } else { //给评论点赞
+            // 拿到评论列表
+            const commentList = this.data.item.commentList
+
+            const index = commentList.findIndex(e => {
+                return e.commentUuid === form.linkedUuid
+            })
+            if (form.status === 1) {
+                commentList[index].star++;
+            } else {
+                commentList[index].star--;
+            }
+
+            this.setData({
+                ['item.commentList']: commentList,
+                starList: starList
+            })
+
+        }
+        console.log(form);
         this.saveStar(form)
     },
-    updateStarList(starList, item) {
+
+    updatePostList(starList, item) {
+        var pages = getCurrentPages();
+        let prevPage = pages[0]; //首页
+        let home = prevPage.selectComponent("#home");
+        home.updatePostList(item)
         this.setData({
             starList: starList,
             item: item
@@ -149,6 +176,15 @@ Page({
 
     //评论
     async saveComment(e) {
+        //所选信息都是必填
+        if (this.data.form.content === null || this.data.form.content === '') {
+            wx.showToast({
+                title: "回复内容为空",
+                icon: 'error',
+                duration: 2000
+            })
+            return false
+        }
         //如果是回复评论
         const id = e.currentTarget.dataset.id;
         if (id !== null) {
@@ -185,13 +221,8 @@ Page({
                     form: form
                 })
 
-                const postUuid = this.data.item.postUuid
-                const query = {
-                    limit: "",
-                    page: "",
-                    postUuid: postUuid
-                }
-                this.getCommentTree(query)
+
+                this.getCommentTreeOnThis()
             }, err => {
                 wx.showToast({
                     icon: "none",
@@ -246,10 +277,16 @@ Page({
         })
     },
 
-    getCommentTree(query) {
+    getCommentTreeOnThis() {
         /*
          *  调用接口
          */
+        const postUuid = this.data.item.postUuid
+        const query = {
+            limit: "",
+            page: "",
+            postUuid: postUuid
+        }
         http.postRequest('/comment/getCommentPage', query, ContentTypeEnum.Default_Sub,
             res => {
                 this.setData({
@@ -271,8 +308,9 @@ Page({
         const item = app.globalData.currentPost;
         console.log(item.commentList);
         const avatar = wx.getStorageSync('userInfo').avatar
-        this.updateStarList(app.globalData.starList)
+
         this.setData({
+            starList: app.globalData.starList,
             item: item,
             avatar: avatar,
         })

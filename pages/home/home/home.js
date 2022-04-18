@@ -28,6 +28,8 @@ Component({
 
     },
     data: {
+        bakPath: '/images/custom-avatar.png',
+
         isExamine: true, //审核字段
         isLogin: false,
         // 轮播图相关
@@ -131,7 +133,7 @@ Component({
                     console.log(err);
                 })
         },
-        
+
         loadPostList() {
             if (this.data.query.limit * this.data.query.page >= this.data.total) {
                 if (this.data.isBottom) {
@@ -316,12 +318,9 @@ Component({
             })
         },
 
-        onPulling(e) {
-            console.log('onPulling:', e)
-        },
+        onPulling(e) {},
 
         onRefresh(e) {
-            console.log('onRefresh:', e)
             if (this._freshing === true) return
             this._freshing = true
 
@@ -343,12 +342,21 @@ Component({
             }, 1000)
         },
 
-        onRestore(e) {
-            console.log('onRestore:', e)
-        },
+        onRestore(e) {},
 
-        onAbort(e) {
-            console.log('onAbort', e)
+        onAbort(e) {},
+
+        updatePostList(item) {
+            const postList = this.data.postList;
+            const index = postList.findIndex(e => {
+                return e.postUuid === item.postUuid
+            })
+            postList[index] = item
+            this.setData({
+                starList: app.globalData.starList,
+                postList: postList
+            });
+            console.log('updateStarList success');
         },
 
 
