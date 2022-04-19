@@ -11,7 +11,10 @@ Page({
         starList: [],
     },
 
-    NavChange(e) {
+    navChange(e) {
+        this.setData({
+            starList: app.globalData.starList
+        });
         console.log(e.currentTarget.dataset.cur);
         this.setData({
             PageCur: e.currentTarget.dataset.cur
@@ -32,12 +35,14 @@ Page({
     },
 
     onLoad: function () {
+
         if (wx.getStorageSync('isLogin') === true) {
             this.setData({
                 isLogin: true
             })
 
             //延时获取starList
+
 
 
             setTimeout(() => {
@@ -50,9 +55,11 @@ Page({
         }
 
         this.setData({
-            isExamine: app.globalData.isExamine
+            isExamine: app.globalData.isExamine,
+
         })
-        console.log(this.data.isLogin);
+
+
     },
 
 

@@ -7,10 +7,10 @@
 
     <!-- 底部导航 -->
     <view class="cu-bar tabbar bg-white navbar">
-        <view class="action {{PageCur==='Home'?'text-blue':'text-gray'}}" bindtap="NavChange" data-cur="Home">
+        <view class="action {{PageCur==='Home'?'text-blue':'text-gray'}}" bindtap="navChange" data-cur="Home">
             <view class="cuIcon-homefill"></view> 主页
         </view>
-        <!-- <view class="action {{PageCur==='Find'?'text-blue':'text-gray'}}" bindtap="NavChange" data-cur="Find">
+        <!-- <view class="action {{PageCur==='Find'?'text-blue':'text-gray'}}" bindtap="navChange" data-cur="Find">
         <view class="cuIcon-discoverfill"></view> 发现
     </view> -->
         <view wx:if="{{ isExamine }}">
@@ -20,10 +20,10 @@
             <button data-path="/pages/post/home/home" class="cu-btn cuIcon-add bg-blue shadow" bindtap="navigateTo"></button>
             发布
         </view>
-        <!-- <view class="action {{PageCur==='Info'?'text-blue':'text-gray'}}" bindtap="NavChange" data-cur="Info">
+        <!-- <view class="action {{PageCur==='Info'?'text-blue':'text-gray'}}" bindtap="navChange" data-cur="Info">
         <view class="cuIcon-messagefill"></view> 消息
     </view> -->
-        <view class="action {{PageCur==='Mine'?'text-blue':'text-gray'}}" bindtap="NavChange" data-cur="Mine">
+        <view class="action {{PageCur==='Mine'?'text-blue':'text-gray'}}" bindtap="navChange" data-cur="Mine">
             <view class="cuIcon-myfill"></view> 我的
         </view>
     </view>

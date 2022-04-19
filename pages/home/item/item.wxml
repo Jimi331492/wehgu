@@ -32,10 +32,10 @@
         <!-- 多张图片 -->
         <view class="image padding-top flex flex-direction" wx:if="{{item.pictureNum>0}}">
             <view>
-                <image class="margin-bottom-sm full" src="{{item.imgIndexURI}}" mode="widthFix"></image>
+                <image class="margin-bottom-sm full" wx:if="{{item.imgIndexURI!==null}}" src="{{item.imgIndexURI}}" mode="widthFix"></image>
             </view>
             <view wx:for="{{imgURIList}}" wx:key="index" wx:for-item="URI">
-                <image class="margin-bottom-sm full" src="{{URI}}" mode="widthFix"></image>
+                <image class="margin-bottom-sm full" wx:if="{{URI!==null}}" src="{{URI}}" mode="widthFix"></image>
             </view>
         </view>
         <!-- 点赞评论区 -->

@@ -24,7 +24,11 @@ Component({
                 isExamine: app.globalData.isExamine,
             });
 
+
         },
+        ready() {
+            console.log('#home' + JSON.stringify(this.data.starList));
+        }
 
     },
     data: {

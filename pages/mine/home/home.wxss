@@ -81,10 +81,9 @@
 }
 
 .edit-btn {
-    width: 22vw;
     position: absolute;
     top: 5vw;
-    right: 5vw;
+    right: 3vw;
     background-color: #000;
     color: #fff;
     opacity: 0.6;

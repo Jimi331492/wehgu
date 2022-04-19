@@ -25,6 +25,7 @@
         "navigationStyle": "custom",
         "navigationBarTextStyle": "white"
     },
+    "lazyCodeLoading": "requiredComponents",
     "usingComponents": {
         "custom": "/components/custom/cu-custom"
     },
