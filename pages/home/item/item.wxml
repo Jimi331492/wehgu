@@ -63,7 +63,7 @@
 
             </view>
             <!-- 所有评论 -->
-            <view class="flex align-center justify-between " style="height: {{comment.uri===null?'10vh':'19.5vh'}};" wx:for="{{item.commentList}}" wx:key="index" wx:for-item="comment">
+            <view class="flex align-center justify-between " style="height: {{comment.uri===null?'10vh':'20vh'}};" wx:for="{{item.commentList}}" wx:key="index" wx:for-item="comment">
                 <view class="flex flex-direction align-center self-start padding-right-sm">
                     <image class="cu-avatar round" wx:if="{{bakPath!==null||comment.fromAvatar!==null}}" src="{{comment.fromAvatar===null?bakPath:comment.fromAvatar}}"></image>
                     <text class="padding-top-sm text-lg text-gray">{{index+1}}L</text>
@@ -85,7 +85,7 @@
                 </view>
                 <!-- 评论的回复和点赞 -->
                 <view class="self-start flex  ">
-                    <text class="icon text-gray cuIcon-message padding-right bg-red" bindtap="replyComment" data-name="{{comment.fromNickname}}" data-to="{{comment.fromUserDetailUuid}}" data-id="{{comment.commentId}}"></text>
+                    <text class="icon text-gray cuIcon-message padding-right" bindtap="replyComment" data-name="{{comment.fromNickname}}" data-to="{{comment.fromUserDetailUuid}}" data-id="{{comment.commentId}}"></text>
                     <text class="icon {{filter.isInclude(comment.commentUuid,starList,'linkedUuid')?'cuIcon-appreciatefill text-yellow':'cuIcon-appreciate text-gray'}}" data-type="comment" data-id="{{comment.commentUuid}}" bindtap="{{filter.isInclude(comment.commentUuid,starList,'linkedUuid')?'cancelLikedIt':'likedIt'}}"></text>
                     <text class="star-count text-gray">{{comment.star}}</text>
                 </view>

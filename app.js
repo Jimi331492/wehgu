@@ -1,4 +1,6 @@
 //app.js
+const http = require('./utils/httputils.js');
+const ContentTypeEnum = require('./utils/ContentTypeEnum.js');
 App({
     require: function ($uri) {
         return wx.require($uri)
@@ -65,6 +67,86 @@ App({
 
                 }
             }
+        })
+    },
+
+    //登录
+    getUserProfile: function () {
+        wx.login({
+            success: res => {
+                if (res.code) {
+                    wx.setStorageSync('code', res.code);
+                }
+            }
+        })
+
+        wx.getUserProfile({
+            desc: '用于完善资料',
+            success: res => {
+
+                const form = {
+                    signature: res.signature,
+                    rawData: res.rawData,
+                    encryptedData: res.encryptedData,
+                    iv: res.iv,
+                    jscode: wx.getStorageSync('code'),
+                    appid: "wxeb4f620b577ff31a"
+                }
+
+                http.postRequest("/mp_get_unionId", form, ContentTypeEnum.Json_Sub,
+                    res => {
+
+                        wx.setStorageSync('sessionId', res.data.sessionId);
+                        wx.setStorageSync('unionId', res.data.unionId);
+                        wx.setStorageSync('openid', res.data.openId);
+                        http.fill_token_toheader(res.data.unionId);
+                        wx.setStorageSync('isLogin', true)
+                        http.postRequest("/getMPUserInfo", res.data.unionId, ContentTypeEnum.Default_Sub,
+                            res => {
+                                wx.setStorageSync('userInfo', res.data);
+                                wx.redirectTo({
+                                    url: '/pages/index/home/home',
+                                })
+                            },
+                            err => {
+                                wx.showToast({
+                                    title: err.message,
+                                })
+                            })
+
+                    },
+                    err => {
+                        wx.showToast({
+                            icon: 'none',
+                            title: err.message,
+                        })
+                    }
+                )
+            },
+            fail: err => {
+                console.log(err);
+            }
+        })
+    },
+
+    // 退出登录
+    confirmExit: function () {
+        wx.clearStorage({
+            success: (res) => {
+                console.log(res)
+                wx.showToast({
+                    icon: 'success',
+                    title: '退出登录成功',
+                    duration: 2000,
+                })
+
+                setTimeout(() =>
+                    // app.reloadThisPage(),
+                    wx.redirectTo({
+                        url: '/pages/index/login/login',
+                    }), 1000
+                )
+            },
         })
     },
 
