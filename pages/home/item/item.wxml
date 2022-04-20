@@ -26,7 +26,7 @@
             </view>
         </view>
         <!-- 内容 -->
-        <view class="content padding-top padding-bottom">
+        <view class="content padding-top ">
             <text class="text-xl"> {{item.content}}</text>
         </view>
         <!-- 多张图片 -->
@@ -39,7 +39,7 @@
             </view>
         </view>
         <!-- 点赞评论区 -->
-        <view class="tip flex justify-between padding-bottom">
+        <view class="tip flex justify-between padding-top padding-bottom">
             <text class="cuIcon-attention text-gray">1.2k浏览</text>
             <view class="flex align-center">
                 <view class="flex padding-right-xl">
@@ -57,31 +57,40 @@
             <text class="cuIcon-close text-gray"></text>
         </view>
         <!-- 评论区 -->
-        <view class="comment flex flex-direction" wx:if="{{item.commentList.length>0}}">
+        <view class="comment flex flex-direction padding-top" wx:if="{{item.commentList.length>0}}">
             <!-- 热门评论 -->
             <view>
 
             </view>
             <!-- 所有评论 -->
-            <view class="flex align-center justify-between " style="height: 10vh;" wx:for="{{item.commentList}}" wx:key="index" wx:for-item="comment">
-                <view class="flex flex-direction align-center padding-right-sm">
+            <view class="flex align-center justify-between " style="height: {{comment.uri===null?'10vh':'19.5vh'}};" wx:for="{{item.commentList}}" wx:key="index" wx:for-item="comment">
+                <view class="flex flex-direction align-center self-start padding-right-sm">
                     <image class="cu-avatar round" wx:if="{{bakPath!==null||comment.fromAvatar!==null}}" src="{{comment.fromAvatar===null?bakPath:comment.fromAvatar}}"></image>
                     <text class="padding-top-sm text-lg text-gray">{{index+1}}L</text>
                 </view>
 
-                <view class="flex flex-direction flex-sub">
+                <view class="flex flex-direction self-start flex-sub">
+
                     <text class="text-lg">{{comment.fromNickname}}</text>
                     <text class="text-sm text-gray"> {{filter.formatTime(comment.addTime,"format")}}</text>
-                    <text class="padding-top-sm text-black"> {{comment.content}}</text>
+
+                    <view class="flex">
+                        <text wx:if="{{comment.toUserDetailUuid!==null}}">回复{{comment.toNickname}}:</text>
+                        <text class="text-black" wx:if="{{comment.content!==null}}"> {{comment.content}}</text>
+                    </view>
+                    <view class="flex " style="padding:4rpx 0" wx:if="{{comment.uri!==null}}">
+                        <image data-url="{{comment.uri}}"  bindtap="ViewImage" class=" full" style=" height: 12vh;" src="{{comment.uri}}" mode="heightFix"></image>
+                    </view>
+
                 </view>
                 <!-- 评论的回复和点赞 -->
-                <view class="self-start flex align-center padding-top">
-                    <text class="icon text-gray cuIcon-message padding-right"></text>
+                <view class="self-start flex  ">
+                    <text class="icon text-gray cuIcon-message padding-right bg-red" bindtap="replyComment" data-name="{{comment.fromNickname}}" data-to="{{comment.fromUserDetailUuid}}" data-id="{{comment.commentId}}"></text>
                     <text class="icon {{filter.isInclude(comment.commentUuid,starList,'linkedUuid')?'cuIcon-appreciatefill text-yellow':'cuIcon-appreciate text-gray'}}" data-type="comment" data-id="{{comment.commentUuid}}" bindtap="{{filter.isInclude(comment.commentUuid,starList,'linkedUuid')?'cancelLikedIt':'likedIt'}}"></text>
                     <text class="star-count text-gray">{{comment.star}}</text>
                 </view>
-
             </view>
+
         </view>
         <!-- 评论区 -->
         <view class="comment flex flex-direction align-center justify-center" style="height: 20vh;" wx:else>
@@ -92,16 +101,23 @@
     </view>
 </scroll-view>
 <view class="bar">
+    <view class="grid col-3  grid-square flex-sub" style="position: relative;">
+        <view class="bg-img" wx:for="{{imgList}}" wx:key="index" bindtap="ViewImage" data-url="{{imgList[index]}}">
+            <image src='{{imgList[index]}}' mode='aspectFill'></image>
+            <view class="cu-tag " catchtap="DelImg" data-index="{{index}}">
+                <text class="text-white cuIcon-close"></text>
+            </view>
+        </view>
+
+    </view>
     <view class="cu-bar input">
         <image class="cu-avatar round" wx:if="{{bakPath!==null||avatar!==null}}" src="{{item.avatar===null?bakPath:avatar}}"></image>
-   
-        <view class="action">
-            <text class="cuIcon-roundaddfill text-grey"></text>
+
+        <view class="action" bindtap="ChooseImage">
+            <text class="cuIcon-picfill text-grey"></text>
         </view>
-        <input class="solid-bottom" value="{{form.content}}" bindinput="contentInput" placeholder="回复楼主：" maxlength="300" cursor-spacing="10"></input>
-        <view class="action">
-            <text class="cuIcon-emojifill text-grey"></text>
-        </view>
+        <input class="solid-bottom" focus="inputFocus" bindblur="inputBlur" value="{{form.content}}" bindinput="contentInput" placeholder="{{placeHolder}}" maxlength="300" cursor-spacing="10"></input>
+
         <button class="cu-btn bg-green shadow-blur" bindtap="saveComment">发送</button>
     </view>
 </view>

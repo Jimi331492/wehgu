@@ -22,6 +22,7 @@ Page({
         },
 
         // 表单
+        baseURL: "",
         imgList: [], //上传图片的人
         form: {
             content: null, //评论内容
@@ -32,13 +33,12 @@ Page({
             parentId: null, //父级评论id
         },
 
+        //输入框
+        inputFocus: false,
+        placeHolder: '回复楼主:',
     },
 
-    contentInput(e) {
-        this.setData({
-            ['form.content']: e.detail.value
-        })
-    },
+
 
     getURIByPath(path) {
         return new Promise((resolve, reject) => {
@@ -176,20 +176,9 @@ Page({
 
     //评论
     async saveComment(e) {
-        //所选信息都是必填
-        if (this.data.form.content === null || this.data.form.content === '') {
-            wx.showToast({
-                title: "回复内容为空",
-                icon: 'error',
-                duration: 2000
-            })
-            return false
-        }
-        //如果是回复评论
-        const id = e.currentTarget.dataset.id;
-        if (id !== null) {
-            this.data.form.parentId = id
-        }
+
+
+
         //如果有照片
         if (this.data.imgList.length > 0) {
             const path = await this.upload('comment', this.data.imgList[0])
@@ -201,6 +190,16 @@ Page({
         /*
          *  调用接口
          */
+        console.log(this.data.form);
+        //所选信息都是必填
+        if ((this.data.form.content === null || this.data.form.content === '') && this.data.form.path === null) {
+            wx.showToast({
+                title: "回复内容为空",
+                icon: 'error',
+                duration: 2000
+            })
+            return false
+        }
         console.log('再保存评论');
         http.postRequest('/comment/saveComment', this.data.form, ContentTypeEnum.Default_Sub,
             res => {
@@ -300,6 +299,64 @@ Page({
             })
     },
 
+    ViewImage(e) {
+
+        wx.previewImage({
+            urls: this.data.imgList.length < 1 ? [e.currentTarget.dataset.url] : this.data.imgList,
+            current: e.currentTarget.dataset.url
+        });
+    },
+    
+    DelImg(e) {
+        wx.showModal({
+            title: '提示',
+            content: '确定要删除吗？',
+            cancelText: '确定',
+            confirmText: '再见',
+            success: res => {
+                if (res.confirm) {
+                    this.data.imgList.splice(e.currentTarget.dataset.index, 1);
+                    this.setData({
+                        imgList: this.data.imgList
+                    })
+                }
+            }
+        })
+    },
+
+    replyComment(e) {
+        const parentId = e.currentTarget.dataset.id
+        const toUserDetailUuid = e.currentTarget.dataset.to
+        const toNickName = e.currentTarget.dataset.name
+
+        this.data.form.parentId = parentId
+        this.data.form.toUserDetailUuid = toUserDetailUuid
+        this.setData({
+            inputFocus: true,
+            placeHolder: '回复 @' + toNickName,
+        })
+    },
+
+    contentInput(e) {
+        console.log(e);
+        this.setData({
+            ['form.content']: e.detail.value
+        })
+        console.log(this.data.form);
+    },
+
+    inputBlur(e) {
+        //输入框失去焦点重置form和placeHolder
+        console.log("inputBlur");
+
+
+        this.setData({
+            placeHolder: '回复楼主：'
+        })
+
+
+    },
+
     /**
      * 生命周期函数--监听页面加载
      */
@@ -313,6 +370,7 @@ Page({
             starList: app.globalData.starList,
             item: item,
             avatar: avatar,
+            baseURL: http.baseURL,
         })
         if (item.pictureNum > 1 && item.imgPathList.length > 1) {
             wx.showLoading({
@@ -336,7 +394,20 @@ Page({
             })
         }
         //初始化评论
-        // this.getCommentTree()
+        const commentList = item.commentList
+        if (commentList.length > 0) {
+            commentList.forEach(async e => {
+                if (e.path !== null) {
+                    const URI = await this.getURIByPath(e.path)
+                    e.URI = URI
+                }
+            })
+
+            this.setData({
+                ['item.commentList']: commentList
+            })
+        }
+
         //初始化表单
         const fromUserDetailUuid = wx.getStorageSync('userInfo').userDetailUuid
         const form = {
