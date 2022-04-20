@@ -31,7 +31,7 @@ Page({
         this.setData({
             starList: app.globalData.starList
         });
-        console.log('updateStarList' + JSON.stringify(this.data.starList));
+  
     },
 
     onLoad: function () {
@@ -49,7 +49,7 @@ Page({
                 this.setData({
                     starList: app.globalData.starList
                 });
-                console.log('sss' + JSON.stringify(this.data.starList));
+            
             }, 1000)
 
         }

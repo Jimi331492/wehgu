@@ -10,7 +10,7 @@ Page({
      * 页面的初始数据
      */
     data: {
-        modalName: null,
+        modalName: "",
         telephone: "",
         //表单输入
         userInfo: {},
@@ -250,7 +250,7 @@ Page({
             modalName: e.currentTarget.dataset.target
         })
     },
-    hideModal(e) {
+    hideModal() {
         this.setData({
             modalName: null
         })

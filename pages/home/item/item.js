@@ -36,8 +36,33 @@ Page({
         //输入框
         inputFocus: false,
         placeHolder: '回复楼主:',
+
+        //提示
+        tipShow: true,
+        modalName: null,
+
+        curComment: null
+    },
+    hideTip() {
+        this.setData({
+            tipShow: false
+        })
     },
 
+    showModal(e) {
+        console.log(e);
+        const comment = e.currentTarget.dataset.comment
+        this.setData({
+            modalName: e.currentTarget.dataset.target,
+            curComment: comment
+        })
+    },
+    hideModal() {
+        this.setData({
+            modalName: null,
+            curComment: null,
+        })
+    },
 
 
     getURIByPath(path) {
@@ -177,8 +202,6 @@ Page({
     //评论
     async saveComment(e) {
 
-
-
         //如果有照片
         if (this.data.imgList.length > 0) {
             const path = await this.upload('comment', this.data.imgList[0])
@@ -306,7 +329,7 @@ Page({
             current: e.currentTarget.dataset.url
         });
     },
-    
+
     DelImg(e) {
         wx.showModal({
             title: '提示',
@@ -324,18 +347,32 @@ Page({
         })
     },
 
-    replyComment(e) {
-        const parentId = e.currentTarget.dataset.id
-        const toUserDetailUuid = e.currentTarget.dataset.to
-        const toNickName = e.currentTarget.dataset.name
 
-        this.data.form.parentId = parentId
-        this.data.form.toUserDetailUuid = toUserDetailUuid
+
+    replyComment(e) {
+        console.log(e.currentTarget.dataset.id);
         this.setData({
-            inputFocus: true,
-            placeHolder: '回复 @' + toNickName,
+            modalName: ""
         })
+        if (e.currentTarget.dataset.id) {
+            const parentId = e.currentTarget.dataset.id
+            const toUserDetailUuid = e.currentTarget.dataset.to
+            const toNickName = e.currentTarget.dataset.name
+            this.data.form.parentId = parentId
+            this.data.form.toUserDetailUuid = toUserDetailUuid
+
+            this.setData({
+                inputFocus: true,
+                placeHolder: '回复 @' + toNickName,
+            })
+        } else {
+            this.setData({
+                inputFocus: true
+            })
+        }
+
     },
+
 
     contentInput(e) {
         console.log(e);
@@ -355,6 +392,29 @@ Page({
         })
 
 
+    },
+
+    //删除评论
+    delteteComment() {
+        http.delRequest(`/comment/deleteComment?UID=${this.data.curComment.commentUuid}`, null,
+            res => {
+                wx.showToast({
+                    title: "删除成功",
+                })
+                this.hideModal();
+                this.getCommentTreeOnThis()
+            }, err => {
+                wx.showToast({
+                    icon: "none",
+                    title: err.message,
+                })
+            })
+    },
+
+    navigateTo(e) {
+        wx.navigateTo({
+            url: e.currentTarget.dataset.path,
+        })
     },
 
     /**
@@ -418,7 +478,10 @@ Page({
             toUserDetailUuid: null, //被动方
             parentId: null, //父级评论id
         }
-        this.data.form = form
+
+        this.setData({
+            form: form
+        })
     },
 
     /**

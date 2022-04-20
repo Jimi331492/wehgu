@@ -136,7 +136,7 @@ App({
                 console.log(res)
                 wx.showToast({
                     icon: 'success',
-                    title: '退出登录成功',
+                    title: '清除状态',
                     duration: 2000,
                 })
 

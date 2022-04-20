@@ -4,7 +4,10 @@
         "pages/index/home/home",
 
         "pages/home/home/home",
+        "pages/home/category/category",
         "pages/home/item/item",
+        "pages/home/report/report",
+        "pages/home/other/other",
 
         "pages/find/home/home",
 

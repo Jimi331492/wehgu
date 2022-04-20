@@ -45,49 +45,49 @@ Component({
             color: 'red',
             badge: 0,
             name: '表白墙',
-            url: "/pages/getCowList/getCowList"
+            url: "/pages/home/category/category"
         }, {
             icon: 'shopfill',
             color: 'yellow',
             badge: 0,
             name: '跳蚤市场',
-            url: "/pages/farmUnit/farmUnit"
+
         }, {
             icon: 'writefill',
             color: 'cyan',
             badge: 0,
             name: '学习专区',
-            url: "/pages/yield/yield"
+            url: "/pages/home/category/category"
         }, {
             icon: 'sponsorfill',
             color: 'olive',
             badge: 0,
             name: '失物招领',
-            url: "/pages/cost/cost"
+            url: "/pages/home/category/category"
         }, {
             icon: 'servicefill',
             color: 'yellow',
             badge: 0,
             name: '在线客服',
-            url: "/pages/expert/expert"
+            url: "/pages/home/category/category"
         }, {
             icon: 'countdownfill',
             color: 'orange',
             badge: 0,
             name: '校园活动',
-            url: "/pages/dietary/dietary"
+            url: "/pages/home/category/category"
         }, {
             icon: 'messagefill',
             color: 'olive',
             badge: 0,
             name: '吐槽专区',
-            url: "/pages/breedConsult/breedConsult"
+            url: "/pages/home/category/category"
         }, {
             icon: 'questionfill',
             color: 'olive',
             badge: 0,
             name: '问题反馈',
-            url: "/pages/illnessList/illnessList"
+            url: "/pages/home/category/category"
         }],
         gridCol: 4,
         skin: false,
@@ -95,7 +95,21 @@ Component({
         //导航栏相关
         TabCur: 0,
         scrollLeft: 0,
-        tabList: ["最热讨论", "最新发布", "距离最近", "历史记录"],
+        tabList: [{
+            label: "评论最多",
+            sort: "comment_count",
+            order: "desc",
+        }, {
+            label: "点赞最多",
+            sort: "star",
+            order: "desc",
+        }, {
+            label: "最新发布",
+            sort: "add_time",
+            order: "desc",
+        }, {
+            label: "我的点赞",
+        }],
         query: {
             limit: 6,
             page: 1,
@@ -169,7 +183,7 @@ Component({
                     confirmText: '去登陆',
                     success: res => {
                         if (res.confirm) {
-                            this.getUserProfile()
+                            app.getUserProfile()
                         }
                     }
                 })

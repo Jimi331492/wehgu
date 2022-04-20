@@ -141,11 +141,20 @@ function filterTree(multiArray) {
     return filterMultiArray
 }
 
+function deleteShow(PostFromUserDetailUuid, CommentFromUserDetailUuid, SelfUserDetailUuid) {
+    var flag = PostFromUserDetailUuid === SelfUserDetailUuid || CommentFromUserDetailUuid === SelfUserDetailUuid
+    // console.log("post", PostFromUserDetailUuid);
+    // console.log("comment", CommentFromUserDetailUuid);
+    // console.log("self", SelfUserDetailUuid);
+    // console.log(flag);
+    return flag
+}
+
 
 module.exports = {
     formatTime: formatTime,
     filterArray: filterArray,
     isInclude: isInclude,
     filterTree: filterTree,
-
+    deleteShow: deleteShow
 }

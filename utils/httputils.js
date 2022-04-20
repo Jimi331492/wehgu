@@ -52,6 +52,14 @@ function get(url, params, onSuccess, onFailed) {
 }
 
 /**
+ * 供外部delete请求调用
+ */
+function del(url, params, onSuccess, onFailed) {
+    // console.log("请求方式：", "DELETE")
+    request(url, params, "DELETE", onSuccess, onFailed);
+}
+
+/**
  * function: 封装网络请求
  * @url URL地址
  * @params 请求参数
@@ -60,11 +68,11 @@ function get(url, params, onSuccess, onFailed) {
  * @onFailed  失败回调
  */
 
-function request(url, params, method, onSuccess, onFailed) {
+const request = (url, params, method, onSuccess, onFailed) => {
     //   wx.showLoading({
     //     title: "正在加载中...",
     //   })
-
+    console.log(app);
     let fullpath = getFullRequestPath(url);
     header["Cookie"] = wx.getStorageSync('cookie');
     header["sessionId"] = wx.getStorageSync('sessionId');
@@ -74,7 +82,7 @@ function request(url, params, method, onSuccess, onFailed) {
         data: dealParams(params),
         method: method,
         header: header,
-        success: function (res) {
+        success: res => {
             //   wx.hideLoading()
             // console.log('响应：', res);
             if (res.header) {
@@ -89,10 +97,11 @@ function request(url, params, method, onSuccess, onFailed) {
                 }
             }
             if (res.data.code === 200) {
+
                 onSuccess(res.data); //request success
             } else if (res.data.code === 403 || res.data.code === 401) {
                 wx.showModal({
-                    content: '登录已过期,请重新登录！',
+                    content: '登录已过期,请重新登录',
                     success: res => {
                         if (res.confirm) {
                             app.getUserProfile()
@@ -110,14 +119,14 @@ function request(url, params, method, onSuccess, onFailed) {
                 onFailed(res.data)
             }
         },
-        fail: function (error) {
+        fail: err => {
             //   wx.hideLoading();
             wx.showToast({
                 title: 'Network Error',
                 icon: 'none',
                 duration: 2000
             })
-            onFailed(error); //failure for other reasons
+            onFailed(err); //failure for other reasons
         }
     })
 }
@@ -141,6 +150,7 @@ module.exports = {
     baseURL: baseURL,
     postRequest: post,
     getRequest: get,
+    delRequest: del,
     fill_token_toheader: fill_token_toheader,
     getFullRequestPath: getFullRequestPath
 }
