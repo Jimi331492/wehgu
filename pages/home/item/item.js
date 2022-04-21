@@ -9,6 +9,7 @@ Page({
      * 页面的初始数据
      */
     data: {
+        isLogin: false,
         bakPath: '/images/custom-avatar.png',
 
         starList: [],
@@ -417,6 +418,11 @@ Page({
         })
     },
 
+    // getUserProfile() {
+    //     app.getUserProfile()
+    // },
+
+
     /**
      * 生命周期函数--监听页面加载
      */
@@ -430,6 +436,7 @@ Page({
             starList: app.globalData.starList,
             item: item,
             avatar: avatar,
+            isLogin: wx.getStorageSync('isLogin'),
             baseURL: http.baseURL,
         })
         if (item.pictureNum > 1 && item.imgPathList.length > 1) {

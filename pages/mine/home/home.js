@@ -64,7 +64,7 @@ Component({
                                     wx.setStorageSync('isLogin', true)
                                     this.setData({
                                         userInfo: wx.getStorageSync('userInfo'),
-                                        isLogin:true
+                                        isLogin: true
                                     })
                                 },
                                 err => {
@@ -137,23 +137,7 @@ Component({
 
         // 退出登录
         confirmExit: function () {
-            wx.clearStorage({
-                success: (res) => {
-                    console.log(res)
-                    wx.showToast({
-                        icon: 'success',
-                        title: '退出登录成功',
-                        duration: 2000,
-                    })
-
-                    setTimeout(() =>
-                        // app.reloadThisPage(),
-                        wx.redirectTo({
-                            url: '/pages/index/login/login',
-                        }), 1000
-                    )
-                },
-            })
+            app.confirmExit("退出登录")
         },
     }
 })

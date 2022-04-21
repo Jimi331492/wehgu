@@ -14,5 +14,10 @@ Component({
     data: {
         isLogin: false
     },
-    methods: {}
+    methods: {
+        getUserProfile() {
+            app.getUserProfile()
+        },
+        
+    }
 })

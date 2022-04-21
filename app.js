@@ -113,7 +113,6 @@ App({
                                     title: err.message,
                                 })
                             })
-
                     },
                     err => {
                         wx.showToast({
@@ -130,13 +129,13 @@ App({
     },
 
     // 退出登录
-    confirmExit: function () {
+    confirmExit: function (content) {
         wx.clearStorage({
             success: (res) => {
                 console.log(res)
                 wx.showToast({
                     icon: 'success',
-                    title: '清除状态',
+                    title: content ? content : '清除状态',
                     duration: 2000,
                 })
 

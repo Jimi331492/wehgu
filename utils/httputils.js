@@ -67,7 +67,6 @@ function del(url, params, onSuccess, onFailed) {
  * @onSuccess 成功回调
  * @onFailed  失败回调
  */
-
 const request = (url, params, method, onSuccess, onFailed) => {
     //   wx.showLoading({
     //     title: "正在加载中...",

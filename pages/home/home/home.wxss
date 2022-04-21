@@ -34,3 +34,7 @@
 .post-list .post-item .image.mm-img {
     margin: 0 20rpx ;
 }
+
+.full{
+    width: 100%;
+}

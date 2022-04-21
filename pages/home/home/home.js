@@ -14,15 +14,21 @@ Component({
         },
     },
     lifetimes: {
-        attached() {
-
+        async attached() {
             this.towerSwiper();
             // 初始化towerSwiper 传已有的数组名即可
-            this.getPostList()
             this.setData({
                 isLogin: wx.getStorageSync('isLogin'),
                 isExamine: app.globalData.isExamine,
             });
+      
+            const res = await this.getPostList(this.data.query)
+            this.data.total = res.data.total
+            console.log(res);
+            this.setData({
+                postList: res.data.records,
+            });
+
 
 
         },
@@ -96,19 +102,17 @@ Component({
         TabCur: 0,
         scrollLeft: 0,
         tabList: [{
-            label: "评论最多",
-            sort: "comment_count",
-            order: "desc",
-        }, {
             label: "点赞最多",
-            sort: "star",
+        }, {
+            label: "评论最多",
+            sort: "comment_num",
             order: "desc",
         }, {
             label: "最新发布",
             sort: "add_time",
             order: "desc",
         }, {
-            label: "我的点赞",
+            label: "最近点赞",
         }],
         query: {
             limit: 6,
@@ -132,124 +136,57 @@ Component({
         },
 
         //获取帖子
-        getPostList() {
-            http.postRequest('/post/getPostPage', this.data.query, ContentTypeEnum.Json_Sub,
-                res => {
-                    let postList = [];
-                    this.data.total = res.data.total
-                    if (this.data.postList.length < 1) {
-                        postList = res.data.records
-                    } else {
-                        postList = this.data.postList.concat(res.data.records)
-                    }
-
-                    this.setData({
-                        postList: postList
-                    })
-
-                }, err => {
-                    console.log(err);
+        getPostList(query) {
+            return new Promise((resolve, reject) => {
+                wx.showLoading({
+                    title: '加载中...',
                 })
+                http.postRequest('/post/getPostPage', query, ContentTypeEnum.Json_Sub,
+                    res => {
+                        resolve(res)
+                        wx.hideLoading();
+                    }, err => {
+                        console.log(err);
+                        reject(err)
+                        wx.hideLoading();
+                    })
+            })
+
         },
 
-        loadPostList() {
+        async loadPostList() {
             if (this.data.query.limit * this.data.query.page >= this.data.total) {
                 if (this.data.isBottom) {
                     wx.showToast({
                         icon: "none",
-                        title: '一滴都没有了',
+                        title: '到底了',
                     })
                 }
                 this.setData({
                     isBottom: true
                 })
-
             }
             if (!this.data.isBottom) {
                 this.data.query.page += 1;
-                this.getPostList()
+                const res = await this.getPostList(this.data.query)
+                let postList = [];
+                this.data.total = res.data.total
+                if (this.data.postList.length < 1) {
+                    postList = res.data.records
+                } else {
+                    postList = this.data.postList.concat(res.data.records)
+                }
+                this.setData({
+                    postList: postList
+                })
             }
 
         },
 
-        // 路由跳转
-        navChange(e) {
-            console.log(e.currentTarget.dataset.url);
-            let url = e.currentTarget.dataset.url
-            if (!this.data.isLogin) {
-                wx.showModal({
-                    title: '提示',
-                    content: '用户未登录。',
-                    confirmText: '去登陆',
-                    success: res => {
-                        if (res.confirm) {
-                            app.getUserProfile()
-                        }
-                    }
-                })
-            } else {
-                wx.navigateTo({
-                    url: url,
-                })
-            }
-        },
 
-        getUserProfile: function () {
-            wx.login({
-                success: res => {
-                    if (res.code) {
-                        wx.setStorageSync('code', res.code);
-                    }
-                }
-            })
 
-            wx.getUserProfile({
-                desc: '用于完善资料',
-                success: res => {
-                    const form = {
-                        signature: res.signature,
-                        rawData: res.rawData,
-                        encryptedData: res.encryptedData,
-                        iv: res.iv,
-                        jscode: wx.getStorageSync('code'),
-                        appid: "wxeb4f620b577ff31a"
-                    }
-
-                    http.postRequest("/mp_get_unionId", form, ContentTypeEnum.Json_Sub,
-                        res => {
-                            console.log(res);
-                            wx.setStorageSync('sessionId', res.data.sessionId);
-                            wx.setStorageSync('unionId', res.data.unionId);
-                            wx.setStorageSync('openid', res.data.openId);
-                            http.fill_token_toheader(res.data.unionId);
-                            wx.setStorageSync('isLogin', true)
-                            http.postRequest("/getMPUserInfo", res.data.unionId, ContentTypeEnum.Default_Sub,
-                                res => {
-                                    wx.setStorageSync('userInfo', res.data);
-                                    this.setData({
-                                        userInfo: res.data
-                                    })
-                                },
-                                err => {
-                                    wx.showToast({
-                                        icon: "none",
-                                        title: err.message,
-                                    })
-                                })
-
-                        },
-                        err => {
-                            wx.showToast({
-                                icon: 'none',
-                                title: err.message,
-                            })
-                        }
-                    )
-                },
-                fail: err => {
-                    console.log(err);
-                }
-            })
+        getUserProfile() {
+            app.getUserProfile()
         },
 
         // cardSwiper
@@ -329,10 +266,63 @@ Component({
             }
         },
         //tab导航
-        tabSelect(e) {
+        async tabSelect(e) {
             this.setData({
                 TabCur: e.currentTarget.dataset.id,
-                scrollLeft: (e.currentTarget.dataset.id - 1) * 60
+                scrollLeft: (e.currentTarget.dataset.id - 1) * 60,
+                isBottom: false,
+            })
+            const option = e.currentTarget.dataset.item;
+            if (option.label === "最近点赞") {
+                const starList = this.data.starList;
+                const postStarList = starList.filter(e => {
+                    return e.type === 0
+                })
+
+                let likedPostList = [];
+                //帖子点赞类型为0直接返回空
+                if (postStarList.length !== 0) {
+                    postStarList.reverse()
+                    if (postStarList.length > 6) {
+                        postStarList = postStarList.slice(0, 6)
+                    }
+                    const res = await this.getLikedPost(postStarList);
+                    likedPostList = res.data
+                }
+                this.setData({
+                    postList: likedPostList,
+                    isBottom: true
+                })
+
+            } else {
+                const defQuery = {
+                    limit: 6,
+                    page: 1,
+                    auditStatus: '正常',
+                    sort: option.sort,
+                    order: option.order
+                };
+
+                const res = await this.getPostList(defQuery);
+                this.data.total = res.data.total
+                this.setData({
+                    postList: res.data.records,
+                    query: defQuery,
+                 
+                })
+           
+            }
+
+        },
+
+        getLikedPost(starList) {
+            return new Promise((resolve, reject) => {
+                http.postRequest('/post/getLikedPostPage', starList, ContentTypeEnum.Default_Sub,
+                    res => {
+                        resolve(res);
+                    }, err => {
+                        reject(err)
+                    })
             })
         },
 
