@@ -1,0 +1,5 @@
+<!--pages/mine/message/message.wxml-->
+<wxs src="/utils/filter.wxs" module="filter"></wxs>
+<custom bgColor="bg-gradual-blue" isCustom>
+    <view slot="content">我的消息</view>
+</custom>

@@ -21,7 +21,7 @@ Component({
                 isLogin: wx.getStorageSync('isLogin'),
                 isExamine: app.globalData.isExamine,
             });
-      
+
             const res = await this.getPostList(this.data.query)
             this.data.total = res.data.total
             console.log(res);
@@ -51,49 +51,49 @@ Component({
             color: 'red',
             badge: 0,
             name: '表白墙',
-            url: "/pages/home/category/category"
+            url: `/pages/home/category/category?tag=${'表白'}&name=${'表白墙'}`
         }, {
             icon: 'shopfill',
             color: 'yellow',
             badge: 0,
             name: '跳蚤市场',
-
+            url: `/pages/home/category/category?tag=${'二手交易'}&name=${'跳蚤市场'}`
         }, {
             icon: 'writefill',
             color: 'cyan',
             badge: 0,
             name: '学习专区',
-            url: "/pages/home/category/category"
+            url: `/pages/home/category/category?tag=${'学习'}&name=${'学习专区'}`
         }, {
             icon: 'sponsorfill',
             color: 'olive',
             badge: 0,
             name: '失物招领',
-            url: "/pages/home/category/category"
+            url: `/pages/home/category/category?tag=${'失物招领'}&name=${'失物招领'}`
         }, {
             icon: 'servicefill',
             color: 'yellow',
             badge: 0,
             name: '在线客服',
-            url: "/pages/home/category/category"
+            url: `/pages/home/home/home`
         }, {
             icon: 'countdownfill',
             color: 'orange',
             badge: 0,
             name: '校园活动',
-            url: "/pages/home/category/category"
+            url: `/pages/home/category/category?tag=${'活动'}&name=${'校园活动'}`,
         }, {
             icon: 'messagefill',
             color: 'olive',
             badge: 0,
             name: '吐槽专区',
-            url: "/pages/home/category/category"
+            url: `/pages/home/category/category?tag=${'吐槽'}&name=${'吐槽专区'}`,
         }, {
             icon: 'questionfill',
             color: 'olive',
             badge: 0,
             name: '问题反馈',
-            url: "/pages/home/category/category"
+            url: '/pages/home/report/report'
         }],
         gridCol: 4,
         skin: false,
@@ -132,6 +132,12 @@ Component({
             app.globalData.currentPost = e.currentTarget.dataset.post
             wx.navigateTo({
                 url: '/pages/home/item/item',
+            })
+        },
+
+        navigateTo(e) {
+            wx.navigateTo({
+                url: e.currentTarget.dataset.path,
             })
         },
 
@@ -308,9 +314,9 @@ Component({
                 this.setData({
                     postList: res.data.records,
                     query: defQuery,
-                 
+
                 })
-           
+
             }
 
         },
@@ -328,19 +334,54 @@ Component({
 
         onPulling(e) {},
 
-        onRefresh(e) {
+        async onRefresh(e) {
             if (this._freshing === true) return
             this._freshing = true
 
-            //重置
-            this.data.query = {
-                limit: 6,
-                page: 1,
-                auditStatus: '正常'
-            };
-            this.data.postList = [];
-            this.data.total = 0;
-            this.getPostList();
+            if (this.data.TabCur !== 3) {
+                const query = {
+                    limit: 6,
+                    page: 1,
+                    auditStatus: '正常',
+                }
+
+                this.data.query = {
+                    ...this.data.tabList[this.data.TabCur],
+                    ...query
+                }
+                console.log(this.data.query);
+                //重置
+                this.data.postList = [];
+                this.data.total = 0;
+                const res = await this.getPostList(this.data.query);
+                this.setData({
+                    postList: res.data.records,
+                    isBottom: false,
+                })
+            } else {
+                const starList = this.data.starList;
+                const postStarList = starList.filter(e => {
+                    return e.type === 0
+                })
+
+                let likedPostList = [];
+                //帖子点赞类型为0直接返回空
+                if (postStarList.length !== 0) {
+                    postStarList.reverse()
+                    if (postStarList.length > 6) {
+                        postStarList = postStarList.slice(0, 6)
+                    }
+                    const res = await this.getLikedPost(postStarList);
+                    likedPostList = res.data
+                }
+                this.setData({
+                    postList: likedPostList,
+                    isBottom: true
+                })
+
+            }
+
+
             setTimeout(() => {
                 this.setData({
                     triggered: false,
@@ -366,8 +407,10 @@ Component({
             });
             console.log('updateStarList success');
         },
-
-
+        //客服
+        handleContact(e) {
+            console.log(e);
+        },
 
         /**
          * 用户点击右上角分享

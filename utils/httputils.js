@@ -71,7 +71,6 @@ const request = (url, params, method, onSuccess, onFailed) => {
     //   wx.showLoading({
     //     title: "正在加载中...",
     //   })
-    console.log(app);
     let fullpath = getFullRequestPath(url);
     header["Cookie"] = wx.getStorageSync('cookie');
     header["sessionId"] = wx.getStorageSync('sessionId');

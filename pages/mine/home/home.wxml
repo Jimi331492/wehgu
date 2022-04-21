@@ -3,7 +3,7 @@
 <!-- <wxs scr="../../../utils/filter.wxs" module="filter" ></wxs> -->
 <custom bgColor="bg-gradual-white">
     <view slot="right">
-        <button class="cuIcon-noticefill bg-yellow round text-white" size="mini"></button>
+        <button bindtap="navigateTo" data-path="/pages/mine/message/message" class="cuIcon-noticefill bg-yellow round text-white" size="mini"></button>
     </view>
     <view slot="content">个人中心</view>
 </custom>

@@ -135,6 +135,12 @@ Component({
             })
         },
 
+        navigateTo(e) {
+            wx.navigateTo({
+                url: e.currentTarget.dataset.path,
+            })
+        },
+
         // 退出登录
         confirmExit: function () {
             app.confirmExit("退出登录")

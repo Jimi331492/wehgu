@@ -1,2 +1,4 @@
 <!--pages/home/report/report.wxml-->
-<text>pages/home/report/report.wxml</text>
+<custom bgColor="bg-gradual-blue" isBack>
+    <view slot="content">问题反馈</view>
+</custom>

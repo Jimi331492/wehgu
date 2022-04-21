@@ -1,0 +1,4 @@
+<!--pages/home/notice/notice.wxml-->
+<custom bgColor="bg-gradual-blue" isBack>
+    <view slot="content">公告</view>
+</custom>

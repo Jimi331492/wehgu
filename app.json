@@ -8,6 +8,7 @@
         "pages/home/item/item",
         "pages/home/report/report",
         "pages/home/other/other",
+        "pages/home/notice/notice",
 
         "pages/find/home/home",
 
@@ -19,7 +20,8 @@
         "pages/mine/home/home",
         "pages/mine/edit/edit",
         "pages/mine/auth/auth",
-        "pages/mine/cropper/cropper"
+        "pages/mine/cropper/cropper",
+        "pages/mine/message/message"
     ],
     "window": {
         "backgroundTextStyle": "light",
