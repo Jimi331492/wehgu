@@ -20,7 +20,7 @@
 
     <!-- 消息列表 -->
     <view class="cu-card case card post-list">
-        <view class="cu-item shadow flex-direction post-item" wx:for="{{postList}}" wx:key="index" data-post="{{item}}" bindtap="{{isLogin?'toItem':'getUserProfile'}}">
+        <view class="cu-item shadow flex-direction post-item" wx:for="{{postList}}" wx:key="index" data-post="{{item}}" bindtap="toItem">
             <view class="image mm-img" wx:if="{{item.imgIndexURI!==null}}">
                 <image src="{{item.imgIndexURI}}" mode="aspectFill"></image>
                 <view class="cu-tag bg-{{item.backgroundColor}}">{{item.tag}}</view>

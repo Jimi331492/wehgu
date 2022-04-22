@@ -26,6 +26,27 @@ Page({
         triggered: false,
         isBottom: false,
     },
+    // 路由跳转
+    toItem(e) {
+        app.globalData.currentPost = e.currentTarget.dataset.post
+        wx.navigateTo({
+            url: '/pages/home/item/item',
+        })
+    },
+
+    updatePostList(item) {
+        const postList = this.data.postList;
+        const index = postList.findIndex(e => {
+            return e.postUuid === item.postUuid
+        })
+        postList[index] = item
+        this.setData({
+            starList: app.globalData.starList,
+            postList: postList
+        });
+        console.log('updateStarList success');
+    },
+
     contentInput(e) {
         this.setData({
             content: e.detail.value

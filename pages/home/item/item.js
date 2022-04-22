@@ -191,9 +191,18 @@ Page({
 
     updatePostList(starList, item) {
         var pages = getCurrentPages();
-        let prevPage = pages[0]; //首页
-        let home = prevPage.selectComponent("#home");
+        let index = pages[0]; //首页
+        if (pages.length > 2) {
+            let prePage = pages[pages.length - 2];
+            if (prePage.updatePostList !== null) {
+                prePage.updatePostList(item)
+            }
+
+        }
+
+        let home = index.selectComponent("#home");
         home.updatePostList(item)
+
         this.setData({
             starList: starList,
             item: item
@@ -313,8 +322,10 @@ Page({
         http.postRequest('/comment/getCommentPage', query, ContentTypeEnum.Default_Sub,
             res => {
                 this.setData({
-                    ['item.commentList']: res.data.records
+                    ['item.commentList']: res.data.records,
+                    ['item.commentNum']: this.data.item.commentNum + 1
                 })
+                this.updatePostList(app.globalData.starList, this.data.item)
             }, err => {
                 wx.showToast({
                     icon: "none",
