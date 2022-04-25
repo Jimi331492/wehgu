@@ -1,14 +1,22 @@
 const ContentTypeEnum = require('./ContentTypeEnum');
-const app = getApp()
+
+const cacheApp = () => {
+    console.log('http获取App实例');
+    return getApp()
+}
+
+
+
+
 /**
  * 请求头
  */
 //域名 正式版
-const baseURL = 'https://serve.my3iao.com/wehgu'
+// const baseURL = 'https://serve.my3iao.com/wehgu'
 //IP 测试版
 // const baseURL = 'http://47.93.25.230:10077/wehgu'
 //本地 开发版
-// const baseURL = 'http://localhost:10077/wehgu'
+const baseURL = 'http://localhost:10077/wehgu'
 
 function fill_token_toheader(token) {
     if (token == null || token == undefined || token == "") {
@@ -101,6 +109,7 @@ const request = (url, params, method, onSuccess, onFailed) => {
                 wx.showModal({
                     content: '登录已过期,请重新登录',
                     success: res => {
+                        const app = cacheApp()
                         if (res.confirm) {
                             app.getUserProfile()
                         } else if (res.cancel) {

@@ -43,12 +43,12 @@
     </view>
 
     <view class="cu-form-group">
-        <view class="title text-gray">手机
-            <text class="text-black margin-left">{{userInfo.telephone!==null?userInfo.telephone:'未绑定'}}</text>
+        <view class="title text-gray flex">手机
+            <text class="text-black text-sm margin-left">{{userInfo.telephone!==null?userInfo.telephone:'绑定手机'}}</text>
         </view>
         <input disabled type="text" />
-        <button size="mini" bindtap="showModal" data-target="bindTelephone" class="{{userInfo.telephone!==null?'cuIcon-check round bg-green':'cuIcon-close bg-red'}}">
-            {{userInfo.telephone!==null?' ':'点击绑定'}}
+        <button size="mini" bindtap="showModal" data-target="bindTelephone" class="cuIcon-mobile bg-green ">
+            验证
         </button>
 
     </view>
@@ -66,7 +66,7 @@
 
 <footer class="footer"></footer>
 
-<modal isBar name="bindTelephone" class="mm-modal" modal-name="{{modalName}}" bind:hidden="hideModal" body-height="{{600}}">
+<modal isBar name="bindTelephone" class="mm-modal" modal-name="{{modalName}}" bind:hidden="hideModal" body-height="600">
     <view class="mm-modal-body">
         <view class="mm-text">输入手机号码
             <view class="mm-text">发送验证码绑定手机</view>
@@ -74,7 +74,7 @@
 
         <view class="mm-input-box {{toggleDelay?'animation-slide-bottom':''}} {{flag?'check-success':'check-fail'}}">
             <view class=" cuIcon-phone"></view>
-            <input class="mm-input" cursor-spacing="{{50}}" bindinput="telephoneInput" disabled="{{isSend}}" type="number" maxlength="11" placeholder="输入手机号" placeholder-class="mm-input-placeholder" auto-focus="{{modalName==='bindTelephone'}}">
+            <input class="mm-input" cursor-spacing="{{50}}" bindinput="telephoneInput" disabled="{{isSend}}" value="{{telephone}}" type="number" maxlength="11" placeholder="输入手机号" placeholder-class="mm-input-placeholder" focus="{{modalName==='bindTelephone'}}">
             </input>
         </view>
         <view class="code-list {{toggleDelay?'animation-scale-up':''}}" style="animation-delay: 0.{{4}}s;" wx:if="{{isSend===true}}">

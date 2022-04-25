@@ -1,6 +1,63 @@
 <!--pages/mine/auth/auth.wxml-->
 <custom bgColor="bg-gradual-white" isBack>
-    <view slot="backText">保存并返回</view>
+    <view slot="backText">返回</view>
     <view slot="content">认证信息</view>
 </custom>
+
+<view class="container flex flex-direction justify-between" style="height: 75vh;">
+    <form action="">
+        <view class="tip padding-tb-sm padding-left-sm">
+            <text class="cuIcon-questionfill">本页面所填信息不用来展示,只用于认证服务</text>
+        </view>
+        <view class="cu-form-group">
+            <view class="title">学号</view>
+            <input class="text-right" type="number" value="{{form.studentNo}}" bindinput="studentNoInput" placeholder="请输入您的学号"></input>
+        </view>
+        <view class="cu-form-group">
+            <view class="title">姓名</view>
+            <input class="text-right" bindinput="nameInput" value="{{form.name}}" placeholder="请输入您的真实姓名"></input>
+        </view>
+        <view class="cu-form-group">
+            <view class="title">性别</view>
+            <picker bindchange="sexChange" value="{{form.sex}}" range="{{sexOptions}}">
+                <view class="picker">
+                    {{form.sex===null?'请选择您的性别':form.sex}}
+                </view>
+            </picker>
+        </view>
+        <view class="cu-form-group" style="justify-content:space-between;">
+            <view class="title">校区选择</view>
+            <picker mode="multiSelector" bindchange="campusChange" bindcolumnchange="universityChange" value="{{multiIndex}}" range="{{multiArray}}" range-key="value">
+                <view class="picker">
+                    {{form.university}}， {{form.campus}}
+                </view>
+            </picker>
+        </view>
+        <view class="cu-form-group">
+            <view class="title">入学年份</view>
+            <picker bindchange="gradeChange" value="{{form.grade}}" range="{{gradeOptions}}">
+                <view class="picker">
+                    {{form.grade===null?'请选择您的入学年份':form.grade}}
+                </view>
+            </picker>
+        </view>
+        <view class="cu-form-group">
+            <view class="title">所属学院</view>
+            <picker bindchange="collegeChange" value="{{form.sex}}" range="{{collegeList}}" range-key="value">
+                <view class="picker">
+                    {{form.college===null?'请选择您的所属学院':form.college}}
+                </view>
+            </picker>
+        </view>
+        <view class="cu-form-group">
+            <view class="title">专业</view>
+            <input class="text-right" bindinput="majorInput" value="{{form.major}}" placeholder="请输入您的专业名称"></input>
+        </view>
+
+    </form>
+    <view class="cu-bar btn-group">
+        <button class="cu-btn bg-green shadow-blur round lg" bindtap="commitAuthForm">保存</button>
+    </view>
+</view>
+
 <footer class="footer"></footer>

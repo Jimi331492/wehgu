@@ -10,7 +10,7 @@ Page({
      * 页面的初始数据
      */
     data: {
-        modalName: "",
+        modalName: " ",
         telephone: "",
         //表单输入
         userInfo: {},
@@ -145,6 +145,8 @@ Page({
         })
     },
 
+    changeData(){},
+
     //介绍输入
     introduceInput(e) {
         this.setData({
@@ -228,7 +230,12 @@ Page({
             res => {
                 wx.setStorageSync('userInfo', this.data.userInfo)
                 this.setData({
-                    userInfo: this.data.userInfo
+                    userInfo: this.data.userInfo,
+                    telephone: "",
+                    isSend: false,
+                    countdown: 30,
+                    codeList: [], //验证码数组
+                    curItemIndex: 0, //当前输入第几位Code
                 })
                 this.hideModal()
                 wx.showToast({
@@ -245,13 +252,15 @@ Page({
 
 
     showModal(e) {
-        console.log(e);
+
         this.setData({
             modalName: e.currentTarget.dataset.target
         })
     },
     hideModal() {
+        console.log(this.data.telephone);
         this.setData({
+
             modalName: null
         })
     },
@@ -269,7 +278,7 @@ Page({
 
 
     itemFocus() {
-        console.log(1);
+
         this.setData({
             codeFocus: true
         })
@@ -317,7 +326,7 @@ Page({
                     telephone: this.data.telephone,
                 }
                 this.setData({
-                    ['userInfo.telephone']: this.data.telephone
+                    ['userInfo.telephone']: this.data.telephone,
                 })
                 this.saveAuth(form)
             }, err => {
@@ -335,6 +344,10 @@ Page({
          */
         http.getRequest(`/sendSMS?telephone=${this.data.telephone}`, null,
             res => {
+                wx.showToast({
+                    icon: "none",
+                    title: res.data,
+                })
                 console.log(res);
                 this.setData({
                     isSend: true,
@@ -364,7 +377,9 @@ Page({
             if (this.data.countdown === 0) {
                 this.setData({
                     isSend: false,
-                    countdown: 30
+                    countdown: 30,
+                    codeList: [], //验证码数组
+                    curItemIndex: 0, //当前输入第几位Code
                 })
                 clearInterval(timer)
             }

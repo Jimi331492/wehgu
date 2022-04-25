@@ -130,6 +130,7 @@ App({
 
     // 退出登录
     confirmExit: function (content) {
+        this.globalData.starList = []
         wx.clearStorage({
             success: (res) => {
                 console.log(res)
@@ -146,6 +147,26 @@ App({
                     }), 1000
                 )
             },
+        })
+    },
+
+    getValueListBykey(key) {
+        return new Promise((resolve, reject) => {
+            const query = {
+                limit: '',
+                page: '',
+                key: key
+            }
+            http.postRequest(`/dictionary/getDictionaryPage`, query, ContentTypeEnum.Default_Sub,
+                res => {
+                    resolve(res.data)
+                }, err => {
+                    wx.showToast({
+                        icon: "none",
+                        title: err.message,
+                    })
+                    reject(err)
+                })
         })
     },
 

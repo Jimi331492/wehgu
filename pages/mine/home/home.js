@@ -29,64 +29,7 @@ Component({
     },
     methods: {
         getUserProfile: function () {
-            wx.login({
-                success: res => {
-                    if (res.code) {
-                        wx.setStorageSync('code', res.code);
-                    }
-                }
-            })
-
-            wx.getUserProfile({
-                desc: '用于完善资料',
-                success: res => {
-
-                    const form = {
-                        signature: res.signature,
-                        rawData: res.rawData,
-                        encryptedData: res.encryptedData,
-                        iv: res.iv,
-                        jscode: wx.getStorageSync('code'),
-                        appid: "wxeb4f620b577ff31a"
-                    }
-
-                    http.postRequest("/mp_get_unionId", form, ContentTypeEnum.Json_Sub,
-                        res => {
-                            console.log(res);
-                            wx.setStorageSync('sessionId', res.data.sessionId);
-                            wx.setStorageSync('unionId', res.data.unionId);
-                            wx.setStorageSync('openid', res.data.openId);
-                            http.fill_token_toheader(res.data.unionId);
-
-                            http.postRequest("/getMPUserInfo", res.data.unionId, ContentTypeEnum.Default_Sub,
-                                res => {
-                                    wx.setStorageSync('userInfo', res.data);
-                                    wx.setStorageSync('isLogin', true)
-                                    this.setData({
-                                        userInfo: wx.getStorageSync('userInfo'),
-                                        isLogin: true
-                                    })
-                                },
-                                err => {
-                                    wx.showToast({
-                                        icon: "none",
-                                        title: err.message,
-                                    })
-                                })
-
-                        },
-                        err => {
-                            wx.showToast({
-                                icon: 'none',
-                                title: err.message,
-                            })
-                        }
-                    )
-                },
-                fail: err => {
-                    console.log(err);
-                }
-            })
+            app.getUserProfile()
         },
 
         //刷新数据
@@ -94,8 +37,7 @@ Component({
             this.setData({
                 userInfo: wx.getStorageSync('userInfo')
             })
-            console.log(this.data.userInfo.introduce);
-            console.log('上一个页面一键刷新');
+          
         },
         // 路由跳转
         navChange(e) {

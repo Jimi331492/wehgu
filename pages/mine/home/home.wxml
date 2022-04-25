@@ -32,7 +32,7 @@
                         +userInfo.userUuid[3]
                         +userInfo.userUuid[4]
                         +userInfo.userUuid[5]}}</text>
-                    <text class="text-df auth-status">{{userInfo.authentication?"已实名":"未认证"}}</text>
+                    <text class="text-df auth-status">{{userInfo.authentication?"已认证":"未认证"}}</text>
                 </view>
                 <view class="text-xl nickname" bindtap="toLogin" wx:else>
                     <text>未登录</text>
