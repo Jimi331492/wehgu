@@ -1,4 +1,4 @@
 <!--pages/find/home/home.wxml-->
-<cu-custom bgColor="bg-gradual-blue">
+<custom bgColor="bg-gradual-blue">
     <view slot="content">发现</view>
-</cu-custom>
+</custom>

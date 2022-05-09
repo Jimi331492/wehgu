@@ -72,6 +72,12 @@
 
     <view class="cu-list menu card-menu margin-top-xl margin-bottom-xl shadow-lg radius">
         <view class="cu-item arrow">
+            <navigator class="content" url="/pages/mine/location/location" hover-class="none">
+                <text class="cuIcon-locationfill text-blue"></text>
+                <text class="text-grey">收货地址</text>
+            </navigator>
+        </view>
+        <view class="cu-item arrow">
             <view class="content" bindtap="CopyLink" data-link="https://github.com/Jimi331492">
                 <text class="cuIcon-github text-grey"></text>
                 <text class="text-grey">GitHub</text>
@@ -101,12 +107,7 @@
                 <text class="text-grey">意见反馈</text>
             </button>
         </view>
-        <view class="cu-item arrow">
-            <navigator class="content" url="/pages/about/test/list" hover-class="none">
-                <text class="cuIcon-creativefill text-orange"></text>
-                <text class="text-grey">Bug测试</text>
-            </navigator>
-        </view>
+
     </view>
     <view class="flex justify-center padding-bottom-xl">
         <text wx:if="{{isLogin==true}}" class="text-red" style="font-size: 1.2rem;" bindtap="confirmExit">退出登录</text>

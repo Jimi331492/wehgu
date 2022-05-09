@@ -48,7 +48,7 @@ var formatTime = function (val, option) {
         if (now_year !== year) {
             return time
         } else if (now_month !== month) {
-            return now_year - year + "个月前";
+            return now_month - month + "个月前";
         } else if (now_day !== day) {
             return now_day - day + "天前";
         } else if (now_hour - hour() > 0) {

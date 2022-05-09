@@ -1,0 +1,5 @@
+<!--pages/mine/location/location.wxml-->
+<custom bgColor="bg-gradual-blue" isBack>
+    <view slot="content">收货地址</view>
+</custom>
+
