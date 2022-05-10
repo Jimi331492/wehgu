@@ -9,9 +9,7 @@ Component({
             this.setData({
                 isLogin: wx.getStorageSync('isLogin')
             });
-            if (this.data.isLogin) {
-                this.getUserLocationList()
-            }
+
 
             const res = await this.getOrderList(this.data.query)
             this.setData({
@@ -100,12 +98,23 @@ Component({
             })
         },
 
+        bindUserLocation(e) {
+            this.setData({
+                ['orderForm.userLocation']: this.data.userLocationList[e.detail.value].deliveryLocation,
+                ['orderForm.userLocationUuid']: this.data.userLocationList[e.detail.value].userLocationUuid
+            })
+        },
+
         remarkInput(e) {
             this.setData({
                 ['packageForm.remark']: e.detail.value
             })
         },
-
+        navigateTo(e) {
+            wx.navigateTo({
+                url: e.currentTarget.dataset.path,
+            })
+        },
         showModal(e) {
             this.setData({
                 modalName: e.currentTarget.dataset.target
@@ -126,6 +135,9 @@ Component({
         // },
 
         async openMyCodeModal(e) {
+
+
+            this.getUserLocationList()
 
 
             const res = await this.getPackageList(this.data.packageQueryParams);
@@ -272,8 +284,13 @@ Component({
             }
             http.postRequest('/user_location/getLocationPage', query, ContentTypeEnum.Default_Sub,
                 res => {
+                    const defaultLocation = res.data.records.find(item => {
+                        return item.isDefault === true
+                    })
                     this.setData({
-                        userLocaionList: res.data.records
+                        userLocationList: res.data.records,
+                        ['orderForm.userLocation']: defaultLocation.deliveryLocation,
+                        ['orderForm.userLocationUuid']: defaultLocation.userLocationUuid,
                     })
                 }, err => {
                     wx.showToast({

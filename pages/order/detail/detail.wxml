@@ -1,0 +1,73 @@
+<!--pages/order/detail/detail.wxml-->
+<wxs src="/utils/filter.wxs" module="filter"></wxs>
+<custom bgColor="bg-gradual-blue" isBack>
+    <view slot="content">发布订单</view>
+</custom>
+<!-- Page -->
+<scroll-view scroll-y class="scrollPage">
+    <view class="bg-white ">
+        <view class="cu-steps">
+            <view class="cu-item flex justify-center align-center" wx:for="{{basicsList}}" wx:key="index">
+                <text class="cuIcon-{{item.icon}}"></text> <text class="text-grey">{{item.name}}</text>
+            </view>
+        </view>
+    </view>
+    <!-- 地址 -->
+    <view class="flex flex-direction margin-sm padding bg-white" style="border-radius: 1rem;">
+        <text class="text-xxl text-bold padding-bottom-sm">三单元301{{orderForm.userLocation.deliveryLocation}}</text>
+        <view>
+            <text class="padding-right">龙际妙{{orderForm.userLocation.consignee}}</text>
+            <text>17367695105{{orderForm.userLocation.consignee}}</text>
+        </view>
+        <view class="padding-top-sm margin-top-sm" style="border-top: 1rpx solid gray;">
+            接单成功后大约30分钟送达
+        </view>
+    </view>
+
+    <!-- 订单包裹 -->
+    <view class="flex flex-direction margin-sm padding bg-white" style="border-radius: 1rem;">
+        <view class="cu-item flex padding  justify-between align-center self-start " style="width: 100%; " wx:for="{{4}}" wx:key="index">
+            <view class="content  flex flex-direction" style="width: 100%;">
+                <view class="self-start text-xl padding-bottom ">
+                    <text class="cuIcon-evaluate_fill text-blue margin-right-xs"></text>
+                    <text class=" text-blue">111000{{item.pickUpCode}}</text>
+                </view>
+                <view class="text-sm padding-bottom" style=" border-bottom: 1rpx solid gray;">
+                    <text class="cuIcon-locationfill margin-right-xs"></text>杀杀杀 {{item.pickUpSite}}
+                </view>
+            </view>
+
+
+        </view>
+    </view>
+
+    <!-- 期望 -->
+    <view class="flex padding-lr margin-bottom justify-between">
+        <view class="text-xl">
+            <text class=" round text-blue cuIcon-male"></text>
+            <text>男生方便送</text>
+        </view>
+        <view class="text-xl">
+            <text class="round text-pink cuIcon-male"></text>
+            <text>女生方便送</text>
+        </view>
+        <view class="text-xl">
+            <text class="round bg-white cuIcon-move"></text>
+            <text>无所谓</text>
+        </view>
+    </view>
+    <!-- 最晚期限 -->
+    <view class="padding-lr">
+        <view class="cu-form-group ">
+            <view class="title">最晚期限</view>
+            <picker mode="time" value="{{form.deadlineTime}}" start="07:01" end="22:01" bindchange="TimeChange">
+                <view class="picker">
+                    {{form.deadlineTime===null?'9:21':form.deadlineTime}}
+                </view>
+            </picker>
+        </view>
+    </view>
+
+    报酬：5 元
+    支付方式
+</scroll-view>

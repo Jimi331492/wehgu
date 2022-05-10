@@ -192,5 +192,6 @@ App({
         isExamine: true, //过审
         currentPost: null, //当前浏览的帖子
         starList: [], //保存当前用户的点赞对象
+        curOrderForm: null,
     }
 })

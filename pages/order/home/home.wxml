@@ -48,13 +48,17 @@
     <view class="mm-modal-body">
         <view class="title ">
             <view class="flex align-center justify-between">
-                <view class="flex flex-sub align-center">
+                <view class="flex flex-sub align-center" wx:if="{{userLocationList.length>0}}">
                     <text class="cuIcon-locationfill text-blue"></text>
-                    <picker bindchange="bindUserLocation" value="{{orderForm.userLocationUuid}}" range-key="userLocationUuid" range="{{userLocationList}}">
+                    <picker bindchange="bindUserLocation" value="{{orderForm.userLocationUuid}}" range-key="deliveryLocation" range="{{userLocationList}}">
                         <view class="picker">
                             {{orderForm.userLocation!==null?orderForm.userLocation:'请选择收货地址'}}
                         </view>
                     </picker>
+                </view>
+                <view class="flex flex-sub align-center" wx:else>
+                    <text class="cuIcon-locationfill text-blue"></text>
+                    <text class="text-bold" data-path="/pages/mine/location/location" catchtap="navigateTo">点击设置收货地址</text>
                 </view>
 
                 <text class="text-xl">管理我的取件码</text>
@@ -91,7 +95,7 @@
         </scroll-view>
 
         <view class="modal-body-bottom flex-sub">
-            <button wx:if="{{choosedPackageList.length>0}}" class="cu-btn bg-white  text-blue margin-bottom mm-text-button" catchtap="savePackage">
+            <button wx:if="{{choosedPackageList.length>0}}" class="cu-btn bg-white  text-blue margin-bottom mm-text-button" data-path="/pages/order/detail/detail" catchtap="navigateTo">
                 <text class="cuIcon-check text-bold"></text>
                 <text>发布订单</text>
             </button>

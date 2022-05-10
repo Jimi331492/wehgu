@@ -15,7 +15,7 @@
         "pages/post/home/home",
 
         "pages/order/home/home",
-
+        "pages/order/detail/detail",
 
         "pages/mine/home/home",
         "pages/mine/edit/edit",
