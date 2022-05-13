@@ -150,11 +150,22 @@ function deleteShow(PostFromUserDetailUuid, CommentFromUserDetailUuid, SelfUserD
     return flag
 }
 
+function encodeLocation(str) {
+
+    for (var i = 2; i < str.length; i++) {
+
+        str[i] = '*'
+    }
+    return str.slice(0, 2) + "******"
+  
+}
+
 
 module.exports = {
     formatTime: formatTime,
     filterArray: filterArray,
     isInclude: isInclude,
     filterTree: filterTree,
-    deleteShow: deleteShow
+    deleteShow: deleteShow,
+    encodeLocation: encodeLocation
 }

@@ -72,17 +72,10 @@ Component({
         },
         packageList: [], //包裹列表
         choosedPackageList: [], //被选中的包裹列表
-
+        choosedPackageUIDList: [], //被选中的包裹UID列表
         //发布订单相关
         userLocationList: [],
-        orderForm: {
-            expected: null, //期望：0男生 1女生 NULL无所谓
-            price: null, //价格
-            deadlineTime: null, //最晚期限
-            packageUIDList: [],
-            userLocationUuid: null, //用户收货地址
-            userLocation: null, //收货地址 展示用的
-        }
+
     },
     methods: {
 
@@ -95,13 +88,6 @@ Component({
         bindPickUpSite(e) {
             this.setData({
                 ['packageForm.pickUpSite']: this.data.pickUpSiteList[e.detail.value].value
-            })
-        },
-
-        bindUserLocation(e) {
-            this.setData({
-                ['orderForm.userLocation']: this.data.userLocationList[e.detail.value].deliveryLocation,
-                ['orderForm.userLocationUuid']: this.data.userLocationList[e.detail.value].userLocationUuid
             })
         },
 
@@ -120,25 +106,20 @@ Component({
                 modalName: e.currentTarget.dataset.target
             })
         },
-        //更新组件视图
-        // updateModalView(data) {
-        //     return new Promise((resolve) => {
-        //         //获取Modal组件给tabList赋值
-        //         const pages = getCurrentPages();
-        //         const currPage = pages[pages.length - 1]; //当前页面
-        //         const order = currPage.selectComponent("#order")
-        //         const modal = order.selectComponent("#modal")
-        //         modal.setData(data)
-        //         resolve(true)
-        //     })
 
-        // },
-
+        toDetail(e) {
+            const choosedPackageList = [];
+            this.data.choosedPackageUIDList.forEach(item => {
+                const bag = this.data.packageList.find(e => {
+                    return e.packageUuid === item
+                })
+                choosedPackageList.push(bag)
+            })
+            console.log(choosedPackageList);
+            app.globalData.choosedPackageList = choosedPackageList
+            this.navigateTo(e)
+        },
         async openMyCodeModal(e) {
-
-
-            this.getUserLocationList()
-
 
             const res = await this.getPackageList(this.data.packageQueryParams);
             const data = {
@@ -271,34 +252,14 @@ Component({
         //被选中的包裹变化
         choosedPackageChange(e) {
             console.log(e);
+
             this.setData({
-                choosedPackageList: e.detail.value
+
+                choosedPackageUIDList: e.detail.value
             })
         },
 
-        getUserLocationList() {
-            const query = {
-                limit: '',
-                page: '',
-                userDetailUuid: wx.getStorageSync('userInfo').userDetailUuid
-            }
-            http.postRequest('/user_location/getLocationPage', query, ContentTypeEnum.Default_Sub,
-                res => {
-                    const defaultLocation = res.data.records.find(item => {
-                        return item.isDefault === true
-                    })
-                    this.setData({
-                        userLocationList: res.data.records,
-                        ['orderForm.userLocation']: defaultLocation.deliveryLocation,
-                        ['orderForm.userLocationUuid']: defaultLocation.userLocationUuid,
-                    })
-                }, err => {
-                    wx.showToast({
-                        icon: "none",
-                        title: err.message,
-                    })
-                })
-        }
+
 
     }
 })

@@ -48,8 +48,7 @@
 
 </scroll-view>
 
-<!-- 底部链接文本 -->
-<footer class="footer"></footer>
+
 
 <view class="cu-modal {{modalName=='Add'?'show':''}}" bindtap="hideModal">
 

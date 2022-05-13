@@ -13,20 +13,24 @@
         </view>
         <view wx:for="{{orderList}}" wx:key="index" class="item flex justify-between align-center  bg-white padding">
             <view class="order-info flex flex-direction ">
-                <view class="padding-bottom">
-                    <text class="text-xl">驿站地址</text>
-                    <text class="cuIcon-locationfill text-blue"></text>
-                    <text>{{item.deliveryLocation}}</text>
+                <view class="padding-bottom flex flex-direction">
+                    <text class="text-xl"> <text class="cuIcon-homefill"></text> 裕华校区{{item.campus}}</text>
+
                 </view>
-                <view class="pick-code-box padding-bottom">
-                    <text class="text-xl padding-left"> 1-3-xxxx</text>
+                <view class="padding-bottom flex flex-direction">
+                    <text class="text-xl"> <text class="cuIcon-homefill"></text> 包裹数量：{{item.packageNum}}</text>
+
+                </view>
+                <view wx:if="{{item.expected!==null}}" class="pick-code-box padding-bottom">
+                    <text class="text-xl ">期望:{{item.expected===0?'男':'女'}}</text>
                 </view>
                 <view class="pick-site-box">
                     <text>送到:</text>
-                    <text>{{item.deliveryLocation}}</text>
+                    <text>{{ filter.encodeLocation(item.deliveryLocation)}}</text>
                 </view>
             </view>
             <view>
+                接单查看详情
                 <text class="cuIcon-right"></text>
             </view>
 
@@ -47,8 +51,8 @@
 <modal id="modal" isBar name="MyCode" class="mm-modal" modal-name="{{modalName}}" bind:hidden="hideModal" body-height="1200">
     <view class="mm-modal-body">
         <view class="title ">
-            <view class="flex align-center justify-between">
-                <view class="flex flex-sub align-center" wx:if="{{userLocationList.length>0}}">
+            <view class="flex align-center justify-center">
+                <!-- <view class="flex flex-sub align-center" wx:if="{{userLocationList.length>0}}">
                     <text class="cuIcon-locationfill text-blue"></text>
                     <picker bindchange="bindUserLocation" value="{{orderForm.userLocationUuid}}" range-key="deliveryLocation" range="{{userLocationList}}">
                         <view class="picker">
@@ -59,7 +63,7 @@
                 <view class="flex flex-sub align-center" wx:else>
                     <text class="cuIcon-locationfill text-blue"></text>
                     <text class="text-bold" data-path="/pages/mine/location/location" catchtap="navigateTo">点击设置收货地址</text>
-                </view>
+                </view> -->
 
                 <text class="text-xl">管理我的取件码</text>
             </view>
@@ -84,10 +88,14 @@
                             <text class="cuIcon-locationfill margin-right-xs"></text> {{item.pickUpSite}}
                         </view>
                     </view>
-                    <view class="action flex justify-center align-center">
-                        <checkbox value="{{item.packageUuid}}" disabled="{{item.orderUuid!==null}}" class="blue" bindchange="itemChange" checked="{{filter.isInclude(item.packageUuid,choosedPackageList)}}"></checkbox>
+                    <view wx:if="{{item.orderUuid===null}}" class="action flex justify-center align-center">
+                        <checkbox value="{{item.packageUuid}}" disabled="{{item.orderUuid!==null}}" class="blue" bindchange="itemChange" checked="{{filter.isInclude(item.packageUuid,choosedPackageUIDList)}}"></checkbox>
 
                         <text class="padding-left cuIcon-delete text-bold text-red" data-id="{{item.packageUuid}}" style="font-size: 1.5rem;" bindtap="confirmDeletePackage"></text>
+                    </view>
+                    <view wx:else class="action flex flex-direction justify-center align-center">
+                        <text>状态：{{item.orderStatus}}</text>
+                        <text class="text-blue text-sm margin-top">查看订单详情</text>
                     </view>
 
                 </view>
@@ -95,7 +103,7 @@
         </scroll-view>
 
         <view class="modal-body-bottom flex-sub">
-            <button wx:if="{{choosedPackageList.length>0}}" class="cu-btn bg-white  text-blue margin-bottom mm-text-button" data-path="/pages/order/detail/detail" catchtap="navigateTo">
+            <button wx:if="{{choosedPackageUIDList.length>0}}" class="cu-btn bg-white  text-blue margin-bottom mm-text-button" data-path="/pages/order/detail/detail" catchtap="toDetail">
                 <text class="cuIcon-check text-bold"></text>
                 <text>发布订单</text>
             </button>
