@@ -170,6 +170,23 @@ App({
         })
     },
 
+    //根据实体名和实体UID获取图片路径列表
+    getPicturePath(query) {
+        return new Promise((resolve, reject) => {
+           
+            http.postRequest(`/sys_oss/getOSSPage`, query, ContentTypeEnum.Default_Sub,
+                res => {
+                    resolve(res)
+                }, err => {
+                    wx.showToast({
+                        icon: "none",
+                        title: err.message,
+                    })
+                    reject(err)
+                })
+        })
+    },
+
 
 
 
@@ -189,7 +206,7 @@ App({
         })
     },
     globalData: {
-        isExamine: true, //过审
+        isExamine: false, //过审
         currentPost: null, //当前浏览的帖子
         starList: [], //保存当前用户的点赞对象
         choosedPackageList: [],

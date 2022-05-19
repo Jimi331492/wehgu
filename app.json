@@ -22,6 +22,7 @@
         "pages/mine/auth/auth",
         "pages/mine/cropper/cropper",
         "pages/mine/message/message",
+        "pages/mine/upload/upload",
         "pages/mine/location/location"
     ],
     "window": {

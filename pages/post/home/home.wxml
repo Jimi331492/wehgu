@@ -5,7 +5,7 @@
 </custom>
 <view class="scrollPage flex flex-direction align-center justify-around">
     <view class="flex justify-between align-center padding" style="width: 100vw;">
-        <text class="text-lightgreen text-xl text-bold  system-tag">河北地质大学表白墙</text>
+        <text class="text-lightgreen text-xl text-bold  system-tag">WeHGU校园墙</text>
         <button class="cu-btn round bg-lightgreen">我的发布</button>
     </view>
 

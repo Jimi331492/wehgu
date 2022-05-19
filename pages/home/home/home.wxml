@@ -3,7 +3,7 @@
 <custom bgColor="bg-gradual-blue">
     <view slot="content">首页</view>
 </custom>
-<scroll-view scroll-y class="scrollPage" wx:if="{{ isExamine }}">
+<scroll-view scroll-y class="scrollPage" wx:if="{{ false }}">
     <!-- 轮播图 -->
     <swiper class="card-swiper square-dot" indicator-dots="true" circular="true" autoplay="true" interval="5000" duration="500" bindchange="cardSwiper" indicator-color="#8799a3" indicator-active-color="#0081ff">
         <swiper-item wx:for="{{swiperList}}" wx:key="index" class="{{cardCur==index?'cur':''}}">
@@ -61,14 +61,19 @@
     </view>
 
     <!-- 导航栏 -->
-    <scroll-view scroll-x class="bg-white nav tab">
+    <!-- <scroll-view scroll-x class="bg-white nav tab">
         <view class="flex text-center">
             <view class="cu-item flex-sub {{index===TabCur?'text-orange cur':''}}" wx:for="{{tabList}}" wx:key="index" bindtap="tabSelect" data-item="{{item}}" data-id="{{index}}">
                 {{item.label}}
             </view>
         </view>
-    </scroll-view>
-
+    </scroll-view> -->
+    <view class="cu-bar bg-gray ">
+        <view class="action text-blue">
+            <text class="cuIcon-titles "></text>
+            <text class="text-bold">系统推荐</text> 
+        </view>
+    </view>
     <!-- 消息列表 -->
     <view class="cu-card case no-card post-list">
         <view class="cu-item shadow flex-direction post-item" wx:for="{{postList}}" wx:key="index" data-post="{{item}}" bindtap="{{isLogin?'toItem':'getUserProfile'}}">

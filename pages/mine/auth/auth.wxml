@@ -6,9 +6,14 @@
 
 <view class="container flex flex-direction justify-between" style="height: 75vh;">
     <form action="">
-        <view class="tip padding-tb-sm padding-left-sm">
-            <text class="cuIcon-questionfill">本页面所填信息不用来展示,只用于认证服务</text>
+        <view class="bg-gray ">
+            <view class="cu-steps">
+                <view class="cu-item flex justify-center align-center" wx:for="{{basicsList}}" wx:key="index">
+                    <text class="cuIcon-{{item.icon}}"></text> <text class="text-grey">{{item.name}}</text>
+                </view>
+            </view>
         </view>
+
         <view class="cu-form-group">
             <view class="title">学号</view>
             <input class="text-right" type="number" value="{{form.studentNo}}" bindinput="studentNoInput" placeholder="请输入您的学号"></input>
@@ -53,10 +58,12 @@
             <view class="title">专业</view>
             <input class="text-right" bindinput="majorInput" value="{{form.major}}" placeholder="请输入您的专业名称"></input>
         </view>
-
+        <view class="tip padding-tb-sm padding-left-sm">
+            <text class="cuIcon-questionfill">本页面所填信息不用来展示,只用于认证服务</text>
+        </view>
     </form>
     <view class="cu-bar btn-group">
-        <button class="cu-btn bg-green shadow-blur round lg" bindtap="commitAuthForm">保存</button>
+        <button class="cu-btn bg-green shadow-blur round lg" data-path="/pages/mine/upload/upload" bindtap="navigateTo">下一步</button>
     </view>
 </view>
 

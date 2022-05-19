@@ -1,4 +1,86 @@
 <!--pages/find/home/home.wxml-->
+<wxs src="/utils/filter.wxs" module="filter"></wxs>
 <custom bgColor="bg-gradual-blue">
-    <view slot="content">发现</view>
+    <view slot="content">广场</view>
 </custom>
+<scroll-view class="scrollPage" scroll-y class="scrollPage" refresher-enabled="{{true}}" refresher-threshold="{{100}}" refresher-default-style="white" refresher-background="gray" refresher-triggered="{{triggered}}" bindrefresherpulling="onPulling" bindrefresherrefresh="onRefresh" bindrefresherrestore="onRestore" bindrefresherabort="onAbort" bindscrolltolower="loadPostList">
+    <view class="box ">
+        <view class="cu-bar search bg-white">
+            <view class="search-form round">
+                <text class="cuIcon-search"></text>
+                <input type="text" placeholder="搜索帖子" confirm-type="search" bindinput="contentInput" value="{{query.content}}"></input>
+                <text class="cuIcon-close" bindtap="reset"></text>
+            </view>
+            <view class="action">
+                <button class="cu-btn bg-green shadow-blur round" bindtap="searchPost">搜索</button>
+            </view>
+        </view>
+    </view>
+
+    <view class="cu-bar bg-gray ">
+        <view class="action">
+            <text class="cuIcon-titles text-blue"></text>热门标签
+        </view>
+
+        <text class="cuIcon-add padding-right">全部</text>
+
+
+    </view>
+    <view class="padding-lr-sm flex flex-wrap justify-between align-center">
+        <view class="self-start cu-capsule round margin-top-sm" wx:for="{{tagList}}" wx:key="index">
+            <view class="cu-tag bg-{{item.color}} ">
+                {{item.title}}
+            </view>
+            <view class="cu-tag line-black">
+                {{ item.postNum}}
+            </view>
+        </view>
+    </view>
+
+    <!-- 导航栏 -->
+    <scroll-view scroll-x class="bg-white nav tab  margin-top-sm">
+        <view class="flex text-center">
+            <view class="cu-item flex-sub {{index===TabCur?'text-orange cur':''}}" wx:for="{{tabList}}" wx:key="index" bindtap="tabSelect" data-item="{{item}}" data-id="{{index}}">
+                {{item.title}}
+            </view>
+        </view>
+    </scroll-view>
+    <!-- 消息列表 -->
+    <view class="cu-card case no-card post-list">
+        <view class="cu-item shadow flex-direction post-item" wx:for="{{postList}}" wx:key="index" data-post="{{item}}" bindtap="{{isLogin?'toItem':'getUserProfile'}}">
+            <view class="image mm-img" wx:if="{{item.imgIndexURI!==null}}">
+                <image src="{{item.imgIndexURI}}" mode="aspectFill"></image>
+                <view class="cu-tag bg-{{item.backgroundColor}}">{{item.tag}}</view>
+                <view class="cu-bar bg-shadeBottom">
+                    <text class="text-cut">{{item.content}}</text>
+                </view>
+            </view>
+            <view class="image mm-img flex align-center" wx:else style="min-height: 400rpx;">
+                <text class="self-start text-bold padding padding-top-xl">{{item.content}}</text>
+                <view class="cu-tag bg-{{item.backgroundColor}}">{{item.tag}}</view>
+            </view>
+            <view class="cu-list menu-avatar ">
+                <view class="cu-item">
+
+                    <image class="cu-avatar lg round" wx:if="{{bakPath!==null||item.avatar!==null}}" src="{{item.avatar===null?bakPath:item.avatar}}"></image>
+                    <view class="content flex-sub">
+                        <view class="text-grey text-sm"> {{filter.formatTime(item.addTime,"format")}}</view>
+                        <view class="text-gray text-sm flex justify-between">
+                            {{item.nickname}}
+                            <view class="text-gray text-sm">
+                                <text class="cuIcon-appreciatefill text-{{filter.isInclude(item.postUuid,starList,'linkedUuid')?'yellow':'gray'}} margin-lr-xs"></text> {{item.star}}
+                            </view>
+                        </view>
+                    </view>
+                </view>
+            </view>
+        </view>
+        <view style="height: 20vh;" class="full flex  flex-direction align-center justify-center" wx:if="{{TabCur===3&&postList.length<1}}">
+            <text style="font-size: 5rem;" class="cuIcon-appreciate text-xxxl"></text>
+            <text class="text-gray">你最近没有点赞</text>
+        </view>
+    </view>
+    <view class="flex justify-center" wx:if="{{isBottom}}">
+        <text class="text-grey">没有更多了</text>
+    </view>
+</scroll-view>

@@ -52,20 +52,20 @@
         <view class="flex flex-sub flex-direction solid-right">
             <view class="text-xxl text-orange">{{visitTotal}}</view>
             <view class="margin-top-sm">
-                <text class="cuIcon-commentfill"></text> Comment
+                <text class="cuIcon-post"></text> 我的发布
             </view>
 
         </view>
         <view class="flex flex-sub flex-direction solid-right">
             <view class="text-xxl text-blue">{{starCount}}</view>
             <view class="margin-top-sm">
-                <text class="cuIcon-favorfill"></text> Star
+                <text class="cuIcon-favorfill"></text> 我的点赞
             </view>
         </view>
         <view class="flex flex-sub flex-direction">
             <view class="text-xxl text-green">{{forksCount}}</view>
             <view class="margin-top-sm">
-                <text class="cuIcon-attentionfill"></text> View
+                <text class="cuIcon-commentfill"></text> 我的评论
             </view>
         </view>
     </view>

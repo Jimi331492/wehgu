@@ -1,0 +1,60 @@
+<!--pages/mine/upload/upload.wxml-->
+<custom bgColor="bg-gradual-white" isCustom>
+    <view slot="content">上传学生证</view>
+</custom>
+
+<view class="scrollPage flex flex-direction justify-between">
+    <view>
+        <view class="cu-bar bg-white margin-top">
+            <view class="action">
+                正面
+            </view>
+        </view>
+        <view class="cu-form-group">
+
+            <view class="bg-img" wx:for="{{frontImage}}" wx:key="index" bindtap="ViewImage" data-url="{{frontImage[index]}}">
+                <image src='{{frontImage[index]}}' mode='scaleToFill'></image>
+                <view class="cu-tag bg-black" catchtap="DelFrontImage" data-index="{{index}}" style="position: absolute; right: 0;">
+                    <text class=" cuIcon-close"></text>
+
+                </view>
+            </view>
+            <view class="flex flex-direction justify-center align-center text-xxl" style="border:1px solid rgba(204, 204, 204, 0.8); width: 100vw;height: 50vw;" bindtap="ChooseFrontImage" wx:if="{{frontImage.length<1}}">
+                <text class="cuIcon-cameraadd"></text>
+                <text class="text-sm padding-top-sm">上传学生证正面</text>
+            </view>
+
+        </view>
+
+        <view class="cu-bar bg-white">
+            <view class="action">
+                背面
+            </view>
+        </view>
+        <view class="cu-form-group padding-bottom-xl">
+            <view class="bg-img" wx:for="{{backImage}}" wx:key="index" bindtap="ViewImage" data-url="{{backImage[index]}}">
+                <image style="width: 100vw;" src='{{backImage[index]}}' mode='aspectFit'></image>
+                <view class="cu-tag bg-black" catchtap="DelBackImage" data-index="{{index}}" style="position: absolute; right: 0;">
+                    <text class="cuIcon-close"></text>
+                </view>
+            </view>
+            <view class="flex flex-direction justify-center align-center text-xxl" style="border:1px solid rgba(204, 204, 204, 0.8); width: 100vw;height: 50vw;" bindtap="ChooseBackImage" wx:if="{{backImage.length<1}}">
+                <text class="cuIcon-cameraadd"></text>
+                <text class="text-sm padding-top-sm">上传学生证背面</text>
+            </view>
+
+        </view>
+    </view>
+
+
+    <view class="cu-bar btn-group ">
+        <button wx:if="{{showUploadBtn}}" class="cu-btn  round bg-green shadow" bindtap="uploadImage">
+            <text class="cuIcon-upload"></text> 上传
+        </button>
+    </view>
+</view>
+
+
+
+
+<footer class="footer"></footer>

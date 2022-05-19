@@ -10,6 +10,16 @@ Page({
      * 页面的初始数据
      */
     data: {
+        basicsList: [{
+            icon: 'usefullfill',
+            name: '完善身份信息'
+        }, {
+            icon: 'roundclosefill',
+            name: '上传学生证照片'
+        }, {
+            icon: 'roundcheckfill',
+            name: '等待管理审核'
+        }, ],
         campusMap: null,
         multiArray: [],
         multiIndex: [0, 0],
@@ -18,6 +28,16 @@ Page({
         collegeList: [], //学院list
         //表单
         form: {
+            studentNo: null, //学号
+            name: null, //院校
+            sex: null, //院校
+            university: null, //院校
+            campus: null, //校区
+            college: null, //学院
+            grade: null, //入学年份
+            major: null, //专业
+        },
+        bakForm: {
             studentNo: null, //学号
             name: null, //院校
             sex: null, //院校
@@ -193,20 +213,10 @@ Page({
         http.postRequest("/sys_user/userAuth", this.data.form, ContentTypeEnum.Default_Sub,
             res => {
                 this.updateUserInfo(wx.getStorageSync('unionId'))
-                wx.showModal({
-                    title: '提示',
-                    content: '保存成功',
-                    showCancel: false,
-                    success: res => {
-                        if (res.confirm) {
-                            wx.navigateBack({
-                                delta: 1,
-                            })
-                        }
-                    }
+                wx.showToast({
+                    icon: "none",
+                    title: '保存成功',
                 })
-
-
             },
             err => {
                 wx.showToast({
@@ -219,10 +229,14 @@ Page({
 
     updateUserInfo(unionId) {
         const pages = getCurrentPages();
-        var prevPage = pages[pages.length - 2]; //上一个页面
+        var prevPage = pages[pages.length - 3]; //上一个页面
         prevPage.getMPUserInfo(unionId)
     },
-
+    navigateTo(e) {
+        wx.navigateTo({
+            url: e.currentTarget.dataset.path,
+        })
+    },
 
     /**
      * 生命周期函数--监听页面加载
@@ -295,6 +309,9 @@ Page({
             })
             this.setData({
                 form: form,
+                bakForm: {
+                    ...form
+                },
                 collegeList: collegeList,
                 multiArray: multiArray,
                 multiIndex: multiIndex
@@ -304,5 +321,14 @@ Page({
 
         this.initValidate(); //初始化预校验规则
     },
+
+    onHide() {
+        const form = JSON.stringify(this.data.form);
+        const bak = JSON.stringify(this.data.bakForm);
+        if (form !== bak) {
+            this.commitAuthForm()
+        }
+
+    }
 
 })
