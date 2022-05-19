@@ -1,18 +1,45 @@
 // pages/home/notice/notice.js
+const http = require('../../../utils/httputils.js');
+const ContentTypeEnum = require('../../../utils/ContentTypeEnum.js');
+const app = getApp()
 Page({
 
     /**
      * 页面的初始数据
      */
     data: {
-
+        noticeList: [],
+    },
+    toItem(e) {
+        app.globalData.curNotice = e.currentTarget.dataset.item
+        this.navigateTo(e)
+    },
+    navigateTo(e) {
+        wx.navigateTo({
+            url: e.currentTarget.dataset.path,
+        })
     },
 
+    getNoticeList() {
+        const query = {
+            limit: '',
+            type: 0,
+            page: '',
+        }
+        http.postRequest('/notice/getNoticePage', query, ContentTypeEnum.Json_Sub,
+            res => {
+                this.setData({
+                    noticeList: res.data.records
+                })
+            }, err => {
+                console.log(err);
+            })
+    },
     /**
      * 生命周期函数--监听页面加载
      */
-    onLoad(options) {
-
+    onLoad() {
+        this.getNoticeList()
     },
 
     /**

@@ -39,7 +39,7 @@
     <view class="cu-list menu {{menuBorder?'sm-border':''}} {{menuCard?'card-menu margin-top':''}}">
         <view class="cu-item {{menuArrow?'arrow':''}}">
             <button class="cu-btn content" bindtap="navigateTo" data-path="/pages/home/notice/notice">
-                <text class="cuIcon-btn text-olive"></text>
+                <text class="cuIcon-notificationfill text-blue"></text>
                 <text class="text-grey">公告：小程序正在测试</text>
             </button>
         </view>

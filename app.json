@@ -9,6 +9,7 @@
         "pages/home/report/report",
         "pages/home/other/other",
         "pages/home/notice/notice",
+        "pages/home/noticekDetail/noticekDetail",
 
         "pages/find/home/home",
 

@@ -1,0 +1,9 @@
+<!--pages/home/noticekDetail/noticekDetail.wxml-->
+<wxs src="/utils/filter.wxs" module="filter"></wxs>
+<custom bgColor="bg-gradual-blue" isCustom>
+    <view slot="content">{{notice.title}}</view>
+</custom>
+<scroll-view scroll-y  class="scrollPage padding text-xl">
+    {{notice.content}}
+</scroll-view>
+<footer class="footer"></footer>

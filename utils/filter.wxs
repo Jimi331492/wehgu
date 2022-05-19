@@ -157,7 +157,24 @@ function encodeLocation(str) {
         str[i] = '*'
     }
     return str.slice(0, 2) + "******"
-  
+
+}
+
+
+/**
+ * @description 传入一个订单信息和用户，返回操作函数名
+ * @param orderInfo 订单信息
+ * @param userInfo 用户信息
+ * @returns {string} 
+ */
+function orderFnChooser(orderInfo, userInfo) {
+    if (userInfo === null) return "getUserProfile"
+    console.log(orderInfo.userDetailUuid, userInfo.userDetailUuid);
+    if (orderInfo.userDetailUuid === userInfo.userDetailUuid) return "showTip"
+
+
+    return saveOrder
+
 }
 
 
@@ -167,5 +184,6 @@ module.exports = {
     isInclude: isInclude,
     filterTree: filterTree,
     deleteShow: deleteShow,
-    encodeLocation: encodeLocation
+    encodeLocation: encodeLocation,
+    orderFnChooser: orderFnChooser
 }

@@ -1,4 +1,26 @@
 <!--pages/home/notice/notice.wxml-->
+<wxs src="/utils/filter.wxs" module="filter"></wxs>
 <custom bgColor="bg-gradual-blue" isBack>
     <view slot="content">公告</view>
 </custom>
+
+<view class="cu-list menu sm-border card-menu margin-top">
+
+    <view class="cu-item " wx:for="{{noticeList}}" wx:key="index">
+        <view class="content padding-tb-sm " data-item="{{item}}" data-path="/pages/home/noticekDetail/noticekDetail" bindtap="toItem">
+            <view>
+                <text class="cuIcon-notificationfill text-blue margin-right-xs"></text> {{item.title}}
+            </view>
+            <view class="text-gray text-sm">
+                <text class="cuIcon-infofill margin-right-xs"></text> {{item.content}}
+            </view>
+        </view>
+        <view class="action">
+            <view class="cu-tag round bg-red "></view>
+        </view>
+        <text class="text-gray texl-sm">{{filter.formatTime(item.addTime,"notime")}}</text>
+    </view>
+
+</view>
+
+<footer class="footer"></footer>

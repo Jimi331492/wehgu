@@ -209,7 +209,7 @@ Page({
                     'pictype': this.data.PicturePathSaveForm.entityName
                 },
                 success: res => {
-                    console.log('上传头像成功获得相对路径' + res);
+                    console.log('上传成功获得相对路径' + res);
                     let obj = new Object();
                     let map = JSON.parse(res.data)
                     obj.path = map.data

@@ -7,7 +7,8 @@ Component({
     lifetimes: {
         async attached() {
             this.setData({
-                isLogin: wx.getStorageSync('isLogin')
+                isLogin: wx.getStorageSync('isLogin'),
+                userInfo: wx.getStorageSync('userInfo')
             });
 
 
@@ -22,7 +23,9 @@ Component({
         addGlobalClass: true,
     },
     data: {
+        bakPath: '/images/custom-avatar.png',
         isLogin: false,
+        userInfo: null,
         //导航栏相关
         TabCur: 0,
         scrollLeft: 0,
@@ -75,10 +78,16 @@ Component({
         choosedPackageUIDList: [], //被选中的包裹UID列表
         //发布订单相关
         userLocationList: [],
-
+        orderInfo: {}
     },
     methods: {
+        showOrderInfo(e) {
+            this.setData({
+                orderInfo: e.currentTarget.dataset.item
+            })
 
+            this.showModal(e)
+        },
         pickUpCodeInput(e) {
             this.setData({
                 ['packageForm.pickUpCode']: e.detail.value
@@ -259,7 +268,12 @@ Component({
             })
         },
 
-
+        showTip(tip) {
+            wx.showToast({
+                icon: 'none',
+                title: tip
+            })
+        }
 
     }
 })
