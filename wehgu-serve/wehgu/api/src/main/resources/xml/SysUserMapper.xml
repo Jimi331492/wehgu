@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wehgu.admin.mapper.SysUserMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.wehgu.admin.entities.SysUser">
+        <id column="user_id" property="userId" />
+        <result column="user_uuid" property="userUuid" />
+        <result column="name" property="name" />
+        <result column="sex" property="sex" />
+        <result column="nation" property="nation" />
+        <result column="id_card" property="idCard" />
+        <result column="birth" property="birth" />
+        <result column="grade" property="grade" />
+        <result column="session" property="session" />
+        <result column="major" property="major" />
+        <result column="college" property="college"/>
+        <result column="student_no" property="studentNo" />
+        <result column="university" property="university"/>
+        <result column="campus" property="campus"/>
+        <result column="telephone" property="telephone" />
+        <result column="email" property="email" />
+        <result column="add_time" property="addTime" />
+        <result column="update_time" property="updateTime" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        user_id, user_uuid, name, sex, nation, id_card, birth, grade,
+session, major, college, student_no, telephone, email, university,add_time, update_time
+    </sql>
+
+    <sql id="User_List_VO">
+        u.user_uuid,  u.name, u.sex, u.nation, u.id_card, u.birth, u.grade, u.session, u.major, u.college,
+    u.student_no, u.telephone,u.campus,u.university,u.email, ac.nickname,ac.avatar,ac.status,ac.union_id,ac.qq,ac.type
+    </sql>
+
+    <select id="selectUsers" resultType="com.wehgu.admin.entities.vo.UserVO">
+        select
+        <include refid="User_List_VO"></include>
+        from sys_user u left join sys_user_detail ac on u.`user_uuid`=ac.`user_uuid`
+        <trim prefix="where" prefixOverrides="and|or">
+            <if test="input.status != null and '' != input.status">
+                and ac.`status` = #{input.status}
+            </if>
+            <if test="input.telephone != null and '' != input.telephone">
+                and u.`telephone` like CONCAT("%",#{input.telephone},"%")
+            </if>
+            <if test="input.university != null and '' != input.university">
+                and u.`university` like CONCAT("%",#{input.university},"%")
+            </if>
+            <if test="input.campus != null and '' != input.campus">
+                and u.`campus` like CONCAT("%",#{input.campus},"%")
+            </if>
+            <if test="input.name != null and '' != input.name">
+                and u.`name` like CONCAT("%",#{input.name},"%")
+            </if>
+            <if test="input.nickname != null and '' != input.nickname">
+                and ac.`nickname` like CONCAT("%",#{input.nickname},"%")
+            </if>
+            <if test="input.sex != null and '' != input.sex">
+                and u.`sex` = #{input.sex}
+            </if>
+            <if test="input.roleUID != null and '' != input.roleUID">
+                and ac.`role_uuid` = #{input.roleUID}
+            </if>
+            <if test="input.deptUID != null and '' != input.deptUID">
+                and ac.`dept_uuid` = #{input.deptUID}
+            </if>
+        </trim>
+    </select>
+
+</mapper>

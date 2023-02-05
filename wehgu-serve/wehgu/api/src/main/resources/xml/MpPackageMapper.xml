@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wehgu.admin.mapper.MpPackageMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.wehgu.admin.entities.MpPackage">
+        <id column="package_id" property="packageId" />
+        <result column="package_uuid" property="packageUuid" />
+        <result column="add_time" property="addTime" />
+        <result column="update_time" property="updateTime" />
+        <result column="pick_up_code" property="pickUpCode" />
+        <result column="pick_up_site" property="pickUpSite" />
+        <result column="remark" property="remark" />
+        <result column="user_detail_uuid" property="userDetailUuid" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        package_id, package_uuid, add_time, update_time, pick_up_code, pick_up_site, remark,user_detail_uuid
+    </sql>
+    <sql id="Package_Column_List">
+        mp.package_id, mp.package_uuid, mp.add_time, mp.update_time, mp.pick_up_code, mp.pick_up_site, mp.remark,mp.user_detail_uuid,
+sud.nickname,`mod`.order_uuid,mo.order_status,mo.expected
+    </sql>
+    <select id="selectPackages" resultType="com.wehgu.admin.entities.vo.PackageVO">
+        select
+        <include refid="Package_Column_List"></include>
+        from mp_package mp
+        left join sys_user_detail sud on mp.user_detail_uuid=sud.user_detail_uuid
+        left join mp_order_detail `mod` on mp.package_uuid=`mod`.package_uuid
+        left join mp_order mo on `mod`.order_uuid=mo.order_uuid
+        <trim prefix="where" prefixOverrides="and|or">
+            <if test="input.userDetailUuid != null and '' != input.userDetailUuid">
+                and sud.`user_detail_uuid` = #{input.userDetailUuid}
+            </if>
+            <if test="input.nickname != null and '' != input.nickname">
+                and sud.`nickname` like CONCAT("%",#{input.nickname},"%")
+            </if>
+            <if test="input.orderStatus != null and '' != input.orderStatus">
+                and mo.`order_status` like CONCAT("%",#{input.orderStatus},"%")
+            </if>
+            <if test="input.pickUpSite != null and '' != input.pickUpSite">
+                and mp.`pick_up_site` like CONCAT("%",#{input.pickUpSite},"%")
+            </if>
+            <if test="input.pickUpCode != null and '' != input.pickUpCode">
+                and mp.`pick_up_code` = #{input.pickUpCode}
+            </if>
+        </trim>
+        order by mp.add_time desc
+    </select>
+
+</mapper>

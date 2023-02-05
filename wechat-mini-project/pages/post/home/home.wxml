@@ -1,0 +1,90 @@
+<!--pages/post/home/home.wxml-->
+<wxs src='../../../utils/filter.wxs' module="filter" />
+<custom bgColor="bg-gradual-blue" isCustom>
+    <view slot="content">发布</view>
+</custom>
+<view class="scrollPage flex flex-direction align-center justify-around">
+    <view class="flex justify-between align-center padding" style="width: 100vw;">
+        <text class="text-lightgreen text-xl text-bold  system-tag">WeHGU校园墙</text>
+        <button class="cu-btn round bg-lightgreen" data-path="/pages/post/mine/mine" bindtap="navigateTo">我的发布</button>
+    </view>
+
+    <form action="" class="flex-sub">
+        <!-- <view class="cu-form-group">
+        <view class="title">标题</view>
+        <input placeholder="请输入标题" placeholder-class="text-bold"></input>
+    </view> -->
+        <view class="cu-form-group">
+            <textarea value="{{form.content}}" bindinput="contentInput" placeholder="请输入发布内容 （禁止引战言论，不完整信息，广告 ）"></textarea>
+        </view>
+        <view class="cu-bar bg-white">
+            <view class="action">
+                上传图片
+            </view>
+            <view class="action">
+                {{imgList.length}}/9
+            </view>
+        </view>
+        <view class="cu-form-group">
+            <view class="grid col-3 grid-square flex-sub">
+                <view class="bg-img" wx:for="{{imgList}}" wx:key="index" bindtap="ViewImage" data-url="{{imgList[index]}}">
+                    <image src='{{imgList[index]}}' mode='aspectFill'></image>
+                    <view class="cu-tag bg-red" catchtap="DelImg" data-index="{{index}}">
+                        <text class="cuIcon-close"></text>
+                    </view>
+                </view>
+                <view class="solids" bindtap="ChooseImage" wx:if="{{imgList.length<9}}">
+                    <text class="cuIcon-cameraadd"></text>
+                </view>
+            </view>
+        </view>
+        <!-- 标签区域 -->
+        <view class="padding-sm flex flex-wrap">
+            <view class="padding-xs" wx:for="{{tagList}}" wx:key="index">
+                <view class="cu-tag round bg-{{item.title===form.tag?item.backgroundColor:'grey'}} light" data-tag="{{item.title}}" bindtap="ChooseTag">{{item.title}}</view>
+            </view>
+            <view class="padding-xs">
+                <view class="cu-tag round bg-{{newTag===null?'grey':'red'}} light" data-target="Tag" bindtap="showModal">
+                    <text class="{{newTag===null?'cuIcon-add':''}}">
+                        <text>{{newTag===null?'':'#'}}</text>
+                        <text> {{newTag!==null&&!filter.isInclude(newTag,tagList,'title')?newTag:'添加标签'}}</text>
+                    </text>
+                </view>
+            </view>
+        </view>
+    </form>
+    <view class="flex justify-center padding-bottom-xl" style="width:66vw">
+        <button class="flex-sub cu-btn bg-blue round lg shadow" bindtap="savePost">发布</button>
+    </view>
+</view>
+
+
+<footer class="footer"></footer>
+
+<modal isBar name="Tag" class="mm-modal" modal-name="{{modalName}}" bind:hidden="hideModal" body-height="{{1000}}">
+    <view class="flex flex-direction">
+        <view class="input-box">
+            <text class="text-grey">#</text>
+            <input class="padding-left-sm flex-sub" placeholder="请输入想要添加的标签" placeholder-class="text-bold" value="{{newTag}}" bindinput="newTagInput" type="text" />
+            <button class="cu-btn bg-white" bindtap="resetTag">
+                <text class="text-black text-bold">取消</text>
+            </button>
+        </view>
+        <view class="flex padding-bottom">
+            <text class="justify-start text-grey text-sm">热门标签</text>
+        </view>
+        <scroll-view style="max-height: 800rpx;" enable-flex="true" scroll-y class=" flex flex-direction">
+            <view class="flex align-center " wx:for="{{tagList}}" wx:key="index">
+                <text wx:if="{{index<3}}" class="text-{{item.color}} text-bold  padding-right-sm padding-bottom">{{index+1}}</text>
+                <text wx:else class="padding-right-sm text-bold padding-bottom">{{index+1}}</text>
+                <view class="flex align-center flex-sub margin-bottom" data-tag="{{item.title}}" bindtap="ChooseTag">
+                    <view class="justify-start text-black padding-sm"> #{{item.title}}</view>
+                </view>
+
+            </view>
+
+        </scroll-view>
+
+    </view>
+
+</modal>

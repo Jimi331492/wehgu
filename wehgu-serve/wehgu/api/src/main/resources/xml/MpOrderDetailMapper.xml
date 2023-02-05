@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wehgu.admin.mapper.MpOrderDetailMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.wehgu.admin.entities.MpOrderDetail">
+        <id column="order_detail_id" property="orderDetailId" />
+        <result column="order_detail_uuid" property="orderDetailUuid" />
+        <result column="add_time" property="addTime" />
+        <result column="update_time" property="updateTime" />
+        <result column="package_uuid" property="packageUuid" />
+        <result column="order_uuid" property="orderUuid" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        order_detail_id, order_detail_uuid, add_time, update_time, package_uuid, order_uuid
+    </sql>
+
+</mapper>

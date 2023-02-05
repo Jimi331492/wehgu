@@ -1,0 +1,8 @@
+{
+  "usingComponents": {
+    "home": "/pages/home/home/home",
+    "find": "/pages/find/home/home",
+    "order": "/pages/order/home/home",
+    "mine": "/pages/mine/home/home"
+  }
+}

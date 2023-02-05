@@ -1,0 +1,13 @@
+<!--pages/mine/cropper/cropper.wxml-->
+<import src="../../../we-cropper/we-cropper.wxml" />
+<view class="cropper-wrapper">
+    <template is="we-cropper" data="{{...cropperOpt}}" />
+    <view class="cropper-buttons">
+        <button class="cu-btn margin-left" bindtap="cancel" style="background-color: #000;">
+            <text class="text-white">取消</text>
+        </button>
+        <button class="bg-green cu-btn margin-right" bindtap="getCropperImage">
+            确定
+        </button>
+    </view>
+</view>

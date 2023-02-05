@@ -1,0 +1,42 @@
+{
+    "pages": [
+        "pages/index/login/login",
+        "pages/index/home/home",
+
+        "pages/home/home/home",
+        "pages/home/category/category",
+        "pages/home/item/item",
+        "pages/home/report/report",
+        "pages/home/other/other",
+        "pages/home/notice/notice",
+        "pages/home/noticekDetail/noticekDetail",
+
+        "pages/find/home/home",
+
+        "pages/post/home/home",
+        "pages/post/mine/mine",
+
+        "pages/order/home/home",
+        "pages/order/detail/detail",
+
+        "pages/mine/home/home",
+        "pages/mine/edit/edit",
+        "pages/mine/auth/auth",
+        "pages/mine/cropper/cropper",
+        "pages/mine/message/message",
+        "pages/mine/upload/upload",
+        "pages/mine/location/location"
+    ],
+    "window": {
+        "backgroundTextStyle": "light",
+        "navigationBarBackgroundColor": "#fff",
+        "navigationBarTitleText": "ColorUI",
+        "navigationStyle": "custom",
+        "navigationBarTextStyle": "white"
+    },
+    "lazyCodeLoading": "requiredComponents",
+    "usingComponents": {
+        "custom": "/components/custom/cu-custom"
+    },
+    "sitemapLocation": "sitemap.json"
+}

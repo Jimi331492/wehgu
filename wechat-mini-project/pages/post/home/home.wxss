@@ -1,0 +1,11 @@
+/* pages/post/home/home.wxss */
+.input-box {
+    width: 90vw;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    border-bottom: 1px solid black;
+    padding-bottom: 15rpx;
+    margin-bottom: 15rpx;
+    text-align: left;
+}

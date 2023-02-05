@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wehgu.admin.mapper.MpTagMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.wehgu.admin.entities.MpTag">
+        <id column="tag_id" property="tagId" />
+        <result column="tag_uuid" property="tagUuid" />
+        <result column="add_time" property="addTime" />
+        <result column="update_time" property="updateTime" />
+        <result column="title" property="title" />
+        <result column="color" property="color" />
+        <result column="background_color" property="backgroundColor" />
+        <result column="remark" property="remark" />
+        <result column="post_num" property="postNum" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        tag_id, tag_uuid, add_time, update_time, title, color, background_color, remark,post_num
+    </sql>
+    <sql id="Tag_Column_List">
+        t.tag_uuid, t.add_time, t.update_time, t.title, t.color, t.background_color, t.remark,t.post_num
+    </sql>
+    <select id="selectTags" resultType="com.wehgu.admin.entities.vo.TagVO">
+        select
+        <include refid="Tag_Column_List"></include>
+        from mp_tag t
+        <trim prefix="where" prefixOverrides="and|or">
+            <if test="input.title != null and '' != input.title">
+                and t.`title` like CONCAT("%",#{input.title},"%")
+            </if>
+        </trim>
+        order by t.post_num desc,t.add_time desc
+    </select>
+
+</mapper>

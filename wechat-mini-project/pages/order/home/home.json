@@ -1,0 +1,7 @@
+{
+    "component": true,
+    "usingComponents": {
+        "footer": "/components/footer/footer",
+        "modal": "/components/modal/modal"
+    }
+}

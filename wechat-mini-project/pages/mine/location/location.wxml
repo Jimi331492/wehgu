@@ -1,0 +1,90 @@
+<!--pages/mine/location/location.wxml-->
+<custom bgColor="bg-gradual-blue" isBack>
+    <view slot="content">收货地址</view>
+</custom>
+
+<!-- 新增 -->
+<button class="cu-btn bg-green round shadow margin-top margin-left" size="mini" data-target="Add" bindtap="showModal">新增</button>
+
+<scroll-view scroll-y class="scrollPage">
+    <view class="cu-card case">
+        <view class="cu-item shadow padding " wx:for="{{userLocationList}}" wx:key="index">
+            <view class="flex justify-around align-center">
+                <view class="flex-sub">
+                    <view class="padding-bottom">
+                        <view wx:if="{{item.isDefault}}">
+                            <text class="cu-tag  light round  bg-blue">默认</text>
+                        </view>
+                    </view>
+                    <view>
+                        收货人：{{item.consignee}}
+                    </view>
+                    <view>
+                        联系方式：{{item.consigneeTelephone}}
+                    </view>
+                    <view class="padding-top">
+                        送货地址:{{item.deliveryLocation}}
+                    </view>
+
+                </view>
+                <view class="self-start ">
+                    <text class="cuIcon-edit text-black padding-right" size="mini" data-item="{{item}}" data-target="Add" bindtap="showModal">编辑</text>
+                    <text class="cuIcon-close text-red" size="mini" data-id="{{item.userLocationUuid}}" bindtap="deleteLocation">删除</text>
+                </view>
+            </view>
+
+        </view>
+        <view wx:if="{{userLocationList.length<1}}" class="item flex flex-direction justify-between align-center  padding">
+            <view class="padding">
+                <text class="cuIcon-locationfill" style="font-size: 80rpx;"></text>
+            </view>
+            <view class="padding">
+                <text class="text-xl">请新增收货地址~</text>
+            </view>
+
+        </view>
+
+    </view>
+
+</scroll-view>
+
+<footer class="footer"></footer>
+
+<view class="cu-modal {{modalName=='Add'?'show':''}}" bindtap="hideModal">
+
+    <view class="cu-dialog" catchtap>
+        <view class="cu-bar bg-white justify-end">
+            <view class="content">我的收货地址</view>
+            <view class="action" bindtap="hideModal">
+                <text class="cuIcon-close text-red"></text>
+            </view>
+        </view>
+        <form action="" class="padding">
+            <view class="cu-form-group">
+                <view class="title">设为默认收货地址</view>
+                <switch class="blue sm" checked="{{form.isDefault}}" bindchange="isDefaultInput"></switch>
+            </view>
+            <view class="cu-form-group">
+                <view class="title">收货人</view>
+                <input style="text-align: right;" placeholder="请输入收货人昵称" value="{{form.consignee}}" bindinput="consigneeInput"></input>
+            </view>
+            <view class="cu-form-group flex">
+                <view class="title">联系方式</view>
+                <view class="flex align-center">
+                    <text class=" text-orange">+86</text>
+                    <input style="text-align: right;" placeholder="请输入收货人手机号" type="number" bindinput="phoneInput" value="{{form.consigneeTelephone}}"></input>
+                </view>
+
+            </view>
+            <view class="cu-form-group">
+                <view class="title">送货地址</view>
+                <textarea style="text-align: right;" placeholder="输入详细地址到门牌号" bindinput="deliveryLocationInput" value="{{form.deliveryLocation}}"></textarea>
+            </view>
+
+        </form>
+        <view class="cu-bar bg-white">
+            <view class="action margin-0 flex-sub  solid-left" bindtap="hideModal">取消 </view>
+            <view class="action margin-0 flex-sub  solid-left" bindtap="saveLocation">确定</view>
+        </view>
+    </view>
+</view>

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wehgu.admin.mapper.MpStarMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.wehgu.admin.entities.MpStar">
+        <id column="linked_uuid" property="linkedUuid" />
+        <id column="user_detail_uuid" property="userDetailUuid" />
+        <result column="status" property="status" />
+        <result column="type" property="type" />
+        <result column="add_time" property="addTime" />
+        <result column="update_time" property="updateTime" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+       linked_uuid, user_detail_uuid, `status`,add_time, update_time
+    </sql>
+
+    <sql id="Star_Column_List">
+       s.linked_uuid,
+        s.user_detail_uuid, s.`status`, s.add_time,s.update_time,s.type
+    </sql>
+
+    <select id="selectStars" resultType="com.wehgu.admin.entities.vo.StarVO">
+        select
+        <include refid="Star_Column_List"></include>
+        from mp_star s
+        left join sys_user_detail ud on s.`user_detail_uuid`= ud.`user_detail_uuid`
+        <trim prefix="where" prefixOverrides="and|or">
+            <if test="input.userDetailUuid != null and '' != input.userDetailUuid">
+                and s.`user_detail_uuid` = #{input.userDetailUuid}
+            </if>
+            <if test="input.nickname != null and '' != input.nickname">
+                and c.`nickname` like CONCAT("%",#{input.nickname},"%")
+            </if>
+            <if test="input.type != null ">
+                and s.`type` = #{input.type}
+            </if>
+            <if test="input.status != null ">
+                and s.`status` = #{input.status}
+            </if>
+            <if test="input.startTime != null ">
+                and s.`add_time` <![CDATA[>=]]> #{input.startTime}
+            </if>
+            <if test="input.endTime != null ">
+                and s.`add_time` <![CDATA[<=]]> #{input.endTime}
+            </if>
+        </trim>
+        order by s.add_time desc
+    </select>
+
+</mapper>

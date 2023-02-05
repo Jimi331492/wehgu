@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wehgu.admin.mapper.MpNoticeMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.wehgu.admin.entities.MpNotice">
+        <id column="notice_id" property="noticeId" />
+        <result column="notice_uuid" property="noticeUuid" />
+        <result column="add_time" property="addTime" />
+        <result column="update_time" property="updateTime" />
+        <result column="title" property="title" />
+        <result column="content" property="content" />
+        <result column="if_revoke" property="ifRevoke" />
+        <result column="if_delete" property="ifDelete" />
+        <result column="revoke_time" property="revokeTime" />
+        <result column="delete_time" property="deleteTime" />
+        <result column="type" property="type" />
+        <result column="user_type" property="userType" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        notice_id, notice_uuid, add_time, update_time, title, content, if_revoke, if_delete, revoke_time, delete_time, type, user_type
+    </sql>
+    <sql id="Notice_Column_List">
+        mn.notice_id, mn.notice_uuid, mn.add_time, mn.update_time, mn.title, mn.content, mn.if_revoke, mn.if_delete, mn.revoke_time, mn.delete_time,
+mn.type, mn.user_type,mnm.user_detail_uuid,mnm.if_read
+    </sql>
+    <select id="selectNotices" resultType="com.wehgu.admin.entities.vo.NoticeVO">
+        select
+        <include refid="Notice_Column_List"></include>
+        from mp_notice mn
+        left join mp_notice_mark mnm on mnm.notice_uuid=mn.notice_uuid
+        <trim prefix="where" prefixOverrides="and|or">
+            <if test="input.content != null and '' != input.content">
+                and mn.`content`  like CONCAT("%",#{input.content},"%")
+            </if>
+            <if test="input.title != null and '' != input.title">
+                and mn.`title` like CONCAT("%",#{input.title},"%")
+            </if>
+        </trim>
+        order by mn.add_time desc
+    </select>
+
+
+</mapper>

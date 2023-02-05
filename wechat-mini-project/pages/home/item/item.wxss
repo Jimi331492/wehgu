@@ -1,0 +1,28 @@
+/* pages/home/item/item.wxss */
+.bar {
+    width: 100%;
+    position: absolute;
+    bottom: 1vh;
+}
+
+.head {
+    width: 100%;
+}
+
+.full {
+    width: 100%;
+}
+
+.icon {
+    font-size: 40rpx;
+}
+
+.flex .message-count {
+    line-height: 40rpx ;
+    padding-left: 5rpx ;
+}
+
+.flex .star-count {
+    line-height: 50rpx ;
+    padding-left: 5rpx ;
+}

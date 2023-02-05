@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <!--引入父项目 替换掉之前的springboot父项目（spring-boot-starter-parent）-->
+    <parent>
+        <artifactId>weixin-spring-boot-starter</artifactId>
+        <groupId>com.wehgu</groupId>
+        <version>0.0.1-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>weixin-spring-boot-autoconfigure</artifactId>
+    <packaging>jar</packaging>
+    <version>0.0.1-SNAPSHOT</version>
+    <name>weixin-spring-boot-autoconfigure</name>
+    <description>weixin-spring-boot-autoconfigure</description>
+
+
+<!--        <parent>-->
+<!--            <groupId>org.springframework.boot</groupId>-->
+<!--            <artifactId>spring-boot-starter-parent</artifactId>-->
+<!--            <version>2.6.2</version>-->
+<!--            <relativePath/> &lt;!&ndash; lookup parent from repository &ndash;&gt;-->
+<!--        </parent>-->
+
+
+    <dependencies>
+        <!--引入wehgu-core模块-->
+        <dependency>
+            <groupId>com.wehgu</groupId>
+            <artifactId>wehgu-core</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+
+    </build>
+
+</project>

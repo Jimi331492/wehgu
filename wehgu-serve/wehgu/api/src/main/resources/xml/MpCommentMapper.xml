@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wehgu.admin.mapper.MpCommentMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.wehgu.admin.entities.MpComment">
+        <id column="comment_id" property="commentId" />
+        <result column="comment_uuid" property="commentUuid" />
+        <result column="parent_id" property="parentId" />
+        <result column="add_time" property="addTime" />
+        <result column="update_time" property="updateTime" />
+        <result column="post_uuid" property="postUuid" />
+        <result column="from_user_detail_uuid" property="fromUserDetailUuid" />
+        <result column="to_user_detail_uuid" property="toUserDetailUuid" />
+        <result column="content" property="content" />
+        <result column="path" property="path" />
+        <result column="star_num" property="starNum" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        comment_id, comment_uuid, parent_id, add_time, update_time, post_uuid, user_detail_uuid,
+content, `path`,from_user_detail_uuid,to_user_detail_uuid
+    </sql>
+
+    <sql id="Comment_Column_List">
+        mc.comment_id, mc.comment_uuid, mc.parent_id, mc.add_time, mc.update_time, mc.post_uuid,
+mc.from_user_detail_uuid, mc.to_user_detail_uuid, mc.content, mc.`path`,mc.`star_num` as star,
+        fud.nickname as from_nickname,fud.avatar as from_avatar,
+        tud.nickname as to_nickname,tud.avatar as to_avatar
+    </sql>
+
+    <select id="selectComments" resultType="com.wehgu.admin.entities.vo.CommentVO">
+        select
+        <include refid="Comment_Column_List"></include>
+        from mp_comment mc
+        left join sys_user_detail fud on mc.`from_user_detail_uuid`=fud.`user_detail_uuid`
+        left join sys_user_detail tud on mc.`to_user_detail_uuid`=tud.`user_detail_uuid`
+        <trim prefix="where" prefixOverrides="and|or">
+            <if test="input.fromUserDetailUuid != null and '' != input.fromUserDetailUuid">
+                and mc.`from_user_detail_uuid` = #{input.fromUserDetailUuid}
+            </if>
+            <if test="input.content != null and '' != input.content">
+                and mc.`content` like CONCAT("%",#{input.content},"%")
+            </if>
+            <if test="input.postUuid != null and '' != input.postUuid">
+                and mc.`post_uuid` = #{input.postUuid}
+            </if>
+            <if test="input.nickname != null and '' != input.nickname">
+                and fud.`nickname` like CONCAT("%",#{input.nickname},"%")
+            </if>
+            <if test="input.startTime != null ">
+                and mc.`add_time` <![CDATA[>=]]> #{input.startTime}
+            </if>
+            <if test="input.endTime != null ">
+                and mc.`add_time` <![CDATA[<=]]> #{input.endTime}
+            </if>
+        </trim>
+        order by
+        <choose>
+            <when test="input.sort != null and input.sort != ''">
+                mc.${input.sort}
+                <if test="input.order != null and input.order != ''">
+                    ${input.order}
+                </if>
+            </when>
+            <otherwise>
+                mc.star_num desc , mc.add_time asc
+            </otherwise>
+        </choose>
+    </select>
+
+</mapper>

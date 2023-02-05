@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wehgu.admin.mapper.MpCarouselMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.wehgu.admin.entities.MpCarousel">
+        <id column="carousel_id" property="carouselId" />
+        <result column="carousel_uuid" property="carouselUuid" />
+        <result column="title" property="title" />
+        <result column="weight" property="weight" />
+        <result column="status" property="status" />
+        <result column="start_time" property="startTime" />
+        <result column="end_time" property="endTime" />
+        <result column="link" property="link" />
+        <result column="location" property="location" />
+        <result column="add_time" property="addTime" />
+        <result column="update_time" property="updateTime" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        carousel_id, carousel_uuid, title, weight, `status`, start_time, end_time, link, location, add_time, update_time
+    </sql>
+    <sql id="Carouse_Column_List">
+        c.carousel_id, c.carousel_uuid, c.title, c.weight, c.`status`, c.start_time, c.end_time, c.link, c.location,
+c.add_time, c.update_time,o.path
+    </sql>
+    <select id="selectCarousels" resultType="com.wehgu.admin.entities.vo.CarouseVO">
+        select
+        <include refid="Carouse_Column_List"></include>
+        from mp_carousel c
+        left join sys_oss o on c.carousel_uuid=o.relation_uuid
+        <trim prefix="where" prefixOverrides="and|or">
+            <if test="input.carouselUuid != null and '' != input.carouselUuid">
+                and c.`carousel_uuid` = #{input.carouselUuid}
+            </if>
+            <if test="input.status != null and '' != input.status">
+                and c.`status` = #{input.status}
+            </if>
+            <if test="input.title != null and '' != input.title">
+                and c.`title` like CONCAT("%",#{input.title},"%")
+            </if>
+            <if test="input.nowTime != null and input.status== 1 ">
+                and c.`start_time` <![CDATA[<=]]> #{input.nowTime}
+            </if>
+            <if test="input.nowTime != null and input.status== 1 ">
+                and c.`end_time` <![CDATA[>=]]> #{input.nowTime}
+            </if>
+            <if test="input.location != null and '' != input.location">
+                and c.`location` = #{input.location}
+            </if>
+        </trim>
+        order by c.status desc, c.weight desc,c.add_time desc
+    </select>
+
+</mapper>

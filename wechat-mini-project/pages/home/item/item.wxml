@@ -1,0 +1,137 @@
+<!--pages/home/item/item.wxml-->
+<wxs src="/utils/filter.wxs" module="filter"></wxs>
+<custom bgColor="bg-gradual-blue" isBack>
+    <view slot="content">
+        {{item.tag}}
+    </view>
+</custom>
+<scroll-view scroll-y class="scrollPage ">
+    <view class=" item flex flex-direction padding-left-sm padding-right-sm">
+        <!-- 头 -->
+        <view class="head flex justify-between padding-top">
+            <view class="avatar flex align-center ">
+                <image class="cu-avatar lg round" wx:if="{{bakPath!==null||item.avatar!==null}}" src="{{item.avatar===null?bakPath:item.avatar}}"></image>
+
+                <view class="padding-left-sm  flex flex-direction flex-sub ">
+                    <view class="text-black text-xl padding-bottom-sm text-sm  ">
+                        {{item.nickname}}
+                    </view>
+                    <view class="text-black text-sm"> {{filter.formatTime(item.addTime,"format")}}</view>
+                </view>
+            </view>
+            <view class="flex align-center ">
+                <button class="cu-btn bg-blue round" data-path="/pages/home/other/other" bindtap="navigateTo">
+                    查看主页
+                </button>
+            </view>
+        </view>
+        <!-- 内容 -->
+        <view class="content padding-top ">
+            <text class="text-xl"> {{item.content}}</text>
+        </view>
+        <!-- 多张图片 -->
+        <view class="image padding-top flex flex-direction" wx:if="{{item.pictureNum>0}}">
+            <view>
+                <image class="margin-bottom-sm full" wx:if="{{item.imgIndexURI!==null}}" src="{{item.imgIndexURI}}" mode="widthFix"></image>
+            </view>
+            <view wx:for="{{imgURIList}}" wx:key="index" wx:for-item="URI">
+                <image class="margin-bottom-sm full" wx:if="{{URI!==null}}" src="{{URI}}" mode="widthFix"></image>
+            </view>
+        </view>
+        <!-- 点赞评论区 -->
+        <view class="tip flex justify-between padding-top padding-bottom">
+            <text class="cuIcon-attention text-gray">1.2k浏览</text>
+            <view class="flex align-center">
+                <view class="flex padding-right-xl" bindtap="replyComment">
+                    <text class="icon cuIcon-message text-gray"></text>
+                    <text class="message-count text-lg text-gray">{{item.commentList.length}}</text>
+                </view>
+                <view class="flex padding-left-xl" data-type="post" data-id="{{item.postUuid}}" bindtap="{{filter.isInclude(item.postUuid,starList,'linkedUuid')?'cancelLikedIt':'likedIt'}}">
+                    <text class="icon {{filter.isInclude(item.postUuid,starList,'linkedUuid')?'cuIcon-appreciatefill text-yellow':'cuIcon-appreciate text-gray'}}"></text>
+                    <text class="star-count text-lg text-gray">{{item.star}}</text>
+                </view>
+            </view>
+        </view>
+        <view class="tip flex justify-between" wx:if="{{tipShow}}">
+            <text class="cuIcon-infofill text-gray">长按评论可以举报哦~</text>
+            <text class="cuIcon-close text-gray" bindtap="hideTip"></text>
+        </view>
+        <!-- 评论区 -->
+        <view class="comment flex flex-direction padding-top" wx:if="{{item.commentList.length>0}}">
+            <!-- 热门评论 -->
+            <view>
+
+            </view>
+            <!-- 所有评论 -->
+            <view class="flex align-center justify-between " style="height: {{comment.uri===null?'10vh':'20vh'}};" wx:for="{{item.commentList}}" wx:key="index" wx:for-item="comment">
+                <view class="flex flex-direction align-center self-start padding-right-sm">
+                    <image class="cu-avatar round" wx:if="{{bakPath!==null||comment.fromAvatar!==null}}" src="{{comment.fromAvatar===null?bakPath:comment.fromAvatar}}"></image>
+                    <text class="padding-top-sm text-lg text-gray">{{index+1}}L</text>
+                </view>
+
+                <view class="flex flex-direction self-start  flex-sub" data-comment="{{comment}}" data-target="longPress" bindlongpress="showModal">
+
+                    <text class="text-lg">{{comment.fromNickname}}</text>
+                    <text class="text-sm text-gray"> {{filter.formatTime(comment.addTime,"format")}}</text>
+
+                    <view class="flex">
+                        <text wx:if="{{comment.toUserDetailUuid!==null}}">回复{{comment.toNickname}}:</text>
+                        <text class="text-black" wx:if="{{comment.content!==null}}"> {{comment.content}}</text>
+                    </view>
+                    <view class="flex " style="padding:4rpx 0" wx:if="{{comment.uri!==null}}">
+                        <image data-url="{{comment.uri}}" bindtap="ViewImage" class=" full" style=" height: 12vh;" src="{{comment.uri}}" mode="heightFix"></image>
+                    </view>
+
+                </view>
+                <!-- 评论的回复和点赞 -->
+                <view class="self-start flex  ">
+                    <text class="icon text-gray cuIcon-message padding-right" bindtap="replyComment" data-name="{{comment.fromNickname}}" data-to="{{comment.fromUserDetailUuid}}" data-id="{{comment.commentId}}"></text>
+                    <text class="icon {{filter.isInclude(comment.commentUuid,starList,'linkedUuid')?'cuIcon-appreciatefill text-yellow':'cuIcon-appreciate text-gray'}}" data-type="comment" data-id="{{comment.commentUuid}}" bindtap="{{filter.isInclude(comment.commentUuid,starList,'linkedUuid')?'cancelLikedIt':'likedIt'}}"></text>
+                    <text class="star-count text-gray">{{comment.star}}</text>
+                </view>
+            </view>
+
+        </view>
+        <!-- 评论区 -->
+        <view class="comment flex flex-direction align-center justify-center" style="height: 20vh;" wx:else>
+            <text style="font-size: 5rem;" class="cuIcon-edit text-xxxl"></text>
+            <text class="text-gray">快给楼主写评论吧</text>
+        </view>
+
+    </view>
+</scroll-view>
+<view class="bar">
+    <view class="grid col-3  grid-square flex-sub" style="position: relative;">
+        <view class="bg-img" wx:for="{{imgList}}" wx:key="index" bindtap="ViewImage" data-url="{{imgList[index]}}">
+            <image src='{{imgList[index]}}' mode='aspectFill'></image>
+            <view class="cu-tag " catchtap="DelImg" data-index="{{index}}">
+                <text class="text-white cuIcon-close"></text>
+            </view>
+        </view>
+
+    </view>
+    <view class="cu-bar input">
+        <image class="cu-avatar round" wx:if="{{bakPath!==null||avatar!==null}}" src="{{item.avatar===null?bakPath:avatar}}"></image>
+
+        <view class="action" bindtap="ChooseImage">
+            <text class="cuIcon-picfill text-grey"></text>
+        </view>
+        <input class="solid-bottom" focus="{{inputFocus}}" bindblur="inputBlur" value="{{form.content}}" bindinput="contentInput" placeholder="{{placeHolder}}" maxlength="300" cursor-spacing="10"></input>
+
+        <button class="cu-btn bg-green shadow-blur" bindtap="saveComment">发送</button>
+    </view>
+</view>
+
+<modal isBar name="longPress" class="mm-modal" modal-name="{{modalName}}" bind:hidden="hideModal" body-height="{{400}}">
+    <view class="flex  full align-center flex-direction" style="height: 100%;">
+        <view class="flex full align-center justify-center flex-sub" data-name="{{curComment.fromNickname}}" data-to="{{curComment.fromUserDetailUuid}}" data-id="{{curComment.commentId}}" bindtap="replyComment">
+            <text class="text-lg">回复</text>
+        </view>
+        <view class="flex full align-center justify-center flex-sub" data-path="/pages/home/report/report" bindtap="navigateTo">
+            <text class="text-lg text-red">举报</text>
+        </view>
+        <view class="flex full align-center justify-center flex-sub" bindtap="delteteComment" wx:if="{{filter.deleteShow(item.userDetailUuid,curComment.fromUserDetailUuid,form.fromUserDetailUuid)}}">
+            <text class="text-lg">删除</text>
+        </view>
+    </view>
+</modal>

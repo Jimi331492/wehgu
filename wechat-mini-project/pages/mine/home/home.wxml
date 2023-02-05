@@ -1,0 +1,115 @@
+<!--pages/mine/home/home.wxml-->
+<!-- navigation -->
+<!-- <wxs scr="../../../utils/filter.wxs" module="filter" ></wxs> -->
+<custom bgColor="bg-gradual-white">
+    <view slot="right">
+        <button bindtap="navigateTo" data-path="/pages/mine/message/message" class="cuIcon-noticefill bg-yellow round text-white" size="mini"></button>
+    </view>
+    <view slot="content">个人中心</view>
+</custom>
+<!-- Page -->
+<scroll-view scroll-y class="scrollPage">
+    <!-- 头像背景 -->
+    <view class="placeholder-1"></view>
+    <view class="avatar-filter-bg bg-mask">
+        <image class="avatar-img" src="{{userInfo.avatar==null?'/images/custom-avatar.png':userInfo.avatar}}">
+        </image>
+    </view>
+
+    <view class="user-avatar">
+        <button class="edit-btn round" bindtap="{{isLogin?'toEdit':'noLogin'}}"><text class="cuIcon-edit"></text> 编辑</button>
+        <view class="flex flex-direction justify-center">
+            <view class="margin-bottom">
+                <view class="mm-tag badge round {{userInfo.gender===1?'cuIcon-female bg-pink':'cuIcon-male bg-blue'}}"></view>
+                <image class="cu-avatar xxxl round" src="{{userInfo.avatar==null?'/images/custom-avatar.png':userInfo.avatar}}"></image>
+            </view>
+            <view class="flex flex-direction">
+                <view class="text-xl nickname" wx:if="{{isLogin}}">
+                    <text wx:if="{{userInfo.nickname!=null}}">{{userInfo.nickname}}</text>
+                    <text wx:else>{{'用户'+userInfo.userUuid[0]
+                        +userInfo.userUuid[1]
+                        +userInfo.userUuid[2]
+                        +userInfo.userUuid[3]
+                        +userInfo.userUuid[4]
+                        +userInfo.userUuid[5]}}</text>
+                    <text class="text-df auth-status">{{userInfo.authentication?"已认证":"未认证"}}</text>
+                </view>
+                <view class="text-xl nickname" bindtap="toLogin" wx:else>
+                    <text>未登录</text>
+                    <text class="text-df auth-status to-login">去登录</text>
+                </view>
+                <view class="margin-top-sm introduce">
+                    <text>{{userInfo.introduce!==null&&isLogin===true?userInfo.introduce:'一句话介绍自己'}}</text>
+                </view>
+            </view>
+        </view>
+
+
+    </view>
+
+
+    <view class="padding flex text-center text-grey bg-white shadow-warp">
+        <view class="flex flex-sub flex-direction solid-right">
+            <view class="text-xxl text-orange">{{visitTotal}}</view>
+            <view class="margin-top-sm">
+                <text class="cuIcon-post"></text> 我的发布
+            </view>
+
+        </view>
+        <view class="flex flex-sub flex-direction solid-right">
+            <view class="text-xxl text-blue">{{starCount}}</view>
+            <view class="margin-top-sm">
+                <text class="cuIcon-favorfill"></text> 我的点赞
+            </view>
+        </view>
+        <view class="flex flex-sub flex-direction">
+            <view class="text-xxl text-green">{{forksCount}}</view>
+            <view class="margin-top-sm">
+                <text class="cuIcon-commentfill"></text> 我的评论
+            </view>
+        </view>
+    </view>
+
+    <view class="cu-list menu card-menu margin-top-xl margin-bottom-xl shadow-lg radius">
+        <view class="cu-item arrow">
+            <navigator class="content" url="/pages/mine/location/location" hover-class="none">
+                <text class="cuIcon-locationfill text-blue"></text>
+                <text class="text-grey">收货地址</text>
+            </navigator>
+        </view>
+        <view class="cu-item arrow">
+            <view class="content" bindtap="CopyLink" data-link="https://github.com/Jimi331492">
+                <text class="cuIcon-github text-grey"></text>
+                <text class="text-grey">GitHub</text>
+            </view>
+        </view>
+        <view class="cu-item arrow">
+            <navigator class="content" url="/pages/about/about/about" hover-class="none">
+                <image class="round-btn" src="/images/custom-avatar.png" mode="aspectFit"></image>
+                <text class="text-grey">关于WeHgu</text>
+            </navigator>
+        </view>
+        <view class="cu-item arrow">
+            <navigator class="content" url="/pages/about/log/log" hover-class="none">
+                <text class="cuIcon-formfill text-green"></text>
+                <text class="text-grey">日志</text>
+            </navigator>
+        </view>
+        <view class="cu-item arrow">
+            <view class="content" bindtap="showQrcode">
+                <text class="cuIcon-appreciatefill text-red"></text>
+                <text class="text-grey">赞赏支持</text>
+            </view>
+        </view>
+        <view class="cu-item arrow">
+            <button class="cu-btn content" open-type="feedback">
+                <text class="cuIcon-writefill text-cyan"></text>
+                <text class="text-grey">意见反馈</text>
+            </button>
+        </view>
+
+    </view>
+    <view class="flex justify-center padding-bottom-xl">
+        <text wx:if="{{isLogin==true}}" class="text-red" style="font-size: 1.2rem;" bindtap="confirmExit">退出登录</text>
+    </view>
+</scroll-view>

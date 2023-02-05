@@ -1,0 +1,25 @@
+<home id='home' wx:if="{{PageCur==='Home'}}" starList="{{starList}}"></home>
+<find id='find' wx:if="{{PageCur==='Find'}}" starList="{{starList}}"></find>
+<order id='order' wx:if="{{PageCur==='Order'}}"></order>
+<mine id='mine' wx:if="{{PageCur==='Mine'}}"></mine>
+
+<!-- 底部导航 -->
+<view class="cu-bar tabbar bg-white navbar">
+    <view class="action {{PageCur==='Home'?'text-blue':'text-gray'}}" bindtap="navChange" data-cur="Home">
+        <view class="cuIcon-homefill"></view> 主页
+    </view>
+    <view class="action {{PageCur==='Find'?'text-blue':'text-gray'}}" bindtap="navChange" data-cur="Find">
+        <view class="cuIcon-discoverfill"></view> 广场
+    </view>
+
+    <view class="action text-gray add-action" wx:if="{{ !isExamine }}">
+        <button data-path="/pages/post/home/home" class="cu-btn cuIcon-add bg-blue shadow" bindtap="{{isLogin?'navigateTo':'getUserProfile'}}"></button>
+        发布
+    </view>
+    <view class="action {{PageCur==='Order'?'text-blue':'text-gray'}}" bindtap="navChange" data-cur="Order">
+        <view class="cuIcon-flashbuyfill "></view> 服务
+    </view>
+    <view class="action {{PageCur==='Mine'?'text-blue':'text-gray'}}" bindtap="navChange" data-cur="Mine">
+        <view class="cuIcon-myfill"></view> 我的
+    </view>
+</view>

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wehgu.admin.mapper.SysRoleMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.wehgu.admin.entities.SysRole">
+        <id column="role_id" property="roleId" />
+        <result column="role_uuid" property="roleUuid" />
+        <result column="role_name" property="roleName" />
+        <result column="description" property="description" />
+        <result column="add_time" property="addTime" />
+        <result column="update_time" property="updateTime" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        role_id, role_uuid, role_name, description, add_time, update_time
+    </sql>
+
+    <sql id="Role_List_VO">
+        role_uuid, role_name, `description`
+    </sql>
+
+    <select id="selectRoles" resultType="com.wehgu.admin.entities.vo.RoleVO">
+        select
+        <include refid="Role_List_VO"></include>
+        from sys_role r
+        <trim prefix="where" prefixOverrides="and|or">
+            <if test="input.roleName != null and '' != input.roleName">
+                and r.`role_name` like CONCAT("%",#{input.roleName},"%")
+            </if>
+            <if test="input.description != null and '' != input.description">
+                and r.`description` like CONCAT("%",#{input.description},"%")
+            </if>
+
+        </trim>
+
+    </select>
+
+
+</mapper>

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wehgu.admin.mapper.SysPermissionMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.wehgu.admin.entities.SysPermission">
+        <id column="perm_id" property="permId" />
+        <result column="perm_uuid" property="permUuid" />
+        <result column="parent_id" property="parentId" />
+        <result column="title" property="title" />
+        <result column="auth" property="auth" />
+        <result column="type" property="type" />
+        <result column="url" property="url" />
+        <result column="icon" property="icon" />
+        <result column="order_num" property="orderNum" />
+        <result column="add_time" property="addTime" />
+        <result column="update_time" property="updateTime" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        perm_id, perm_uuid, parent_id, title, auth, type, url, icon, order_num, add_time, update_time
+    </sql>
+
+    <sql id="Perm_List_VO">
+        p.perm_id, p.perm_uuid, p.parent_id, p.title, p.auth, p.type, p.url, p.icon, p.order_num, p.add_time, pp.title as parent_title
+    </sql>
+
+    <select id="selectPerms" resultType="com.wehgu.admin.entities.SysPermission">
+        select
+        <include refid="Perm_List_VO"></include>
+        from sys_permission p
+        left join sys_permission pp on p.`parent_id`=pp.`perm_id`
+        <trim prefix="where" prefixOverrides="and|or">
+            <if test="input.title != null and '' != input.title">
+                and p.`title` like CONCAT("%",#{input.title},"%")
+            </if>
+            <if test="input.auth != null and '' != input.auth">
+                and p.`auth` like CONCAT("%",#{input.auth},"%")
+            </if>
+            <if test="input.type != null and '' != input.type">
+                and p.`type` = #{input.type}
+            </if>
+        </trim>
+        order by p.order_num asc , p.add_time asc
+    </select>
+
+</mapper>

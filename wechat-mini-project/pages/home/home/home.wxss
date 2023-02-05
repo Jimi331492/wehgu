@@ -1,0 +1,40 @@
+/* pages/home/home.wxss */
+
+.tower-swiper .tower-item {
+    transform: scale(calc(0.5 + var(--index) / 10));
+    margin-left: calc(var(--left) * 100rpx - 150rpx);
+    z-index: var(--index);
+}
+
+.cu-list+.cu-list {
+    margin-top: 15rpx;
+}
+
+.tab {
+    margin-top: 15rpx;
+}
+
+.post-list {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    margin: 10rpx;
+}
+
+.post-list .post-item {
+    display: flex;
+    justify-content: space-between;
+    width: 49%;
+    margin: 5rpx 0 !important; 
+    padding-top: 10rpx;
+    border-radius: 10rpx;
+}
+
+.post-list .post-item .image.mm-img {
+    margin: 0 20rpx ;
+}
+
+.full{
+    width: 100%;
+}

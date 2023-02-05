@@ -1,0 +1,57 @@
+<!--pages/index/login/login.wxml-->
+<wxs src="/utils/filter.wxs" module="filter" />
+<view class="container">
+    <image wx:if="{{bgImgPath}}" src="{{bgImgPath}}" class="bg1"></image>
+
+    <view class="container-2">
+        <view class="welcome-word">
+            <view class="word-1">
+                <text>
+                    欢迎你，新同学</text>
+            </view>
+            <view class="word-2">
+                <view>
+                    即刻加入WeHGU,
+                </view>
+                <view>
+                    与校友一起发现美好校园生活！
+                </view>
+            </view>
+        </view>
+        <view class="login-box">
+            <button class="cu-btn round lg shadow wx-login" bindtap="getUserProfile">
+                <text class="cuIcon-weixin"></text>通过微信登录
+            </button>
+        </view>
+        <view class="no-login flex" bindtap="toIndexHome">
+            <text class="padding-top">游客模式</text>
+        </view>
+
+        <view class="flex code-login shadow" bindtap="showModal" data-target="CodeLogin">
+            <text class="padding-top cuIcon-phone"></text>
+        </view>
+    </view>
+
+    <footer class="footer"></footer>
+</view>
+
+<modal isBar name="CodeLogin" class="mm-modal" modal-name="{{modalName}}" bind:hidden="hideModal" body-height="{{600}}">
+    <view class="mm-modal-body">
+        <view class="mm-text">一键登录,更快捷方便</view>
+        <view class="mm-input-box {{toggleDelay?'animation-slide-bottom':''}} {{flag?'check-success':'check-fail'}}">
+            <view class=" cuIcon-phone"></view>
+            <input class="mm-input" cursor-spacing="{{50}}" bindinput="telephoneInput" disabled="{{isSend}}" type="number" maxlength="11" placeholder="输入手机号" placeholder-class="mm-input-placeholder" auto-focus="{{modalName==='CodeLogin'}}">
+            </input>
+        </view>
+        <view class="code-list {{toggleDelay?'animation-scale-up':''}}" style="animation-delay: 0.{{4}}s;" wx:if="{{isSend===true}}">
+            <input value="{{codeList.length>=index+1?codeList[index]:''}}" disabled class="code-item {{curItemIndex==index && 'theme-color'}}" type="number" maxlength="1" catchtap="itemFocus" wx:for="{{4}}" wx:key="index"></input>
+
+            <input type="number" cursor-spacing="{{100}}" class="code-input" maxlength="4" bindinput="codeInputChange" data-field="code" focus="{{codeFocus}}"></input>
+        </view>
+
+        <button disabled="{{isSend===true}}" class="cu-btn round lg shadow tel-login send-btn" catchtap="sendCode">
+            <text class="cuIcon-weixin"></text>{{isSend?countdown:'获取验证码'}}
+        </button>
+    </view>
+
+</modal>

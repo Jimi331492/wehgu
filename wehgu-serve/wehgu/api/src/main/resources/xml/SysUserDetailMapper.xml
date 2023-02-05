@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wehgu.admin.mapper.SysUserDetailMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.wehgu.admin.entities.SysUserDetail">
+        <id column="user_detail_id" property="userDetailId" />
+        <result column="user_detail_uuid" property="userDetailUuid" />
+        <result column="nickname" property="nickname" />
+        <result column="avatar" property="avatar" />
+        <result column="gender" property="gender" />
+        <result column="authentication" property="authentication" />
+        <result column="introduce" property="introduce" />
+        <result column="status" property="status" />
+        <result column="open_id" property="openId" />
+        <result column="union_id" property="unionId" />
+        <result column="password" property="password" />
+        <result column="salt" property="salt" />
+        <result column="qq" property="qq" />
+        <result column="type" property="type" />
+        <result column="add_time" property="addTime" />
+        <result column="update_time" property="updateTime" />
+        <result column="user_uuid" property="userUuid" />
+        <result column="role_uuid" property="roleUuid" />
+        <result column="dept_uuid" property="deptUuid" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        user_detail_id, user_detail_uuid,nickname,avatar,`status`, introduce,authentication,open_id, union_id, `password`, salt, qq, type, add_time, update_time, user_uuid, role_uuid, dept_uuid
+    </sql>
+    <sql id="Customer_List_VO">
+        c.user_detail_uuid,c.nickname,c.gender,c.authentication, c.introduce,c.avatar, c.status,c.union_id,c.user_uuid,c.avatar,c.qq,c.add_time, u.telephone,r.role_name
+    </sql>
+
+    <select id="selectCustomers" resultType="com.wehgu.admin.entities.vo.CustomerVO">
+        select
+        <include refid="Customer_List_VO"></include>
+        from sys_user_detail c
+            left join sys_user u on c.`user_uuid`=u.`user_uuid`
+            left join sys_role r on c.`role_uuid`=r.`role_uuid`
+        <trim prefix="where" prefixOverrides="and|or">
+            <if test="input.status != null and '' != input.status">
+                and c.`status` = #{input.status}
+            </if>
+            <if test="input.telephone != null and '' != input.telephone">
+                and u.`telephone` like CONCAT("%",#{input.telephone},"%")
+            </if>
+            <if test="input.nickname != null and '' != input.nickname">
+                and c.`nickname` like CONCAT("%",#{input.nickname},"%")
+            </if>
+            <if test="input.roleUID != null and '' != input.roleUID">
+                and c.`role_uuid` = #{input.roleUID}
+            </if>
+            <if test="input.deptUID != null and '' != input.deptUID">
+                and c.`dept_uuid` = #{input.deptUID}
+            </if>
+        </trim>
+    </select>
+
+
+</mapper>

@@ -1,0 +1,213 @@
+<!--pages/info/home/home.wxml-->
+<wxs src="/utils/filter.wxs" module="filter"></wxs>
+<custom bgColor="bg-gradual-blue">
+    <view slot="content">服务大厅</view>
+</custom>
+<!-- Page -->
+<scroll-view scroll-y class="scrollPage ">
+
+    <view class="list ">
+        <view class="self-start padding-tb flex align-center justify-between" style="width: 100%;">
+            <text class="padding-left-xl text-xl">待领取订单</text>
+            <button class="cu-btn round bg-blue margin-right-xl" bindtap="openMyCodeModal" data-target="MyCode">我的取件码</button>
+        </view>
+        <view wx:for="{{orderList}}" wx:key="index" class="item flex justify-between align-center  bg-white padding">
+            <view class="order-info flex flex-direction ">
+                <view class="padding-bottom flex flex-direction">
+                    <text class="text-xl"> <text class="cuIcon-homefill"></text> {{item.userInfoVO.campus}}</text>
+
+                </view>
+                <view class="padding-bottom flex flex-direction">
+                    <text class="text-xl"> <text class="cuIcon-homefill"></text> 包裹数量：{{item.packageNum}}</text>
+
+                </view>
+                <view wx:if="{{item.expected!==null}}" class="pick-code-box padding-bottom">
+                    <text class="text-xl ">期望:{{item.expected===0?'男':'女'}}</text>
+                </view>
+                <view class="pick-site-box">
+                    <text>送到:</text>
+                    <text>{{ filter.encodeLocation(item.deliveryLocation)}}</text>
+                </view>
+            </view>
+            <view data-target="Order" data-item="{{item}}" bindtap="showOrderInfo">
+                接单查看详情
+                <text class="cuIcon-right"></text>
+            </view>
+
+        </view>
+        <view wx:if="{{total<1}}" class="item flex flex-direction justify-between align-center  bg-white padding">
+            <view class="padding">
+                <text class="cuIcon-flashbuyfill" style="font-size: 80rpx;"></text>
+            </view>
+            <view class="padding">
+                <text class="text-xl">还没有人发布订单哦~</text>
+            </view>
+
+        </view>
+    </view>
+
+</scroll-view>
+
+<modal id="modal" isBar name="MyCode" class="mm-modal" modal-name="{{modalName}}" bind:hidden="hideModal" body-height="1200">
+    <view class="mm-modal-body">
+        <view class="title ">
+            <view class="flex align-center justify-center">
+
+                <text class="text-xl">管理我的取件码</text>
+            </view>
+
+            <scroll-view scroll-x class="bg-white nav">
+                <view class="flex text-center">
+                    <view class="cu-item flex-sub {{index==TabCur?'text-orange cur':''}}" wx:for="{{tabList}}" wx:key="index" bindtap="tabSelect" data-id="{{index}}">
+                        {{item.label}}
+                    </view>
+                </view>
+            </scroll-view>
+        </view>
+        <scroll-view scroll-y style="min-height: 700rpx;" class="flex-sub margin-bottom">
+            <checkbox-group bindchange="choosedPackageChange">
+                <view class="cu-item flex bg-gray padding  justify-between align-center self-start " style="width: 100%; border-radius: 1rem;" wx:for="{{packageList}}" wx:key="index">
+                    <view class="content padding-tb-sm flex flex-direction">
+                        <view class="self-start text-xl padding-bottom ">
+                            <text class="cuIcon-evaluate_fill text-blue margin-right-xs"></text>
+                            <text class=" text-blue">{{item.pickUpCode}}</text>
+                        </view>
+                        <view class="text-sm">
+                            <text class="cuIcon-locationfill margin-right-xs"></text> {{item.pickUpSite}}
+                        </view>
+                    </view>
+                    <view wx:if="{{item.orderUuid===null}}" class="action flex justify-center align-center">
+                        <checkbox value="{{item.packageUuid}}" disabled="{{item.orderUuid!==null}}" class="blue" bindchange="itemChange" checked="{{filter.isInclude(item.packageUuid,choosedPackageUIDList)}}"></checkbox>
+
+                        <text class="padding-left cuIcon-delete text-bold text-red" data-id="{{item.packageUuid}}" style="font-size: 1.5rem;" bindtap="confirmDeletePackage"></text>
+                    </view>
+                    <view wx:else class="action flex flex-direction justify-center align-center">
+                        <text>状态：{{item.orderStatus}}</text>
+                        <text class="text-blue text-sm margin-top">查看订单详情</text>
+                    </view>
+
+                </view>
+            </checkbox-group>
+        </scroll-view>
+
+        <view class="modal-body-bottom flex-sub">
+            <button wx:if="{{choosedPackageUIDList.length>0}}" class="cu-btn bg-white  text-blue margin-bottom mm-text-button" data-path="/pages/order/detail/detail" catchtap="toDetail">
+                <text class="cuIcon-check text-bold"></text>
+                <text>发布订单</text>
+            </button>
+            <button class="cu-btn round bg-blue mm-text-button" bindtap="openAddCodeModal" data-target="AddCode">
+                <text class="cuIcon-add"></text>
+                <text>添加更多取件码</text>
+            </button>
+        </view>
+
+    </view>
+</modal>
+
+<modal isBar name="AddCode" class="mm-modal" modal-name="{{modalName}}" bind:hidden="hideModal" body-height="1200">
+    <view class="mm-modal-body">
+        <view class="title">
+            <text class="text-xl">帮我代取</text>
+        </view>
+        <view class="form flex flex-direction flex-sub margin-top ">
+            <view class="cu-form-group  bg-gray round">
+                <view class="title">取件码</view>
+                <input style="text-align: right;" value="{{packageForm.pickUpCode}}" bindinput="pickUpCodeInput" placeholder="请输入你的取件码"></input>
+            </view>
+            <view class="cu-form-group  bg-gray round margin-top">
+                <view class="title">驿站</view>
+                <picker bindchange="bindPickUpSite" style="width: 100%;" value="{{packageForm.pickUpSite}}" range-key="value" range="{{pickUpSiteList}}">
+                    <view class="picker">
+                        {{packageForm.pickUpSite!==null?packageForm.pickUpSite:'请选择包裹所在驿站'}}
+                    </view>
+                </picker>
+            </view>
+            <view class="cu-form-group  bg-gray round margin-top">
+                <view class="title">描述</view>
+                <input style="text-align: right;" value="{{packageForm.remark}}" bindinput="remarkInput" placeholder="简述一下包裹大小重量"></input>
+            </view>
+
+        </view>
+
+
+        <view class="modal-body-bottom">
+            <button class="cu-btn bg-blue margin-bottom mm-icon-button" catchtap="savePackage">
+                <text class="cuIcon-check text-bold"></text>
+            </button>
+            <button class="cu-btn text-blue bg-white mm-text-button" data-target="MyCode" catchtap="showModal">
+                <text>取消</text>
+            </button>
+        </view>
+    </view>
+</modal>
+
+<modal isBar name="Order" class="mm-modal" modal-name="{{modalName}}" bind:hidden="hideModal" body-height="1200">
+    <view class="mm-modal-body ">
+        <view class="title">
+            <text class="text-xl">确认接单</text>
+            <view class="flex flex-direction text-xl ">
+                <view class="flex align-center padding-top">
+                    <text class="cuIcon-pick"></text>
+                    <text>包裹数量:</text>
+                    <view>{{orderInfo.packageNum}}</view>
+                </view>
+
+                <view class="flex align-center padding-top-sm">
+                    <text class="cuIcon-home"></text>
+                    <text>校区:</text>
+                    <view>{{orderInfo.userInfoVO.campus}}</view>
+                </view>
+
+                <view class="flex align-center padding-top-sm">
+                    <text class="cuIcon-timefill"></text>
+                    <text>最晚期限:</text>
+                    <text>{{filter.formatTime(orderInfo.deadlineTime) }}</text>
+                </view>
+
+            </view>
+        </view>
+
+        <!-- 发布人名片 -->
+        <view class="flex flex-direction bg-blue " style="border-radius: 0.5rem;">
+            <view class="self-start padding-tb-sm ">
+                <text class="text-white  padding-left">发布人名片</text>
+            </view>
+
+            <view class="flex bg-blue justify-between padding" style="border-radius: 0.5rem; background-color: #F7F7FF;">
+                <view class="flex padding-tb align-center ">
+                    <image class="cu-avatar xl  round" wx:if="{{bakPath!==null||item.avatar!==null}}" src="{{orderInfo.userInfoVO.avatar===null?bakPath:orderInfo.userInfoVO.avatar}}"></image>
+                    <view class="flex flex-direction  padding-left-sm text-black">
+                        <view class="self-start">{{orderInfo.userInfoVO.nickname}}</view>
+
+                        <view class="self-start">{{orderInfo.userInfoVO.college}}</view>
+                        <view class="self-start">
+                            <view class="cu-capsule round">
+                                <view class="cu-tag bg-blue sm">
+                                    <text class="cuIcon-check"></text>
+                                </view>
+                                <view class="cu-tag line-blue sm">
+                                    {{orderInfo.userInfoVO.authentication?"已认证":"已认证"}}
+                                </view>
+                            </view>
+
+                        </view>
+                    </view>
+                </view>
+
+                <view class="flex justify-center align-center text-xxl " data-tip="你尚未接受该订单!" catchtap="showTip">
+                    <text style="border-radius: 5rem; font-size: 2rem;" class="line-lightgreen cuIcon-phone"></text>
+                </view>
+            </view>
+        </view>
+
+        <view class="modal-body-bottom">
+            <button class="cu-btn bg-blue margin-bottom mm-icon-button flex align-center" data-tip="建议取消发单" catchtap="{{filter.orderFnChooser(orderInfo,userInfo)}}">
+                <text class="cuIcon-check text-bold"></text>
+                <text class="text-xl padding-lr-sm">确认接单</text>
+            </button>
+            <button class="cu-btn text-blue bg-white mm-text-button" data-target="null" catchtap="showModal">
+                <text>取消</text>
+            </button>
+        </view>
+    </view>
+</modal>

@@ -1,0 +1,254 @@
+# 配置端口
+server:
+  port: 10077
+  servlet:
+    application-display-name: admin
+    context-path: /wehgu
+spring:
+  servlet:
+    multipart:
+      max-file-size: 200MB
+      max-request-size: 2000MB
+  mvc:
+    hiddenmethod:
+      filter:
+        enabled: true
+  application:
+    name: admin
+
+  redis:
+    host: 47.93.25.230
+    port: 6379
+    password: 666xsxsgg
+    jedis:
+      pool:
+        max-active: 8
+        max-wait: -1
+        max-idle: 500
+        min-idle: 0
+    lettuce:
+      shutdown-timeout: 100
+
+  #  profiles:
+  #    active: dev
+  # 配置数据源
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://47.93.25.230:3306/wehgu?useUnicode=true&characterEncoding=UTF-8&useSSL=false # MySQL在高版本需要指明是否进行SSL连接 解决则加上 &useSSL=false
+    name: root
+    username: root
+    password: 666xsxsgg
+    # 使用druid数据源
+    type: com.alibaba.druid.pool.DruidDataSource
+    filters: stat
+    maxActive: 20
+    initialSize: 1
+    maxWait: 60000
+    minIdle: 1
+    timeBetweenEvictionRunsMillis: 60000
+    minEvictableIdleTimeMillis: 300000
+    validationQuery: select 'x'
+    testWhileIdle: true
+    testOnBorrow: false
+    testOnReturn: false
+    poolPreparedStatements: true
+    maxOpenPreparedStatements: 20
+
+#  #mybatis-plus相关配置
+#  # mybatis的配置
+#  mybatis-plus:
+#    #1.配置mapper文件放在resource下的mapper中
+#    mapper-locations: classpath:/mapper/*.xml
+#    #2.配置实体扫描，多个package用逗号或者分号分隔
+#    type-aliases-package: com.example.manage_server.pojo
+#    #3.配置mybatis日志打印（这个生效后下面logging中的打印失效）
+#    configuration:
+#      log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+#  logging:
+#    file:
+#      path: src/main/resources/log
+
+
+# mybatis-plus相关配置
+mybatis-plus:
+  # xml扫描，多个目录用逗号或者分号分隔（告诉 Mapper 所对应的 XML 文件位置）
+  mapper-locations: classpath:**/*Mapper.xml
+  # 以下配置均有默认值,可以不设置
+  global-config:
+    #主键类型  0:"数据库ID自增", 1:"用户输入ID",2:"全局唯一ID (数字类型唯一ID)", 3:"全局唯一ID UUID";
+    id-type: 0
+    #字段策略 0:"忽略判断",1:"非 NULL 判断"),2:"非空判断"
+    field-strategy: 2
+    #驼峰下划线转换
+    db-column-underline: true
+    #刷新mapper 调试神器
+    refresh-mapper: false
+    #数据库大写下划线转换
+    #capital-mode: true
+    #序列接口实现类配置
+    #key-generator: com.baomidou.springboot.xxx
+    #逻辑删除配置
+    #logic-delete-value: 0 # 逻辑已删除值(默认为 1)
+    #logic-not-delete-value: 1 # 逻辑未删除值(默认为 0)
+    #自定义填充策略接口实现
+    #    meta-object-handler: com.zhengqing.config.MyMetaObjectHandler
+    #自定义SQL注入器
+    #sql-injector: com.baomidou.springboot.xxx
+  configuration:
+    # 是否开启自动驼峰命名规则映射:从数据库列名到Java属性驼峰命名的类似映射
+    map-underscore-to-camel-case: true
+    cache-enabled: false
+    # 如果查询结果中包含空值的列，则 MyBatis 在映射的时候，不会映射这个字段
+    #    call-setters-on-nulls: true
+    # 这个配置会将执行的sql打印出来，在开发或测试的时候可以用
+    #    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    # 解决oracle更新数据为null时无法转换报错，mysql不会出现此情况
+    jdbc-type-for-null: 'null'
+#    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
+logging:
+  config:
+    classpath: logback.xml
+  level:
+    root: warn
+    com.mp.first_mp.dao: trace
+  pattern:
+    console: '%p%m%n'
+
+snowflake:
+  epolldate: 2022-03-05 18:00:00.000
+
+otherconfig:
+  workId: 0
+  dataCenterId: 0
+
+wehgu-auth-properties:
+  #安全认证
+  auth:
+    # 加密秘钥信息 WEHGU_ISMIAO base64编码
+    secret: V0VIR1VfSVNNSUFP
+    # token的签发者
+    issuer: JimiLo
+    # token过期时间（分钟）
+    tokenExpireTime: 60
+    # 用户选择保存登录状态对应token过期时间（天）
+    saveLoginTime: 7
+    # 限制用户登陆错误次数（次）
+    loginTimeLimit: 10
+    # 错误超过次数后多少分钟后才能继续登录（分钟）
+    loginAfterTime: 10
+    ignoreUrls:
+      - /mp_get_unionId
+      - /swagger-ui.html
+      - /swagger-ui/index.html
+      - /swagger-resources/**
+      - /doc.html
+      - /v2/api-docs
+      - /v3/api-docs
+      - /webjars/**
+      - /**/*.js
+      - /**/*.css
+      - /**/*.png
+      - /**/*.ico
+      - /getCurrentUserInfo
+      - /register
+      - /checkSMS
+      - /sendSMS
+      - /file/uploadPicture
+      - /file/uploadVideo
+      - /login
+      - /carousel/getCarouselPage
+      - /notice/getNoticePage
+      - /post/getPostPage
+
+    weChatUrl:
+      - /SMSLogin
+      - /sys_user_detail/saveCustomer
+      - /getMPUserInfo
+
+
+    notLoginUrl:
+      - /mp_get_unionId
+      - /doc.html
+      - /register
+      - /checkSMS
+      - /sendSMS
+      - /file/uploadPicture
+      - /file/uploadVideo
+      - /carousel/getCarouselPage
+      - /notice/getNoticePage
+      - /SMSLogin
+      - /getMPUserInfo
+      - /post/getPostPage
+
+tx:
+  sms:
+    appId: 1400602062
+    appKey: 0b3bbc2df79773283d38f05b1d9d8e26
+    templateId: 1218499
+    smsSign: WeHgu
+    smsEffectiveTime: 5
+
+---
+
+weixin:
+  config:
+    servlet_prefix: weixin
+    weChatOpenPlatformConfig:
+      appId: wxeb4f620b577ff31a
+      appSecret: ccc721049ed536507b128e9b3b94c3a6
+      redirectUrl: https://cow.sp.bjblkj.com/cownetwork/wx/callBack
+
+    wxPayConfig:
+      appId: wxeb4f620b577ff31a
+      appSecret: ccc721049ed536507b128e9b3b94c3a6
+      machId: 1617816020
+      machSecret: OE8l20H65kbN0K98608QQ864X0r1tW06
+      notifyUrl: http://localhost:10077/wehgu/wx/wxNotify
+
+    wxaConfigs:
+      - appId: wxeb4f620b577ff31a
+        appSecret: ccc721049ed536507b128e9b3b94c3a6
+        token: wehgu_token
+        encodingAesKey:
+        messageEncrypt: false
+
+
+#knife4j相关配置 doc.html
+knife4j:
+  enable: true
+  documents:
+    -
+      group: 2.X版本
+      name: 接口签名
+      locations: classpath:sign/*
+  setting:
+    language: zh-CN
+    enableSwaggerModels: true
+    enableDocumentManage: true
+    swaggerModelName: 实体类列表
+    enableVersion: false
+    enableReloadCacheParameter: false
+    enableAfterScript: true
+    enableFilterMultipartApiMethodType: POST
+    enableFilterMultipartApis: false
+    enableRequestCache: true
+    enableHost: false
+    enableHostText: 192.168.0.193:8888
+    enableHomeCustom: true
+    homeCustomLocation: classpath:markdown/home.md
+    enableSearch: false
+    enableFooter: true
+    enableFooterCustom: true
+    footerCustomContent: Apache License 2.0 | Copyright isMiaoA·
+    enableDynamicParameter: false
+    enableDebug: true
+    enableOpenApi: false
+    enableGroup: true
+  cors: false
+  production: false
+  basic:
+    enable: false
+    username: jimilo
+    password: 123456
+

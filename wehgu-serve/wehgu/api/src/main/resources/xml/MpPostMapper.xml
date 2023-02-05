@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wehgu.admin.mapper.MpPostMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.wehgu.admin.entities.MpPost">
+        <id column="post_id" property="postId" />
+        <result column="post_uuid" property="postUuid" />
+        <result column="add_time" property="addTime" />
+        <result column="update_time" property="updateTime" />
+        <result column="user_detail_uuid" property="userDetailUuid" />
+        <result column="content" property="content" />
+        <result column="picture_num" property="pictureNum" />
+        <result column="star_num" property="starNum" />
+        <result column="comment_num" property="commentNum" />
+        <result column="audit_status" property="auditStatus" />
+        <result column="tag_uuid" property="tagUuid" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        post_id, post_uuid, add_time, update_time, user_detail_uuid, content, picture_num,
+    comment_num,star_num,audit_status,tag_uuid
+    </sql>
+
+    <sql id="Post_Column_List">
+        p.post_id, p.post_uuid, p.add_time, p.update_time, p.user_detail_uuid, p.content,p.audit_status,p.comment_num,
+    p.picture_num, p.star_num as star,c.nickname,c.avatar,p.tag_uuid,t.title,t.color,t.background_color,u.telephone
+    </sql>
+
+    <select id="selectPosts" resultType="com.wehgu.admin.entities.vo.PostVO">
+        select
+        <include refid="Post_Column_List"></include>
+        from mp_post p
+        left join sys_user_detail c on p.`user_detail_uuid`=c.`user_detail_uuid`
+        left join sys_user u on c.`user_uuid`=u.`user_uuid`
+        left join mp_tag t on p.`tag_uuid`=t.`tag_uuid`
+        <trim prefix="where" prefixOverrides="and|or">
+            <if test="input.userDetailUuid != null and '' != input.userDetailUuid">
+                and c.`user_detail_uuid` = #{input.userDetailUuid}
+            </if>
+            <if test="input.auditStatus != null and '' != input.auditStatus">
+                and p.`audit_status` = #{input.auditStatus}
+            </if>
+            <if test="input.content != null and '' != input.content">
+                and p.`content` like CONCAT("%",#{input.content},"%")
+            </if>
+            <if test="input.nickname != null and '' != input.nickname">
+                and c.`nickname` like CONCAT("%",#{input.nickname},"%")
+            </if>
+            <if test="input.tag != null and '' != input.tag">
+                and t.`title` like CONCAT("%",#{input.tag},"%")
+            </if>
+            <if test="input.startTime != null ">
+                and p.`add_time` <![CDATA[>=]]> #{input.startTime}
+            </if>
+            <if test="input.endTime != null">
+                and p.`add_time` <![CDATA[<=]]> #{input.endTime}
+            </if>
+        </trim>
+        order by
+        <choose>
+            <when test="input.sort != null and input.sort != ''">
+                p.${input.sort}
+                <if test="input.order != null and input.order != ''">
+                    ${input.order}
+                </if>
+            </when>
+            <otherwise>
+                p.star_num desc , p.add_time desc
+            </otherwise>
+        </choose>
+
+    </select>
+
+    <select id="selectByUID" parameterType="string" resultType="com.wehgu.admin.entities.vo.PostVO">
+        select
+        <include refid="Post_Column_List"></include>
+        from mp_post p
+        left join sys_user_detail c on p.`user_detail_uuid`=c.`user_detail_uuid`
+        left join sys_user u on c.`user_uuid`=u.`user_uuid`
+        left join mp_tag t on p.`tag_uuid`=t.`tag_uuid`
+        where p.`post_uuid` = #{postUID}
+        limit 1
+    </select>
+
+</mapper>
