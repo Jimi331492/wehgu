@@ -1,1 +1,90 @@
-/* pages/home/other/other.wxss */
+/* pages/mine/home/home.wxss */
+
+.mm-tag {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    z-index: 100;
+    width: 1.5rem;
+    height: 1.5rem;
+    font-size: 1rem;
+    top: 2rem;
+    left: 7.5rem;
+}
+
+
+.scrollPage .placeholder-1 {
+    width: 100vw;
+    height: 550rpx;
+}
+
+.scrollPage .avatar-filter-bg {
+    width: 100vw;
+    height: 550rpx;
+    filter: blur(8rpx);
+    overflow: hidden;
+    position: absolute;
+    top: 0;
+    z-index: -100;
+}
+
+
+
+.avatar-filter-bg .avatar-img {
+    width: 100vw;
+    height: 550rpx;
+}
+
+.scrollPage .user-avatar {
+    width: 100vw;
+    height: 550rpx;
+    position: absolute;
+    top: 0;
+    z-index: 99;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+}
+
+.user-avatar {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.user-avatar .xxxl {
+    width: 10rem;
+    height: 10rem;
+    position: relative;
+}
+
+.user-avatar .nickname {
+    display: flex;
+    justify-content: center;
+}
+
+.user-avatar .auth-status {
+    align-self: flex-end;
+}
+
+.user-avatar .introduce {
+    display: flex;
+    justify-content: center;
+    opacity: 0.8;
+}
+
+.to-login {
+    border-bottom: solid 1rpx white;
+}
+
+.edit-btn {
+    position: absolute;
+    top: 5vw;
+    right: 3vw;
+    background-color: #000;
+    color: #fff;
+    opacity: 0.6;
+}

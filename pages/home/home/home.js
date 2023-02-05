@@ -117,7 +117,8 @@ Component({
         query: {
             limit: 6,
             page: 1,
-            auditStatus: '正常'
+            auditStatus: '正常',
+            sort: "comment_num",
         },
         total: 0,
         isBottom: false,

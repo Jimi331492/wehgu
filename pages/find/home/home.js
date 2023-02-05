@@ -108,6 +108,19 @@ Component({
             })
 
         },
+        
+        updatePostList(item) {
+            const postList = this.data.postList;
+            const index = postList.findIndex(e => {
+                return e.postUuid === item.postUuid
+            })
+            postList[index] = item
+            this.setData({
+                starList: app.globalData.starList,
+                postList: postList
+            });
+            console.log('updateStarList success');
+        },
 
         //获取帖子
         getPostList(query) {

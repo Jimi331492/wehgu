@@ -268,10 +268,15 @@ Component({
             })
         },
 
-        showTip(tip) {
-            wx.showToast({
-                icon: 'none',
-                title: tip
+        showTip(e) {
+            const str = JSON.stringify(e)
+            console.log(str);
+            wx.showModal({
+                title: "提示:不能接自己的单",
+                content: "你是要取消发单吗?",
+                cancelColor: 'cancelColor',
+                cancelText: "不用了",
+                confirmText: "去取消"
             })
         }
 

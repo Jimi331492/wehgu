@@ -1,0 +1,63 @@
+<!--pages/post/mine/mine.wxml-->
+<wxs src='../../../utils/filter.wxs' module="filter" />
+<custom bgColor="bg-gradual-blue" isCustom>
+    <view slot="content">我的发布</view>
+</custom>
+
+<scroll-view class="scrollPage" scroll-y class="scrollPage" refresher-enabled="{{true}}" refresher-threshold="{{100}}" refresher-default-style="white" refresher-background="gray" refresher-triggered="{{triggered}}" bindrefresherpulling="onPulling" bindrefresherrefresh="onRefresh" bindrefresherrestore="onRestore" bindrefresherabort="onAbort" bindscrolltolower="loadPostList">
+    <!-- 导航栏 -->
+    <scroll-view scroll-x class="bg-white nav tab ">
+        <view class="flex text-center">
+            <view class="cu-item flex-sub {{index===TabCur?'text-orange cur':''}}" wx:for="{{tabList}}" wx:key="index" bindtap="tabSelect" data-item="{{item}}" data-id="{{index}}">
+                {{item.title}}
+            </view>
+        </view>
+    </scroll-view>
+
+
+    <view wx:if="{{postList.length<1}}" class=" flex justify-center" style="width: 100vw;">
+        <view class="padding-top-xl text-xxl">这里很干净，啥也没有</view>
+    </view>
+
+    <view wx:else>
+        <checkbox-group bindchange="checkboxChange">
+            <view class="cu-timeline " wx:for="{{postList}}" wx:key="index">
+                <view class="cu-time">{{filter.formatTime(item.addTime,"notime")}}</view>
+                <view class="cu-item justify-bewteen" style="display: flex; height: 15vh;">
+                    <view class='action-checkbox'>
+                        <checkbox class='round orange' value="{{item.postUuid}}" checked="{{filter.isInclude(item.postUuid,choosedUIDList)}}"></checkbox>
+                    </view>
+                    <view class="image mm-img " wx:if="{{item.imgIndexURI!==null}}">
+                        <image src="{{item.imgIndexURI}}" style="width: 60vw; height: 100%; position: absolute; top:0;right:0" mode="aspectFill"></image>
+                        <view class="cu-tag bg-{{item.backgroundColor}}" style="position: absolute; top:0;right: 0;">{{item.tag}}</view>
+                        <view class="cu-bar bg-shadeBottom" style="position: absolute; bottom:0;z-index: 10;right: 0;">
+                            <text class="text-cut">{{item.content}}</text>
+                        </view>
+                    </view>
+                    <view class="image mm-img flex align-center" wx:else style="height: 100%;">
+                        <text class="text-bold text-xxl text-black padding padding-top-xl" style="position: absolute; top:0;right: 0;">{{item.content}}</text>
+                        <view class="cu-tag bg-{{item.backgroundColor}}" style="position: absolute; top:0;right: 0;">{{item.tag}}</view>
+                    </view>
+
+                </view>
+            </view>
+        </checkbox-group>
+    </view>
+
+</scroll-view>
+
+<view wx:if="{{postList.length>1}}" class="cu-bar bg-white tabbar border  shop">
+
+    <view class="action flex flex-direction">
+        <checkbox class='round orange padding-top-sm' disabled="{{filter.arrayEqual(choosedIdList,cartList,'mallCartId')}}" bindtap="chooseAll" checked="{{filter.arrayEqual(choosedIdList,cartList,'mallCartId')}}"></checkbox>
+        <view style="padding-top: 10rpx;">全选</view>
+    </view>
+    <view class="action text-red">
+        <view class="cuIcon-delete padding-top-sm"></view>
+        删除
+    </view>
+    <view class="btn-group margin-top">
+
+        <button class="cu-btn bg-blue round shadow-blur">仅自己可见</button>
+    </view>
+</view>

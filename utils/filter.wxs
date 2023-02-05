@@ -173,7 +173,7 @@ function orderFnChooser(orderInfo, userInfo) {
     if (orderInfo.userDetailUuid === userInfo.userDetailUuid) return "showTip"
 
 
-    return saveOrder
+    return "saveOrder"
 
 }
 

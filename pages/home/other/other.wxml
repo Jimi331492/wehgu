@@ -1,2 +1,38 @@
 <!--pages/home/other/other.wxml-->
-<text>pages/home/other/other.wxml</text>
+<custom bgColor="bg-gradual-white" isCustom> 
+    <view slot="content">用户主页</view>
+</custom>
+<scroll-view scroll-y class="scrollPage">
+    <!-- 头像背景 -->
+    <view class="placeholder-1"></view>
+    <view class="avatar-filter-bg bg-mask">
+        <image class="avatar-img" src="{{userInfo.avatar==null?'/images/custom-avatar.png':userInfo.avatar}}">
+        </image>
+    </view>
+
+    <view class="user-avatar">
+        
+        <view class="flex flex-direction justify-center">
+            <view class="margin-bottom">
+                <view class="mm-tag badge round {{userInfo.gender===1?'cuIcon-female bg-pink':'cuIcon-male bg-blue'}}"></view>
+                <image class="cu-avatar xxxl round" src="{{userInfo.avatar==null?'/images/custom-avatar.png':userInfo.avatar}}"></image>
+            </view>
+            <view class="flex flex-direction">
+                <view class="text-xl nickname">
+                    <text wx:if="{{userInfo.nickname!=null}}">{{userInfo.nickname}}</text>
+                   
+                    <text class="text-df auth-status">{{userInfo.authentication?"已认证":"未认证"}}</text>
+                </view>
+               
+                <view class="margin-top-sm introduce">
+                    <text>{{userInfo.introduce!==null&&isLogin===true?userInfo.introduce:'一句话介绍自己'}}</text>
+                </view>
+            </view>
+        </view>
+    </view>
+
+
+
+
+
+</scroll-view>

@@ -199,9 +199,20 @@ Page({
             }
 
         }
+        console.log(pages);
 
         let home = index.selectComponent("#home");
-        home.updatePostList(item)
+        let find = index.selectComponent("#find");
+        console.log(home, find);
+        if (home !== null) {
+            home.updatePostList(item)
+        }
+
+        if (find !== null) {
+            find.updatePostList(item)
+        }
+
+
 
         this.setData({
             starList: starList,

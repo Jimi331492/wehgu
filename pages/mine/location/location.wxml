@@ -48,7 +48,7 @@
 
 </scroll-view>
 
-
+<footer class="footer"></footer>
 
 <view class="cu-modal {{modalName=='Add'?'show':''}}" bindtap="hideModal">
 
